@@ -476,11 +476,7 @@ INSERT INTO options (option_id, question_id, option_text, is_correct) VALUES
 (280, 80, 'Ocean', 0);
 
 
-
--- ============================================================
 -- USER ACCOUNTS AND LEARNING PROGRESS TABLES
--- Added after the original Salinify tables and seed data.
--- ============================================================
 
 -- USERS
 -- Stores registered Salinify accounts
