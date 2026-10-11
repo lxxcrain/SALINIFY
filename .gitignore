@@ -27,3 +27,7 @@ desktop.ini
 api/db.php
 api/test_connection.php
 .env
+
+# Temporary session and testing files
+/tmp_sessions/
+/cookies.txt
