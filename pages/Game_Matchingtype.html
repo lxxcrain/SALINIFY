@@ -442,48 +442,7 @@
 
       <div class="instruction">Instruction: Click two boxes that belong together. If they match, they will disappear and be recorded as a pair. Continue until all pairs are matched.</div>
 
-      <div class="word-boxes" id="wordBoxes">
-        <div class="word-box" data-pair="20">Ilog</div>
-        <div class="word-box" data-pair="3">Manáng</div>
-        <div class="word-box" data-pair="16">Prutas</div>
-        <div class="word-box" data-pair="8">Malamíg</div>
-        <div class="word-box" data-pair="14">Inapúy</div>
-        <div class="word-box" data-pair="15">Naténg</div>
-        <div class="word-box" data-pair="18">Dagat</div>
-        <div class="word-box" data-pair="15">Gulay</div>
-        <div class="word-box" data-pair="4">Manóng</div>
-        <div class="word-box" data-pair="6">Gwapo</div>
-        <div class="word-box" data-pair="10">Naimbág nga malém</div>
-        <div class="word-box" data-pair="3">Àte</div>
-        <div class="word-box" data-pair="6">Natarakí</div>
-        <div class="word-box" data-pair="5">Maganda</div>
-        <div class="word-box" data-pair="11">Magandáng Gabi</div>
-        <div class="word-box" data-pair="5">Napíntas</div>
-        <div class="word-box" data-pair="17">Bantáy</div>
-        <div class="word-box" data-pair="4">Kúya</div>
-        <div class="word-box" data-pair="7">Napudót</div>
-        <div class="word-box" data-pair="18">Baybay</div>
-        <div class="word-box" data-pair="11">Naimbág nga rabí-i</div>
-        <div class="word-box" data-pair="13">Pagkain</div>
-        <div class="word-box" data-pair="9">Magandáng Umaga</div>
-        <div class="word-box" data-pair="8">Nalamíis</div>
-        <div class="word-box" data-pair="13">Makan</div>
-        <div class="word-box" data-pair="2">Tatáng</div>
-        <div class="word-box" data-pair="12">Maraming salamat</div>
-        <div class="word-box" data-pair="9">Naimbág nga bigát</div>
-        <div class="word-box" data-pair="20">Karayan</div>
-        <div class="word-box" data-pair="14">Kanin</div>
-        <div class="word-box" data-pair="7">Mainit</div>
-        <div class="word-box" data-pair="1">Nanay</div>
-        <div class="word-box" data-pair="16">Bunga</div>
-        <div class="word-box" data-pair="12">Agyamanák Unay</div>
-        <div class="word-box" data-pair="10">Magandáng Hapon</div>
-        <div class="word-box" data-pair="1">Ináng</div>
-        <div class="word-box" data-pair="19">Kayú</div>
-        <div class="word-box" data-pair="2">Tatay</div>
-        <div class="word-box" data-pair="17">Bundok</div>
-        <div class="word-box" data-pair="19">Puno</div>
-      </div>
+      <div class="word-boxes" id="wordBoxes"></div>
 
       <div class="action-bar">
         <button class="pair-btn" id="showPairs">Review Matched Pairs</button>
@@ -531,6 +490,62 @@
   let storedPairs = [];
   let points = 0;
   let gameCompleted = false;
+
+
+let totalPairs = 0;
+
+async function fetchMatchingPairs() {
+    try {
+        const response = await fetch(
+            "../api/matching.php?dialect=Ilocano"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch Ilocano matching pairs");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error("No matching pairs found");
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        data.forEach((pair, index) => {
+            const pairId = String(pair.pair_id ?? index);
+
+            const dialectBox = document.createElement("div");
+            dialectBox.className = "word-box";
+            dialectBox.dataset.pair = pairId;
+            dialectBox.textContent = pair.word;;
+
+            const tagalogBox = document.createElement("div");
+            tagalogBox.className = "word-box";
+            tagalogBox.dataset.pair = pairId;
+            tagalogBox.textContent = pair.match_text;
+
+            if (!dialectBox.textContent.trim() ||
+                !tagalogBox.textContent.trim()) {
+                throw new Error("Missing matching pair text");
+            }
+
+            fragment.appendChild(dialectBox);
+            fragment.appendChild(tagalogBox);
+        });
+
+        totalPairs = data.length;
+        wordBoxesContainer.replaceChildren(fragment);
+
+        console.log("Ilocano matching pairs loaded:", totalPairs);
+        return true;
+
+    } catch (error) {
+        console.error("Error loading Ilocano matching pairs:", error);
+        return false;
+    }
+}
+
 
   function shuffleArray(array) {
     const shuffled = [...array];
@@ -587,12 +602,12 @@
         s.classList.add('matched');
         correctPairs++;
         points++;
-        pointsDisplay.textContent = `${points} / 20`;
-        progressBar.style.width = `${(correctPairs / 20) * 100}%`;
+        pointsDisplay.textContent = `${points} / ${totalPairs}`;
+        progressBar.style.width = `${(correctPairs / totalPairs) * 100}%`;
         showPlusOne();
-        if (correctPairs === 20) {
-          gameCompleted = true;
-          setTimeout(() => showCongrats(), 800);
+        if (correctPairs === totalPairs) {
+            gameCompleted = true;
+            setTimeout(() => showCongrats(), 800);
         }
       } else {
         playWrongSound();
@@ -633,7 +648,7 @@ function showCongrats() {
   const screen = document.getElementById("congratsScreen");
   const finalScoreText = document.getElementById("finalScore");
 
-  finalScoreText.innerText = `Score: ${points} / 20`;
+  finalScoreText.innerText = `Score: ${points} / ${totalPairs}`;
 
   screen.style.display = "flex";
   congratsSound.play().catch(e => console.log("Congrats sound failed:", e));
@@ -646,7 +661,7 @@ function showCongrats() {
     points = 0;
     gameCompleted = false;
 
-    pointsDisplay.textContent = `0 / 20`;
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
     progressBar.style.width = `0%`;
     pairWords.innerHTML = "";
     pairWords.style.display = "none";
@@ -682,7 +697,15 @@ function showCongrats() {
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", async function () {
+    const success = await fetchMatchingPairs();
+
+    if (!success) {
+        alert("Unable to load Ilocano matching pairs.");
+        return;
+    }
+
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
     resetAndShuffleBoxes();
 
     const navLinks = document.querySelectorAll('.sidebar ul li a');

@@ -750,38 +750,61 @@
       });
 
 
-      const questions = [
-        { word: "Ináng : _____", choices: ["Kapatid na babae", "Ina", "Pamangkin"], answer: "Ina", hint: "Magulang na babae" },
-        { word: "Tatáng : _____", choices: ["Ama", "Tiyuhin", "Kapatid na lalaki"], answer: "Ama", hint: "Magulang na lalaki" },
-        { word: "Manáng : _____", choices: ["Panganay na babae", "Pinsan", "Lola"], answer: "Panganay na babae", hint: "Matandang kapatid na babae" },
-        { word: "Manóng : _____", choices: ["Lolo", "Pinsan", "Panganay na lalaki"], answer: "Panganay na lalaki", hint: "Matandang kapatid na lalaki" },
-        { word: "Napíntas : _____", choices: ["Maganda", "Mabango", "Mabait"], answer: "Maganda", hint: "Kaakit-akit na anyo" },
-        { word: "Natarakí : _____", choices: ["Mabait", "Mabango", "Gwapo"], answer: "Gwapo", hint: "Kaakit-akit na anyo" },
-        { word: "Napudót : _____", choices: ["Mainit", "Malamig", "Maligamgam"], answer: "Mainit", hint: "Kabaligtaran ng malamig" },
-        { word: "Nalamíis : _____", choices: ["Tuyo", "Maalinsangan", "Malamig"], answer: "Malamig", hint: "Mababang temperatura" },
-        { word: "Naimbág nga bigát : _____", choices: ["Magandang Gabi", "Magandang Umaga", "Masayang Pagtulog"], answer: "Magandang Umaga", hint: "Pagbati sa umaga" },
-        { word: "Naimbág nga malém : _____", choices: ["Magandang Tanghali", "Masayang Pagtulog", "Magandang Hapon"], answer: "Magandang Hapon", hint: "Pagbati sa hapon" },
-        { word: "Naimbág nga rabí-i : _____", choices: ["Paalam", "Magandang Umaga", "Magandang Gabi"], answer: "Magandang Gabi", hint: "Pagbati sa gabi" },
-        { word: "Agyamanák unay : _____", choices: ["Maraming salamat", "Paumanhin", "Walang anuman"], answer: "Maraming salamat", hint: "Pagpapakita ng pasasalamat" },
-        { word: "Makan : _____", choices: ["Pagkain", "Inumin", "Kanin"], answer: "Pagkain", hint: "Pangkalahatang tawag sa kinakain" },
-        { word: "Inapúy : _____", choices: ["Bigas", "Kanin", "Tinapay"], answer: "Kanin", hint: "Pangunahing pagkain (kanin)" },
-        { word: "Naténg : _____", choices: ["Gulay", "Prutas", "Karne"], answer: "Gulay", hint: "Pagkaing mula sa halaman" },
-        { word: "Bunga : _____", choices: ["Bulaklak", "Dahon", "Prutas"], answer: "Prutas", hint: "Bahagi ng halaman na nakakain" },
-        { word: "Bantáy : _____", choices: ["Bundok", "Burol", "Ilog"], answer: "Bundok", hint: "Mataas na anyong lupa" },
-        { word: "Baybay : _____", choices: ["Lawa", "Dagat", "Ilog"], answer: "Dagat", hint: "Malaking anyong tubig na maalat" },
-        { word: "Kayú : _____", choices: ["Puno", "Damo", "Bulaklak"], answer: "Puno", hint: "Mataas na halaman na pwedeng akyatin" },
-        { word: "Karayan : _____", choices: ["Sapa", "Karagatan", "Ilog"], answer: "Ilog", hint: "Tuluyang daloy ng tubig" }
-      ];
-      let hintsLeft = 3;
-      let revealsLeft = 3;
-      let currentQuestion = 0;
-      shuffleArray(questions);
-      questions.forEach(q => shuffleArray(q.choices));
-      let userAnswers = new Array(questions.length).fill(null);
-      let revealed = new Array(questions.length).fill(false);
-      let attemptsCount = new Array(questions.length).fill(0);
+      let questions = [];
 
+    
+async function fetchQuestions() {
+    try {
+        const response = await fetch(
+            "../api/quizzes.php?dialect=Ilocano&type=Analogy"
+        );
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch Ilocano analogy questions");
+        }
+
+        const data = await response.json();
+
+        questions = data.map(q => {
+            const correctOption = q.options.find(
+                opt => Number(opt.is_correct) === 1
+            );
+
+            return {
+                word: q.question.trim() + " _____",
+                choices: q.options.map(opt => opt.text),
+                answer: correctOption ? correctOption.text : "",
+                hint: q.hint || ""
+            };
+        });
+
+        if (
+            questions.length === 0 ||
+            questions.some(q =>
+                q.choices.length !== 3 ||
+                !q.answer
+            )
+        ) {
+            throw new Error("Invalid or missing analogy questions");
+        }
+
+        console.log("Ilocano analogy questions loaded:", questions.length);
+
+        return true;
+
+    } catch (error) {
+        console.error("Error loading Ilocano analogy questions:", error);
+        return false;
+    }
+}
+
+        let hintsLeft = 3;
+        let revealsLeft = 3;
+        let currentQuestion = 0;
+
+        let userAnswers = [];
+        let revealed = [];
+        let attemptsCount = [];
 
 
       const questionText = document.getElementById("question");
@@ -1029,10 +1052,28 @@
         loadQuestion();
       }
 
+     
+    async function initializeGame() {
+    const success = await fetchQuestions();
 
+    if (!success) {
+        alert("Unable to load Ilocano analogy questions.");
+        return;
+    }
 
+    shuffleArray(questions);
+    questions.forEach(q => shuffleArray(q.choices));
 
-      loadQuestion();
+    userAnswers = new Array(questions.length).fill(null);
+    revealed = new Array(questions.length).fill(false);
+    attemptsCount = new Array(questions.length).fill(0);
+
+    updateButtonLabels();
+    loadQuestion();
+}
+
+initializeGame();
+
     </script>
 
 

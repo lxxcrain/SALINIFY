@@ -435,48 +435,7 @@
 
       <div class="instruction">Instruction: Click two boxes that belong together. If they match, they will disappear and be recorded as a pair. Continue until all pairs are matched.</div>
 
-      <div class="word-boxes" id="wordBoxes">
-        <div class="word-box" data-pair="17">Bundok</div>
-        <div class="word-box" data-pair="3">Àtchi</div>
-        <div class="word-box" data-pair="3">Àte</div>
-        <div class="word-box" data-pair="1">Íma</div>
-        <div class="word-box" data-pair="5">Maganda</div>
-        <div class="word-box" data-pair="19">Tanaman</div>
-        <div class="word-box" data-pair="9">Mayap á abák</div>
-        <div class="word-box" data-pair="19">Puno</div>
-        <div class="word-box" data-pair="9">Magandáng Umaga</div>
-        <div class="word-box" data-pair="2">Tatay</div>
-        <div class="word-box" data-pair="6">Masantíng</div>
-        <div class="word-box" data-pair="7">Mapalí</div>
-        <div class="word-box" data-pair="7">Mainit</div>
-        <div class="word-box" data-pair="16">Prutas</div>
-        <div class="word-box" data-pair="14">Kanin</div>
-        <div class="word-box" data-pair="11">Mayap á béngi</div>
-        <div class="word-box" data-pair="15">Gulé</div>
-        <div class="word-box" data-pair="1">Nanay</div>
-        <div class="word-box" data-pair="18">Dayat Malat</div>
-        <div class="word-box" data-pair="2">Tatáng</div>
-        <div class="word-box" data-pair="10">Mayap á gatpanapún</div>
-        <div class="word-box" data-pair="18">Dagat</div>
-        <div class="word-box" data-pair="12">Maraming salamat</div>
-        <div class="word-box" data-pair="10">Magandáng Hapon</div>
-        <div class="word-box" data-pair="20">Ilug</div>
-        <div class="word-box" data-pair="14">Nasi</div>
-        <div class="word-box" data-pair="16">Busbus</div>
-        <div class="word-box" data-pair="13">Pagkain</div>
-        <div class="word-box" data-pair="11">Magandáng Gabi</div>
-        <div class="word-box" data-pair="12">Dakal á Salamat</div>
-        <div class="word-box" data-pair="20">Ilog</div>
-        <div class="word-box" data-pair="4">Kóya</div>
-        <div class="word-box" data-pair="8">Marimlá</div>
-        <div class="word-box" data-pair="4">Kúya</div>
-        <div class="word-box" data-pair="15">Gulay</div>
-        <div class="word-box" data-pair="6">Gwapo</div>
-        <div class="word-box" data-pair="5">Malagú</div>
-        <div class="word-box" data-pair="8">Malamíg</div>
-        <div class="word-box" data-pair="13">Pamangan</div>
-        <div class="word-box" data-pair="17">Bunduk</div>
-      </div>
+      <div class="word-boxes" id="wordBoxes"></div>
 
       <div class="action-bar">
         <button class="pair-btn" id="showPairs">Review Matched Pairs</button>
@@ -525,6 +484,62 @@
   let storedPairs = [];
   let points = 0;
   let gameCompleted = false;
+  let totalPairs = 0;
+
+async function fetchMatchingPairs() {
+    try {
+        const response = await fetch(
+            "../api/matching.php?dialect=Kapampangan"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch Kapampangan matching pairs");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data) || data.length === 0) {
+            throw new Error("No matching pairs found");
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        data.forEach((pair, index) => {
+            const pairId = String(pair.pair_id ?? index);
+
+            const dialectBox = document.createElement("div");
+            dialectBox.className = "word-box";
+            dialectBox.dataset.pair = pairId;
+            dialectBox.textContent = pair.word;
+
+            const translationBox = document.createElement("div");
+            translationBox.className = "word-box";
+            translationBox.dataset.pair = pairId;
+            translationBox.textContent = pair.match_text;
+
+            if (
+                !dialectBox.textContent.trim() ||
+                !translationBox.textContent.trim()
+            ) {
+                throw new Error("Missing matching pair text");
+            }
+
+            fragment.appendChild(dialectBox);
+            fragment.appendChild(translationBox);
+        });
+
+        totalPairs = data.length;
+        wordBoxesContainer.replaceChildren(fragment);
+
+        console.log("Kapampangan matching pairs loaded:", totalPairs);
+        return true;
+
+    } catch (error) {
+        console.error("Error loading Kapampangan matching pairs:", error);
+        return false;
+    }
+}
+
 
   function shuffleArray(array) {
     const shuffled = [...array];
@@ -577,12 +592,12 @@
         s.classList.add('matched');
         correctPairs++;
         points++;
-        pointsDisplay.textContent = `${points} / 20`;
-        progressBar.style.width = `${(correctPairs / 20) * 100}%`;
+        pointsDisplay.textContent = `${points} / ${totalPairs}`;
+        progressBar.style.width = `${(correctPairs / totalPairs) * 100}%`;
         showPlusOne();
-        if (correctPairs === 20) {
-          gameCompleted = true;
-          setTimeout(() => showCongrats(), 800);
+        if (correctPairs === totalPairs) {
+            gameCompleted = true;
+            setTimeout(() => showCongrats(), 800);
         }
       } else {
         playWrongSound();
@@ -622,7 +637,7 @@
   function showCongrats() {
     const screen = document.getElementById("congratsScreen");
     const finalScoreText = document.getElementById("finalScore");
-    finalScoreText.innerText = `Score: ${points} / 20`;
+    finalScoreText.innerText = `Score: ${points} / ${totalPairs}`;
     screen.style.display = "flex";
     congratsSound.play().catch(e => console.log(e));
   }
@@ -633,7 +648,7 @@
     storedPairs = [];
     points = 0;
     gameCompleted = false;
-    pointsDisplay.textContent = `0 / 20`;
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
     progressBar.style.width = `0%`;
     pairWords.innerHTML = "";
     pairWords.style.display = "none";
@@ -667,7 +682,15 @@
     }
   });
 
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", async function () {
+    const success = await fetchMatchingPairs();
+
+    if (!success) {
+        alert("Unable to load Kapampangan matching pairs.");
+        return;
+    }
+
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
     resetAndShuffleBoxes();
     const navLinks = document.querySelectorAll('.sidebar ul li a');
     navLinks.forEach(link => {

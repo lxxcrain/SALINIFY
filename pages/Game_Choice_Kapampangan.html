@@ -533,28 +533,51 @@
 
 
 <script>
-        const originalQuestions = [
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Íma\"?", "options": ["Tatay", "Nanay", "Àte", "Kúya"], "correct": 1, "hint": "Kilala bilang Ilaw ng Tahanan" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Tatáng\"?", "options": ["Kúya", "Àte", "Nanay", "Tatay"], "correct": 3, "hint": "Kilala bilang Haligi ng Tahanan" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Àtchi\"?", "options": ["Tatay", "Kúya", "Àte", "Nanay"], "correct": 2, "hint": "Babaeng panganay na anak" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Kóya\"?", "options": ["Kúya", "Tatay", "Nanay", "Àte"], "correct": 0, "hint": "Lalakeng panganay na anak" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Malagú\"?", "options": ["Maginoo", "Maganda", "Mahinhin", "Gwapo"], "correct": 1, "hint": "Salitang naglalarawan sa mukha ng babae" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Masantíng\"?", "options": ["Maganda", "Maginoo", "Gwapo", "Mahinhin"], "correct": 2, "hint": "Salitang naglalarawan sa mukha ng lalake" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Mapalí\"?", "options": ["Mainit", "Malamíg", "Maligamgam", "Nagyeyelo"], "correct": 0, "hint": "Temperatura ng panahon tuwing buwan ng Marso-Mayo" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Marimlá\"?", "options": ["Nagyeyelo", "Mainit", "Maligamgam", "Malamíg"], "correct": 3, "hint": "Temperatura ng panahon tuwing buwan ng Disyembre-Pebrero" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Mayap á abák\"?", "options": ["Magandáng Gabi", "Magandáng Araw", "Magandáng Umaga", "Magandáng Hapon"], "correct": 2, "hint": "Pagbati na sinasabi sa pagsikat ng araw" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Mayap á gatpanapún\"?", "options": ["Magandáng Hapon", "Magandáng Umaga", "Magandáng Gabi", "Magandáng Araw"], "correct": 0, "hint": "Pagbati na sinasabi kapag ang araw ay tirik na tirik na" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Mayap á béngi\"?", "options": ["Magandáng Araw", "Magandáng Umaga", "Magandáng Hapon", "Magandáng Gabi"], "correct": 3, "hint": "Pagbati na sinasabi kapag ang buwan ay nasa kalangitan" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Dakal á Salamat\"?", "options": ["Kumusta Ka?", "Maraming Salamat", "Walang Anuman", "Mag ingat"], "correct": 1, "hint": "Pagbati na sinasabi tuwing nakakatanggap ng kabutihan" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Pamangan\"?", "options": ["Inumin", "Pagkain", "Karne", "Kanin"], "correct": 1, "hint": "Kinakain natin sa araw-araw" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Nasi\"?", "options": ["Kanin", "Sabaw", "Prutas", "Tubig"], "correct": 0, "hint": "Pagkaing sagana sa carbohydrates" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Busbus\"?", "options": ["Sabaw", "Gulay", "Prutas", "Karne"], "correct": 2, "hint": "Ang iba ay matamis, ang iba ay maaasim" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Gulé\"?", "options": ["Isda", "Kanin", "Prutas", "Gulay"], "correct": 3, "hint": "Pagkaing masagana sa sustansya" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Bunduk\"?", "options": ["Bulkan", "Bundok", "Burol", "Kapatagan"], "correct": 1, "hint": "Mataas na bahagi ng lupa" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Dayat Malat\"?", "options": ["Dagat", "Ilog", "Karagatan", "Lawa"], "correct": 0, "hint": "Malawak na anyong tubig" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Tanaman\"?", "options": ["Sanga", "Bunga", "Puno", "Dahon"], "correct": 2, "hint": "Ito ay may dahon, sanga, at ang iba ay namumunga" },
-            { "text": "Ano sa Tagalog ang ibig sabihin ng \"Ilug\"?", "options": ["Lawa", "Palaisdaan", "Kanal", "Ilog"], "correct": 3, "hint": "Isang likas na daluyan ng tubig na umaagos" }
-        ];
+        let originalQuestions = [];
+
+async function fetchQuestions() {
+    try {
+        const response = await fetch(
+            "../api/quizzes.php?dialect=Kapampangan&type=Choice"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch questions");
+        }
+
+        const data = await response.json();
+
+        originalQuestions = data.map(q => ({
+            text: q.question,
+            options: q.options.map(opt => opt.text),
+            correct: q.options.findIndex(
+                opt => Number(opt.is_correct) === 1
+            ),
+            hint: q.hint
+        }));
+
+        if (
+            originalQuestions.length === 0 ||
+            originalQuestions.some(q =>
+                q.correct === -1 ||
+                q.options.length !== 4
+            )
+        ) {
+            throw new Error("Invalid or missing quiz data");
+        }
+
+        console.log(
+            "Kapampangan questions loaded:",
+            originalQuestions.length
+        );
+
+        return true;
+
+    } catch (error) {
+        console.error("Error loading questions:", error);
+        return false;
+    }
+}
         
         const roman = ["", "I", "II", "III"];
         let hintCount = 3;
@@ -774,17 +797,16 @@
             }
         });
 
-        window.onload = () => {
-            questions = shuffleArray([...originalQuestions]);
-            gameState = questions.map(() => ({
-                answered: false,
-                userChoice: -1,
-                revealed: false,
-                shownHint: false,
-                wrongAttempts: 0
-            }));
-            loadQ();
-        };
+        window.onload = async () => {
+            const success = await fetchQuestions();
+
+            if (!success) {
+            alert("Unable to load Kapampangan quiz questions.");
+        return;
+        }
+
+        restartGame();
+};
 </script>
 
 </body>

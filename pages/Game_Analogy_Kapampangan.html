@@ -752,41 +752,62 @@
 
 
 
-      const questions = [
-        { word: "Íma : _____", choices: ["Kapatid na babae", "Ina", "Pamangkin"], answer: "Ina", hint: "Magulang na babae" },
-        { word: "Tatáng : _____", choices: ["Kapatid na lalaki", "Tiyuhin", "Ama"], answer: "Ama", hint: "Magulang na lalaki" },
-        { word: "Àtchi : _____", choices: ["Ate", "Ina", "Neneng"], answer: "Ate", hint: "Matandang kapatid na babae" },
-        { word: "Kóya : _____", choices: ["Lolo", "Kuya", "Ama"], answer: "Kuya", hint: "Matandang kapatid na lalaki" },
-        { word: "Malagú : _____", choices: ["Mainit", "Maganda", "Pangit"], answer: "Maganda", hint: "Kaakit-akit na anyo" },
-        { word: "Masantíng : _____", choices: ["Matangkad", "Mainit", "Gwapo"], answer: "Gwapo", hint: "Gwapong lalaki" },
-        { word: "Mapalí : _____", choices: ["Maligamgam", "Mainit", "Malamig"], answer: "Mainit", hint: "Kabaligtaran ng malamig" },
-        { word: "Marimlá : _____", choices: ["Tuyo", "Mainit", "Malamig"], answer: "Malamig", hint: "Kabaligtaran ng mainit" },
-        { word: "Mayap á abák : _____", choices: ["Magandang Hapon", "Magandang Umaga", "Magandang Gabi"], answer: "Magandang Umaga", hint: "Pagbati sa umaga" },
-        { word: "Mayap á gatpanapún : _____", choices: ["Magandang Hapon", "Magandang Gabi", "Magandang Umaga"], answer: "Magandang Hapon", hint: "Pagbati sa hapon" },
-        { word: "Mayap á béngi : _____", choices: ["Magandang Hapon", "Magandang Gabi", "Magandang Umaga"], answer: "Magandang Gabi", hint: "Pagbati sa gabi" },
-        { word: "Dakal á Salamat : _____", choices: ["Walang anuman", "Maraming salamat", "Paumanhin"], answer: "Maraming salamat", hint: "Pagpapakita ng pasasalamat" },
-        { word: "Pamangan : _____", choices: ["Pagkain", "Meryenda", "Inumin"], answer: "Pagkain", hint: "Bagay na kinakain" },
-        { word: "Nasi : _____", choices: ["Tinapay", "Kanin", "Sabaw"], answer: "Kanin", hint: "Pangunahing pagkain" },
-        { word: "Gulé : _____", choices: ["Karne", "Prutas", "Gulay"], answer: "Gulay", hint: "Masustansyang pagkain mula sa halaman" },
-        { word: "Busbus : _____", choices: ["Isda", "Prutas", "Bigas"], answer: "Prutas", hint: "Matamis na natural na pagkain" },
-        { word: "Bunduk : _____", choices: ["Bundok", "Lawa", "Ilog"], answer: "Bundok", hint: "Mataas na anyong lupa" },
-        { word: "Dayat Malat : _____", choices: ["Ilog", "Dagat", "Lawa"], answer: "Dagat", hint: "Malaking anyong tubig na maalat" },
-        { word: "Tanaman : _____", choices: ["Bulaklak", "Damo", "Puno"], answer: "Puno", hint: "Mataas na halaman" },
-        { word: "Ilug : _____", choices: ["Ilog", "Lawa", "Sapa"], answer: "Ilog", hint: "Umaagos na tubig" }
-      ];
+      let questions = [];
 
+   
+async function fetchQuestions() {
+    try {
+        const response = await fetch(
+            "../api/quizzes.php?dialect=Kapampangan&type=Analogy"
+        );
 
+        if (!response.ok) {
+            throw new Error("Failed to fetch Kapampangan analogy questions");
+        }
+
+        const data = await response.json();
+
+        questions = data.map(q => {
+            const correctOption = q.options.find(
+                opt => Number(opt.is_correct) === 1
+            );
+
+            return {
+                word: q.question.trim() + " _____",
+                choices: q.options.map(opt => opt.text),
+                answer: correctOption ? correctOption.text : "",
+                hint: q.hint || ""
+            };
+        });
+
+        if (
+            questions.length === 0 ||
+            questions.some(q =>
+                q.choices.length !== 3 ||
+                !q.answer
+            )
+        ) {
+            throw new Error("Invalid or missing analogy questions");
+        }
+
+        console.log("Kapampangan analogy questions loaded:", questions.length);
+
+        return true;
+
+    } catch (error) {
+        console.error("Error loading Kapampangan analogy questions:", error);
+        return false;
+    }
+}
 
 
       let hintsLeft = 3;
       let revealsLeft = 3;
       let currentQuestion = 0;
-      shuffleArray(questions);
-      questions.forEach(q => shuffleArray(q.choices));
-      let userAnswers = new Array(questions.length).fill(null);
-      let revealed = new Array(questions.length).fill(false);
-      let attemptsCount = new Array(questions.length).fill(0);
 
+      let userAnswers = [];
+      let revealed = [];
+      let attemptsCount = [];
 
 
 
@@ -1037,8 +1058,28 @@
 
 
 
+   
+async function initializeGame() {
+    const success = await fetchQuestions();
 
-      loadQuestion();
+    if (!success) {
+        alert("Unable to load Kapampangan analogy questions.");
+        return;
+    }
+
+    shuffleArray(questions);
+    questions.forEach(q => shuffleArray(q.choices));
+
+    userAnswers = new Array(questions.length).fill(null);
+    revealed = new Array(questions.length).fill(false);
+    attemptsCount = new Array(questions.length).fill(0);
+
+    updateButtonLabels();
+    loadQuestion();
+}
+
+initializeGame();
+
     </script>
 
 
