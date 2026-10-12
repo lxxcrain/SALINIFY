@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salinify - Authentication System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fff8df;
+            color: #2b2b2b;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+
+        .serif-font {
+            font-family: 'bright DEMO', 'Playfair Display', serif;
+        }
+
+
+        /* Background & Footer Graphic */
+        .bg-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            opacity: 0.8; /* Adjust this value (0.0 to 1.0) to control transparency */
+        }
+
+
+        .earth-hill {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120%;
+            height: 180px;
+            background: radial-gradient(ellipse at center top, #5c2c16 0%, #42200f 70%, #2b1307 100%);
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+
+        /* Header */
+        header {
+            width: 100%;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+            position: relative;
+        }
+
+
+        .logo {
+            height: 80px;
+            object-fit: contain;
+        }
+
+
+        .status-badge {
+            display: none;
+            font-size: 12px;
+            padding: 6px 12px;
+            background: #fefae0;
+            border: 1px solid #c8b6a6;
+            border-radius: 9999px;
+            color: #7f3b08;
+            font-weight: 500;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+
+        /* Main Container */
+        main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 32px 16px;
+            z-index: 10;
+            position: relative;
+            max-width: 1152px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+
+        .main-title-container {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+
+        .main-title-container h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e2b37;
+        }
+
+
+        @media (min-width: 768px) {
+            .main-title-container h1 {
+                font-size: 3rem;
+            }
+        }
+
+
+        .main-title-container p {
+            font-size: 0.875rem;
+            color: #4a4a4a;
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+
+        @media (min-width: 768px) {
+            .main-title-container p {
+                font-size: 1rem;
+            }
+        }
+
+
+        /* Cards / Modals */
+        .auth-card {
+            width: 100%;
+            max-width: 448px;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            padding: 32px;
+            border: 1px solid #e6dbc9;
+            position: relative;
+        }
+
+
+        .auth-card-wide {
+            max-width: 1024px;
+        }
+
+
+        .modal-hat {
+            position: absolute;
+            top: -90px;
+            right: -80px;
+            width: 160px;
+            height: 90px;
+            object-fit: contain;
+            transform: rotate(5deg);
+            z-index: 25;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            pointer-events: none;
+        }
+
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #5c5c5c;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+
+        .input-wrapper {
+            position: relative;
+        }
+
+
+        .input-icon {
+            position: absolute;
+            inset-y: 0;
+            left: 0;
+            padding-top: 12px;
+            padding-left: 12px;
+            display: flex;
+            align-items: center;
+            color: #8c5830;
+        }
+
+
+        .input-icon-right {
+            position: absolute;
+            inset-y: 0;
+            top: 35%;
+            right: 0;
+            padding-bottom: 12px;
+            padding-right: 12px;
+            display: flex;
+            align-items: center;
+            color: #8c5830;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+
+        .custom-input {
+            background: #fefae0;
+            border: 1px solid #c8b6a6;
+            width: 100%;
+            padding: 12px 16px 12px 40px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: inherit;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+
+        .custom-input.no-icon {
+            padding-left: 16px;
+        }
+
+
+        .custom-input.has-right-icon {
+            padding-right: 40px;
+        }
+
+
+        .custom-input:focus {
+            outline: none;
+            border-color: #8c5830;
+            box-shadow: 0 0 0 2px rgba(140, 88, 48, 0.15);
+        }
+
+
+        select.custom-input {
+            appearance: none;
+            padding-right: 36px;
+        }
+
+
+        /* Buttons */
+        .btn-earth {
+            background-color: #7f3b08;
+            color: #ffffff;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+
+        .btn-earth:hover {
+            background-color: #632d06;
+        }
+
+
+        .btn-gold {
+            background: linear-gradient(135deg, #e5a93b, #c4871d);
+            color: #fff;
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #f2b647, #d49323);
+        }
+
+
+        /* Utility Helpers */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-xs { font-size: 12px; }
+        .text-sm { font-size: 14px; }
+        .font-semibold { font-weight: 600; }
+        .text-brown { color: #b36b00; }
+        .text-brown-dark { color: #7f3b08; }
+        .text-gray { color: #5c5c5c; }
+       
+        .signup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 32px;
+            width: 100%;
+        }
+
+
+        @media (min-width: 768px) {
+            .signup-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+
+        .signup-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            border: 1px solid #e6dbc9;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+
+        .toast-box {
+            display: none;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            max-width: 448px;
+            width: 100%;
+            text-align: center;
+            z-index: 30;
+        }
+
+
+        .link-btn {
+            background: none;
+            border: none;
+            color: #b36b00;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            text-decoration: none;
+        }
+        .link-btn:hover { text-decoration: underline; }
+
+
+        .flex-between {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+            color: #4a4a4a;
+        }
+
+
+        .success-banner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 12px;
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+            color: #166534;
+            font-size: 14px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+
+    <img src="signup_bg2.png" alt="Background" class="bg-image">
+
+
+    <!-- Header -->
+    <header>
+        <img src="salinify2.png" alt="Salinify Logo" class="logo">
+        <div id="status-badge" class="status-badge">
+            <i class="fa-solid fa-user-check" style="margin-right: 4px;"></i> <span id="logged-user-display">Logged In</span>
+        </div>
+    </header>
+
+
+    <!-- Main Content -->
+    <main>
+        <div class="main-title-container">
+            <h1 id="main-title" class="serif-font">Welcome, ka-salin!</h1>
+            <p id="main-subtitle">Please enter your details to sign in.</p>
+        </div>
+
+
+        <div id="toast-message" class="toast-box"></div>
+
+
+        <!-- VIEW 1: LOGIN -->
+        <section id="view-login" class="auth-card">
+            <img src="wooden_hat.png" class="modal-hat">
+            <form id="form-login" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">Email or Username</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-at"></i></span>
+                        <input type="text" id="login-identifier" required class="custom-input" placeholder="Email or Username">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="login-password" required class="custom-input has-right-icon" placeholder="Password">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye')" class="input-icon-right"><i id="login-eye" class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="flex-between" style="margin-bottom: 20px;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="login-remember" style="width: 16px; height: 16px; accent-color: #7f3b08; margin-right: 8px;">
+                        <span>Remember Me</span>
+                    </label>
+                    <button type="button" onclick="switchView('reset-step1')" class="link-btn text-xs">Forgot password?</button>
+                </div>
+                <button type="submit" class="btn-earth">Log In</button>
+                <div class="text-center text-xs text-gray" style="margin-top: 16px;">
+                    Don't have an account?<br><button type="button" onclick="switchView('signup')" class="link-btn" style="margin-top: 2px;">Sign Up Here</button>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- VIEW 2: SIGN UP -->
+        <section id="view-signup" class="hidden" style="width: 100%; max-width: 1024px; position: relative;">
+            <img src="wooden_hat.png" class="modal-hat" style="right: 15px; top: -50px;">
+            <form id="form-signup" class="signup-grid" onsubmit="handleSignup(event)">
+                <div class="signup-box">
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Firstname</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" id="signup-name" required class="custom-input" placeholder="Firstname">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Account Email</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-at"></i></span>
+                                <input type="email" id="signup-email" required class="custom-input" placeholder="Email Address">
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Password</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" id="signup-password" required minlength="6" class="custom-input has-right-icon" placeholder="Password">
+                                <button type="button" onclick="togglePasswordVisibility('signup-password', 'signup-eye1')" class="input-icon-right"><i id="signup-eye1" class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Confirm password</label>
+                            <div class="input-wrapper">
+                                <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" id="signup-confirm" required class="custom-input has-right-icon" placeholder="Confirm password">
+                                <button type="button" onclick="togglePasswordVisibility('signup-confirm', 'signup-eye2')" class="input-icon-right"><i id="signup-eye2" class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="signup-box">
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Password recovery question:</label>
+                            <div class="input-wrapper">
+                                <select id="signup-question" required class="custom-input no-icon">
+                                    <option value="" disabled selected>Select a security question</option>
+                                    <option value="What is the name of your first pet?">What is the name of your first pet?</option>
+                                    <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
+                                    <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                                    <option value="In what town were you born?">In what town were you born?</option>
+                                </select>
+                                <span class="input-icon-right" style="pointer-events: none;"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                            </div>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;">
+                            <label class="form-label">Answer:</label>
+                            <div class="input-wrapper">
+                                <input type="text" id="signup-answer" required class="custom-input no-icon has-right-icon" placeholder="Security answer" style="padding-left: 16px;">
+                                <button type="button" onclick="togglePasswordVisibility('signup-answer', 'signup-ans-eye')" class="input-icon-right"><i id="signup-ans-eye" class="fa-solid fa-eye"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding-top: 16px;">
+                        <button type="submit" class="btn-gold">Sign Up</button>
+                        <div class="text-center text-xs text-gray" style="margin-top: 12px;">
+                            Already have an account?<br><button type="button" onclick="switchView('login')" class="link-btn" style="color: #7f3b08; margin-top: 2px;">Log In</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- VIEW 3: RESET STEP 1 -->
+        <section id="view-reset-step1" class="auth-card hidden">
+            <img src="wooden_hat.png" class="modal-hat">
+            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your email to verify your security question.</p>
+            <form id="form-reset-step1" onsubmit="handleResetStep1(event)">
+                <div class="form-group">
+                    <label class="form-label">Account Email</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-at"></i></span>
+                        <input type="email" id="reset-email" required class="custom-input" placeholder="Enter your registered email">
+                    </div>
+                </div>
+                <button type="submit" class="btn-earth">
+                    <span>Find Account</span> <i class="fa-solid fa-magnifying-glass text-xs"></i>
+                </button>
+                <div class="text-center text-xs text-gray" style="margin-top: 16px;">
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- VIEW 4: RESET STEP 2 -->
+        <section id="view-reset-step2" class="auth-card hidden">
+            <img src="wooden_hat.png" class="modal-hat">
+            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your security answer to verify your account.</p>
+            <form id="form-reset-step2" onsubmit="handleResetStep2(event)">
+                <div class="form-group">
+                    <label class="form-label">Your security question:</label>
+                    <div id="display-security-question" style="padding: 12px; background: #fefae0; border: 1px solid #c8b6a6; border-radius: 12px; font-size: 14px; font-weight: 500; color: #4a4a4a;">Loading question...</div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Enter security answer</label>
+                    <div class="input-wrapper">
+                        <input type="text" id="reset-answer-input" required class="custom-input no-icon has-right-icon" placeholder="Enter security answer" style="padding-left: 16px;">
+                        <button type="button" onclick="togglePasswordVisibility('reset-answer-input', 'ans-eye')" class="input-icon-right"><i id="ans-eye" class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-earth">Verify Security Answer</button>
+                <div class="text-center text-xs text-gray" style="margin-top: 16px;">
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- VIEW 5: RESET STEP 3 -->
+        <section id="view-reset-step3" class="auth-card hidden">
+            <img src="wooden_hat.png" class="modal-hat">
+            <div class="success-banner">
+                <i class="fa-solid fa-circle-check" style="font-size: 20px; flex-shrink: 0;"></i>
+                <p style="line-height: 1.2;">Security answer verified! Enter your new password below.</p>
+            </div>
+            <form id="form-reset-step3" onsubmit="handleResetStep3(event)">
+                <div class="form-group">
+                    <label class="form-label">New Password (min 6 characters)</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="new-password" required minlength="6" class="custom-input has-right-icon" placeholder="New Password">
+                        <button type="button" onclick="togglePasswordVisibility('new-password', 'np-eye')" class="input-icon-right"><i id="np-eye" class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Re-enter new password</label>
+                    <div class="input-wrapper">
+                        <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="confirm-new-password" required class="custom-input has-right-icon" placeholder="Re-enter password">
+                        <button type="button" onclick="togglePasswordVisibility('confirm-new-password', 'ncp-eye')" class="input-icon-right"><i id="ncp-eye" class="fa-solid fa-eye"></i></button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-earth">
+                    <span>Save New Password</span> <i class="fa-solid fa-check text-xs"></i>
+                </button>
+                <div class="text-center text-xs text-gray" style="margin-top: 16px;">
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                </div>
+            </form>
+        </section>
+
+
+        <!-- VIEW 6: DASHBOARD -->
+        <section id="view-dashboard" class="auth-card hidden text-center">
+            <img src="wooden_hat.png" class="modal-hat">
+            <div style="width: 80px; height: 80px; background: #fefae0; border: 2px solid #8c5830; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #7f3b08; font-size: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);">
+                <i class="fa-solid fa-hat-cowboy"></i>
+            </div>
+            <h2 id="dash-welcome" class="serif-font" style="font-size: 1.5rem; font-weight: bold; color: #1e2b37; margin-bottom: 8px;">Mabuhay, Ka-salin!</h2>
+            <p class="text-sm text-gray" style="margin-bottom: 24px;">You are successfully logged in to Salinify.</p>
+            <div style="padding: 16px; background: #fefae0; border-radius: 12px; border: 1px solid #c8b6a6; text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+                <div><span style="font-weight: bold; color: #7f3b08;">Name / Username:</span> <span id="dash-name">-</span></div>
+                <div><span style="font-weight: bold; color: #7f3b08;">Email:</span> <span id="dash-email">-</span></div>
+            </div>
+            <button onclick="handleLogout()" class="btn-earth">Log Out</button>
+        </section>
+
+
+    </main>
+
+
+    <!-- Earth Hill Graphic Footer -->
+    <div class="earth-hill"></div>
+
+
+    <script>
+        // Retrieve or initialize users database in localStorage
+        function getUsers() {
+            const users = localStorage.getItem('salinify_users');
+            return users ? JSON.parse(users) : [
+                {
+                    name: 'Ka-salin User',
+                    email: 'kasalin@salinify.ph',
+                    password: 'password123',
+                    question: 'What is the name of your first pet?',
+                    answer: 'bantay'
+                }
+            ];
+        }
+
+
+        function saveUsers(users) {
+            localStorage.setItem('salinify_users', JSON.stringify(users));
+        }
+
+
+        let resetSessionEmail = null;
+
+
+        const viewConfig = {
+            'login': {
+                title: 'Welcome, ka-salin!',
+                subtitle: 'Please enter your details to sign in.'
+            },
+            'signup': {
+                title: 'Sign up',
+                subtitle: 'Create your Salinify account'
+            },
+            'reset-step1': {
+                title: 'Reset Password',
+                subtitle: 'Account Verification'
+            },
+            'reset-step2': {
+                title: 'Reset Password',
+                subtitle: 'Security Question Verification'
+            },
+            'reset-step3': {
+                title: 'Reset Password',
+                subtitle: 'Create New Password'
+            },
+            'dashboard': {
+                title: 'Salinify Community',
+                subtitle: 'Your active session'
+            }
+        };
+
+
+        function switchView(viewId) {
+            const views = ['login', 'signup', 'reset-step1', 'reset-step2', 'reset-step3', 'dashboard'];
+            views.forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (el) el.classList.add('hidden');
+            });
+
+
+            const target = document.getElementById('view-' + viewId);
+            if (target) target.classList.remove('hidden');
+
+
+            if (viewConfig[viewId]) {
+                document.getElementById('main-title').textContent = viewConfig[viewId].title;
+                document.getElementById('main-subtitle').textContent = viewConfig[viewId].subtitle;
+            }
+
+
+            hideToast();
+        }
+
+
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById('toast-message');
+            toast.textContent = message;
+            toast.classList.remove('hidden');
+            if (type === 'error') {
+                toast.className = 'mb-4 px-4 py-3 rounded-xl text-sm font-medium shadow-md bg-red-100 text-red-800 border border-red-300 max-w-md w-full text-center z-30 mx-auto';
+            } else {
+                toast.className = 'mb-4 px-4 py-3 rounded-xl text-sm font-medium shadow-md bg-emerald-100 text-emerald-800 border border-emerald-300 max-w-md w-full text-center z-30 mx-auto';
+            }
+        }
+
+
+        function hideToast() {
+            const toast = document.getElementById('toast-message');
+            toast.classList.add('hidden');
+        }
+
+
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const identifier = document.getElementById('login-identifier').value.trim();
+            const password = document.getElementById('login-password').value;
+
+
+            const users = getUsers();
+            const user = users.find(u => u.email.toLowerCase() === identifier.toLowerCase() || u.name.toLowerCase() === identifier.toLowerCase());
+
+
+            if (!user || user.password !== password) {
+                showToast('Invalid email/username or password. Please try again.', 'error');
+                return;
+            }
+
+
+            localStorage.setItem('salinify_logged_user', JSON.stringify(user));
+            setupDashboard(user);
+            switchView('dashboard');
+            showToast('Welcome back, ' + user.name + '!', 'success');
+            window.location.href = '../pages/home.html';
+        }
+
+
+        function handleSignup(event) {
+            event.preventDefault();
+            const name = document.getElementById('signup-name').value.trim();
+            const email = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm').value;
+            const question = document.getElementById('signup-question').value;
+            const answer = document.getElementById('signup-answer').value.trim().toLowerCase();
+
+
+            if (password !== confirm) {
+                showToast('Passwords do not match. Please re-enter.', 'error');
+                return;
+            }
+
+
+            const users = getUsers();
+            if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+                showToast('An account with this email already exists.', 'error');
+                return;
+            }
+
+
+            const newUser = { name, email, password, question, answer };
+            users.push(newUser);
+            saveUsers(users);
+
+
+            showToast('Account created successfully! Please log in.', 'success');
+            document.getElementById('form-signup').reset();
+            switchView('login');
+        }
+
+
+        function handleResetStep1(event) {
+            event.preventDefault();
+            const email = document.getElementById('reset-email').value.trim();
+            const users = getUsers();
+            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+
+
+            if (!user) {
+                showToast('No account found registered with this email address.', 'error');
+                return;
+            }
+
+
+            resetSessionEmail = user.email;
+            document.getElementById('display-security-question').textContent = user.question;
+            switchView('reset-step2');
+        }
+
+
+        function handleResetStep2(event) {
+            event.preventDefault();
+            const enteredAnswer = document.getElementById('reset-answer-input').value.trim().toLowerCase();
+            const users = getUsers();
+            const user = users.find(u => u.email.toLowerCase() === resetSessionEmail.toLowerCase());
+
+
+            if (!user || user.answer !== enteredAnswer) {
+                showToast('Incorrect security answer. Please try again.', 'error');
+                return;
+            }
+
+
+            document.getElementById('form-reset-step2').reset();
+            switchView('reset-step3');
+        }
+
+
+        function handleResetStep3(event) {
+            event.preventDefault();
+            const newPass = document.getElementById('new-password').value;
+            const confirmPass = document.getElementById('confirm-new-password').value;
+
+
+            if (newPass !== confirmPass) {
+                showToast('New passwords do not match.', 'error');
+                return;
+            }
+
+
+            const users = getUsers();
+            const userIndex = users.findIndex(u => u.email.toLowerCase() === resetSessionEmail.toLowerCase());
+           
+            if (userIndex !== -1) {
+                users[userIndex].password = newPass;
+                saveUsers(users);
+            }
+
+
+            resetSessionEmail = null;
+            showToast('Password updated successfully! Please log in.', 'success');
+            document.getElementById('form-reset-step3').reset();
+            switchView('login');
+        }
+
+
+        function setupDashboard(user) {
+            document.getElementById('dash-welcome').textContent = 'Mabuhay, ' + user.name + '!';
+            document.getElementById('dash-name').textContent = user.name;
+            document.getElementById('dash-email').textContent = user.email;
+           
+            const badge = document.getElementById('status-badge');
+            document.getElementById('logged-user-display').textContent = user.name;
+            badge.classList.remove('hidden');
+        }
+
+
+        function handleLogout() {
+            localStorage.removeItem('salinify_logged_user');
+            document.getElementById('status-badge').classList.add('hidden');
+            switchView('login');
+            showToast('Logged out successfully.', 'success');
+        }
+
+
+        window.onload = function() {
+            const loggedUser = localStorage.getItem('salinify_logged_user');
+            if (loggedUser) {
+                try {
+                    const user = JSON.parse(loggedUser);
+                    setupDashboard(user);
+                    switchView('dashboard');
+                } catch(e) {
+                    localStorage.removeItem('salinify_logged_user');
+                }
+            }
+        };
+    </script>
+</body>
+</html>
+
