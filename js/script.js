@@ -167,6 +167,101 @@ document.addEventListener("DOMContentLoaded", function () {
     if (navClassesLink) navClassesLink.addEventListener('click', updateActiveNav);
     if (startBtn) startBtn.addEventListener('click', updateActiveNav);
     if (closeBtn) closeBtn.addEventListener('click', updateActiveNav);
+
+    //ACCOUNT POP-UP
+
+    const accountBtn = document.getElementById('accountBtn');
+    const accountModal = document.getElementById('accountModal');
+    const closeAccountBtn = document.getElementById('closeAccountBtn');
+    const accountDoneBtn = document.getElementById('accountDoneBtn');
+
+    const accountUsername = document.getElementById('accountUsername');
+    const accountEmail = document.getElementById('accountEmail');
+    const accountCreated = document.getElementById('accountCreated');
+    const accountMessage = document.getElementById('accountMessage');
+
+    function closeAccountModal() {
+        accountModal.classList.add('hidden');
+    }
+    if (accountBtn && accountModal) {
+        accountBtn.addEventListener('click', async () => {
+            accountModal.classList.remove('hidden');
+
+            accountUsername.textContent = 'Loading...';
+            accountEmail.textContent = 'Loading...';
+            accountCreated.textContent = 'Loading...';
+            accountMessage.textContent = '';
+
+            try {
+                const response = await fetch('../api/account.php', {
+                    method: 'GET',
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        data.message || 'Unable to load account details.'
+                    );
+                }
+
+                accountUsername.textContent = data.username;
+                accountEmail.textContent = data.email;
+
+                if (data.created_at) {
+                    const date = new Date(data.created_at);
+
+                    accountCreated.textContent =
+                        Number.isNaN(date.getTime())
+                            ? data.created_at
+                            : date.toLocaleDateString('en-PH', {
+                                year: 'numeric',
+                                month: 'long',
+                                day: 'numeric'
+                            });
+                } else {
+                    accountCreated.textContent = 'Not available';
+                }
+
+            } catch (error) {
+                console.error('Account loading error:', error);
+
+                accountUsername.textContent = '—';
+                accountEmail.textContent = '—';
+                accountCreated.textContent = '—';
+
+                accountMessage.textContent =
+                    error.message || 'Unable to load account details.';
+            }
+        });
+
+        if (closeAccountBtn) {
+            closeAccountBtn.addEventListener('click', closeAccountModal);
+        }
+
+        if (accountDoneBtn) {
+            accountDoneBtn.addEventListener('click', closeAccountModal);
+        }
+
+        accountModal.addEventListener('click', (event) => {
+            if (event.target === accountModal) {
+                closeAccountModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+            if (
+                event.key === 'Escape' &&
+                !accountModal.classList.contains('hidden')
+            ) {
+                closeAccountModal();
+            }
+        });
+    }
 });
 
 // 1. Move scrollTab OUTSIDE DOMContentLoaded so the HTML buttons can find it
@@ -200,9 +295,12 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Close Button
-    document.getElementById('closeBtn').addEventListener('click', () => {
-        slideDownAndRedirect("home.html");
-    });
+    const closeButton = document.getElementById('closeBtn');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            slideDownAndRedirect("home.html");
+        });
+    }
 
     // Sidebar Links
     const navLinks = document.querySelectorAll('.sidebar ul li a');

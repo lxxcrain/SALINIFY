@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 
-
 <body>
     <div class="homepage">
         <div class="nav">
@@ -31,6 +30,18 @@
                     </li>
                     <li><a href="play-ui.html"><span class="material-icons">sports_esports</span> Play </a> </li>
                 </ul>
+            </div>
+            <div class="nav-bottom">
+                <form action="../api/logout.php" method="POST" class="logout-form">
+                    <button type="submit" class="logout-link">
+                        <span class="material-icons">logout</span>
+                        Logout
+                    </button>
+                </form>
+                <button type="button" id="accountBtn" class="account-link">
+                    <span class="material-icons">account_circle</span>
+                    Account
+                </button>
             </div>
         </div>
         <div class="content">
@@ -131,8 +142,7 @@
                                 <li>🔤 Words may sound different from Tagalog</li>
                                 <li>💡 One of the older native languages</li>
                             </ul>
-                            <button class="learn-more-btn"
-                                onclick="window.location.href='classes.html#pampanga'">Learn
+                            <button class="learn-more-btn" onclick="window.location.href='classes.html#pampanga'">Learn
                                 More</button>
                         </div>
                     </div>
@@ -155,8 +165,7 @@
                                 <li>🔤 Easier to recognize for beginners</li>
                                 <li>💡 One of the most widely spoken</li>
                             </ul>
-                            <button class="learn-more-btn"
-                                onclick="window.location.href='classes.html#ilocos'">Learn
+                            <button class="learn-more-btn" onclick="window.location.href='classes.html#ilocos'">Learn
                                 More</button>
                         </div>
                     </div>
@@ -169,6 +178,83 @@
                 <button class="nav-dot-btn ilo-btn active" onclick="switchTab('ilo')"
                     style="margin-left: auto;">ILOCANO</button>
             </div>
+        </div>
+    </div>
+
+
+    <div id="accountModal" class="account-modal hidden">
+        <div class="account-card" role="dialog" aria-modal="true" aria-labelledby="accountTitle">
+
+            <button type="button" id="closeAccountBtn" class="account-close" aria-label="Close account">
+                &times;
+            </button>
+
+            <!-- Clickable Profile Picture -->
+            <button type="button" id="accountAvatarBtn" class="account-avatar" aria-label="Change profile picture"
+                title="Click to change profile picture">
+
+                <img id="accountProfilePicture" src="" alt="" hidden>
+
+                <span id="accountDefaultIcon" class="material-icons">
+                    account_circle
+                </span>
+
+                <span class="avatar-edit-icon material-icons">
+                    photo_camera
+                </span>
+            </button>
+
+            <!-- Hidden file picker -->
+            <input type="file" id="profilePictureInput" accept="image/jpeg,image/png,image/webp" hidden>
+
+            <h2 id="accountTitle">My Account</h2>
+
+            <p class="account-subtitle">
+                Your Salinify account details
+            </p>
+
+            <div id="accountMessage" class="account-message" role="status">
+            </div>
+
+            <!-- Account Details -->
+            <div class="account-details">
+
+                <div class="account-detail-row">
+                    <span class="material-icons">person</span>
+                    <div>
+                        <p class="account-label">Username</p>
+                        <p id="accountUsername" class="account-value">
+                            Loading...
+                        </p>
+                    </div>
+                </div>
+
+                <div class="account-detail-row">
+                    <span class="material-icons">mail</span>
+                    <div>
+                        <p class="account-label">Email Address</p>
+                        <p id="accountEmail" class="account-value">
+                            Loading...
+                        </p>
+                    </div>
+                </div>
+
+                <div class="account-detail-row">
+                    <span class="material-icons">calendar_month</span>
+                    <div>
+                        <p class="account-label">Member Since</p>
+                        <p id="accountCreated" class="account-value">
+                            Loading...
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="button" id="accountDoneBtn" class="account-done">
+                Done
+            </button>
+
         </div>
     </div>
 
@@ -286,6 +372,203 @@
                     }, 300);
                 });
             }
+
+
+            
+// === ACCOUNT MODAL + PROFILE PICTURE LOGIC ===
+
+const accountBtn = document.getElementById("accountBtn");
+const accountModal = document.getElementById("accountModal");
+const closeAccountBtn = document.getElementById("closeAccountBtn");
+const accountDoneBtn = document.getElementById("accountDoneBtn");
+
+const accountUsername = document.getElementById("accountUsername");
+const accountEmail = document.getElementById("accountEmail");
+const accountCreated = document.getElementById("accountCreated");
+const accountMessage = document.getElementById("accountMessage");
+
+// Profile picture elements
+const avatarBtn = document.getElementById("accountAvatarBtn");
+const pictureInput = document.getElementById("profilePictureInput");
+const profileImg = document.getElementById("accountProfilePicture");
+const defaultIcon = document.getElementById("accountDefaultIcon");
+
+function closeAccountModal() {
+    accountModal.classList.add("hidden");
+}
+
+function displayProfilePicture(path) {
+    if (path) {
+        profileImg.src = "../" + path + "?t=" + Date.now();
+        profileImg.hidden = false;
+        defaultIcon.hidden = true;
+    } else {
+        profileImg.removeAttribute("src");
+        profileImg.hidden = true;
+        defaultIcon.hidden = false;
+    }
+}
+
+// Open Account modal and load account details
+if (accountBtn && accountModal) {
+    accountBtn.addEventListener("click", async function () {
+        accountModal.classList.remove("hidden");
+
+        accountUsername.textContent = "Loading...";
+        accountEmail.textContent = "Loading...";
+        accountCreated.textContent = "Loading...";
+        accountMessage.textContent = "";
+
+        try {
+            const response = await fetch("../api/account.php", {
+                method: "GET",
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(
+                    data.message || "Unable to load account details."
+                );
+            }
+
+            accountUsername.textContent = data.username;
+            accountEmail.textContent = data.email;
+
+            if (data.created_at) {
+                const date = new Date(data.created_at);
+
+                accountCreated.textContent = Number.isNaN(date.getTime())
+                    ? data.created_at
+                    : date.toLocaleDateString("en-PH", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    });
+            } else {
+                accountCreated.textContent = "Not available";
+            }
+
+            // Load the user's saved profile picture
+            displayProfilePicture(data.profile_picture);
+
+        } catch (error) {
+            console.error("Account loading error:", error);
+
+            accountUsername.textContent = "—";
+            accountEmail.textContent = "—";
+            accountCreated.textContent = "—";
+            accountMessage.textContent =
+                error.message || "Unable to load account details.";
+        }
+    });
+
+    if (closeAccountBtn) {
+        closeAccountBtn.addEventListener("click", closeAccountModal);
+    }
+
+    if (accountDoneBtn) {
+        accountDoneBtn.addEventListener("click", closeAccountModal);
+    }
+
+    // Close when clicking outside the account card
+    accountModal.addEventListener("click", function (event) {
+        if (event.target === accountModal) {
+            closeAccountModal();
+        }
+    });
+
+    // Close when pressing Escape
+    document.addEventListener("keydown", function (event) {
+        if (
+            event.key === "Escape" &&
+            !accountModal.classList.contains("hidden")
+        ) {
+            closeAccountModal();
+        }
+    });
+} else {
+    console.error("Account button or modal was not found.");
+}
+
+// === PROFILE PICTURE UPLOAD LOGIC ===
+
+if (avatarBtn && pictureInput) {
+    avatarBtn.addEventListener("click", function () {
+        pictureInput.click();
+    });
+
+    pictureInput.addEventListener("change", async function () {
+        const file = pictureInput.files[0];
+
+        if (!file) return;
+
+        // Allow JPEG, PNG, and WebP only
+        const allowedTypes = [
+            "image/jpeg",
+            "image/png",
+            "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+            accountMessage.textContent =
+                "Please choose a JPEG, PNG, or WebP image.";
+            pictureInput.value = "";
+            return;
+        }
+
+        // Maximum file size: 2 MB
+        if (file.size > 2 * 1024 * 1024) {
+            accountMessage.textContent =
+                "Please choose an image smaller than 2 MB.";
+            pictureInput.value = "";
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("profile_picture", file);
+
+        try {
+            accountMessage.textContent = "Uploading picture...";
+
+            const response = await fetch(
+                "../api/upload_profile_picture.php",
+                {
+                    method: "POST",
+                    credentials: "same-origin",
+                    body: formData
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message || "Unable to upload the picture."
+                );
+            }
+
+            displayProfilePicture(result.profile_picture);
+
+            accountMessage.textContent =
+                "Profile picture updated successfully.";
+
+        } catch (error) {
+            console.error("Profile picture upload error:", error);
+
+            accountMessage.textContent =
+                error.message || "Unable to upload the picture.";
+        } finally {
+            pictureInput.value = "";
+        }
+    });
+}
+
+
         });
 
 
@@ -307,4 +590,5 @@
         }
     </script>
 </body>
+
 </html>

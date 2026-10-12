@@ -106,15 +106,19 @@
     overflow-x: hidden;
     z-index: 10;
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .nav-container {
     width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     gap: 10px;
+    flex: 1 1 0;
+    min-height: 0;
+    overflow-y: auto;
 }
 
 .nav ul {
@@ -199,21 +203,30 @@
     padding: 0;
 }
 
-/* ================= LOGOUT ================= */
+.nav-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: auto;
+    padding: 10px 0 0;
+    flex-shrink: 0;
+    width: 100%;
+}
+
+/* ================= LOGOUT/ACCOUNT ================= */
 
 .logout-form {
-    margin-top: auto;
-    margin-bottom: 20px;
+    margin: 0;
     padding: 0;
     width: 100%;
 }
 
-.logout-link {
+.logout-link,
+.account-link {
     display: flex;
     align-items: center;
     width: 100%;
     box-sizing: border-box;
-    margin-bottom:0;
     padding: 10px 15px;
     background: transparent;
     border: none;
@@ -226,20 +239,246 @@
     cursor: pointer;
 }
 
-.logout-link .material-icons {
+.logout-link .material-icons,
+.account-link .material-icons {
     font-size: 28px;
     margin-right: 10px;
 }
 
-.logout-link:hover {
+.logout-link:hover,
+.account-link:hover {
     color: #ffffff;
     background-color: #2e4365;
 
 }
 
-.logout-link:focus-visible {
+.logout-link:focus-visible,
+.account-link:focus-visible {
     outline: 2px solid #e59d2c;
     outline-offset: 3px;
+}
+
+/* ================= ACCOUNT MODAL ================= */
+
+.account-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(24, 35, 48, 0.65);
+    backdrop-filter: blur(3px);
+}
+
+.account-modal.hidden {
+    display: none;
+}
+
+.account-card {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 32px 26px 26px;
+    border-radius: 22px;
+    background: #fff8df;
+    color: #2e4365;
+    text-align: center;
+    box-shadow: 0 18px 50px rgba(0, 0, 0, 0.25);
+    animation: accountPopIn 0.22s ease-out;
+}
+
+@keyframes accountPopIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.account-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #2e4365;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.account-close:hover {
+    background: #f0e5c9;
+}
+
+.account-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: #e59d2c;
+    color: #ffffff;
+}
+
+.account-avatar .material-icons {
+    font-size: 48px;
+}
+
+.account-card h2 {
+    margin: 0;
+    color: #2e4365;
+    font-size: 28px;
+}
+
+.account-subtitle {
+    margin: 8px 0 24px;
+    color: #746b5b;
+    font-size: 14px;
+}
+
+.account-details {
+    padding: 8px 16px;
+    border: 1px solid #ead9b6;
+    border-radius: 16px;
+    background: #fffdf5;
+    text-align: left;
+}
+
+.account-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    padding: 15px 0;
+}
+
+.account-detail-row + .account-detail-row {
+    border-top: 1px solid #eee4d0;
+}
+
+.account-detail-row > .material-icons {
+    margin-top: 3px;
+    color: #e59d2c;
+    font-size: 25px;
+}
+
+.account-detail-row > div {
+    min-width: 0;
+    flex: 1;
+}
+
+.account-label {
+    margin: 0 0 5px;
+    color: #766b59;
+    font-size: 13px;
+}
+
+.account-value {
+    margin: 0;
+    color: #2e4365;
+    font-size: 16px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.account-message {
+    margin-bottom: 12px;
+    color: #8a3b08;
+    font-size: 14px;
+}
+
+.account-message:empty {
+    display: none;
+}
+
+.account-done {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+    border: none;
+    border-radius: 12px;
+    background: #2e4365;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.account-done:hover {
+    background: #1e304b;
+}
+
+/*ACCOUNT PICTURE UPLOAD*/
+
+.account-avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 110px;
+    height: 110px;
+    padding: 0;
+    margin: 0 auto 16px;
+    border: 3px solid #e59d2c;
+    border-radius: 50%;
+    background: #fff5e6;
+    color: #2e4365;
+    cursor: pointer;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.account-avatar #accountProfilePicture {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+.account-avatar #accountProfilePicture[hidden],
+.account-avatar #accountDefaultIcon[hidden] {
+    display: none;
+}
+
+.account-avatar #accountDefaultIcon {
+    font-size: 76px;
+}
+
+.avatar-edit-icon {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 2px solid #fff5e6;
+    border-radius: 50%;
+    background: #2e4365;
+    color: white;
+    font-size: 18px;
 }
 
 /* ================= CONTENT ================= */
