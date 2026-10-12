@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salinify - SignUp/SignIn</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -40,7 +43,8 @@
             height: 100%;
             object-fit: cover;
             z-index: 0;
-            opacity: 0.8; /* Adjust this value (0.0 to 1.0) to control transparency */
+            opacity: 0.8;
+            /* Adjust this value (0.0 to 1.0) to control transparency */
         }
 
 
@@ -85,7 +89,7 @@
             border-radius: 9999px;
             color: #7f3b08;
             font-weight: 500;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
 
@@ -167,7 +171,7 @@
             object-fit: contain;
             transform: rotate(5deg);
             z-index: 25;
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.2));
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
             pointer-events: none;
         }
 
@@ -305,15 +309,38 @@
 
 
         /* Utility Helpers */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .text-xs { font-size: 12px; }
-        .text-sm { font-size: 14px; }
-        .font-semibold { font-weight: 600; }
-        .text-brown { color: #b36b00; }
-        .text-brown-dark { color: #7f3b08; }
-        .text-gray { color: #5c5c5c; }
-       
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-xs {
+            font-size: 12px;
+        }
+
+        .text-sm {
+            font-size: 14px;
+        }
+
+        .font-semibold {
+            font-weight: 600;
+        }
+
+        .text-brown {
+            color: #b36b00;
+        }
+
+        .text-brown-dark {
+            color: #7f3b08;
+        }
+
+        .text-gray {
+            color: #5c5c5c;
+        }
+
         .signup-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -365,7 +392,10 @@
             font-family: inherit;
             text-decoration: none;
         }
-        .link-btn:hover { text-decoration: underline; }
+
+        .link-btn:hover {
+            text-decoration: underline;
+        }
 
 
         .flex-between {
@@ -399,17 +429,19 @@
         }
     </style>
 </head>
+
 <body>
 
 
-    <img src="signup_bg2.png" alt="Background" class="bg-image">
+    <img src="../assets/images/signup_bg2.png" alt="Background" class="bg-image">
 
 
     <!-- Header -->
     <header>
-        <img src="salinify2.png" alt="Salinify Logo" class="logo">
+        <img src="../assets/images/salinify2.png" alt="Salinify Logo" class="logo">
         <div id="status-badge" class="status-badge">
-            <i class="fa-solid fa-user-check" style="margin-right: 4px;"></i> <span id="logged-user-display">Logged In</span>
+            <i class="fa-solid fa-user-check" style="margin-right: 4px;"></i> <span id="logged-user-display">Logged
+                In</span>
         </div>
     </header>
 
@@ -427,33 +459,39 @@
 
         <!-- VIEW 1: LOGIN -->
         <section id="view-login" class="auth-card">
-            <img src="wooden_hat.png" class="modal-hat">
+            <img src="../assets/images/wooden_hat.png" class="modal-hat">
             <form id="form-login" onsubmit="handleLogin(event)">
                 <div class="form-group">
                     <label class="form-label">Email or Username</label>
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fa-solid fa-at"></i></span>
-                        <input type="text" id="login-identifier" required class="custom-input" placeholder="Email or Username">
+                        <input type="text" id="login-identifier" required class="custom-input"
+                            placeholder="Email or Username">
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" id="login-password" required class="custom-input has-right-icon" placeholder="Password">
-                        <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye')" class="input-icon-right"><i id="login-eye" class="fa-solid fa-eye"></i></button>
+                        <input type="password" id="login-password" required class="custom-input has-right-icon"
+                            placeholder="Password">
+                        <button type="button" onclick="togglePasswordVisibility('login-password', 'login-eye')"
+                            class="input-icon-right"><i id="login-eye" class="fa-solid fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="flex-between" style="margin-bottom: 20px;">
                     <label class="checkbox-label">
-                        <input type="checkbox" id="login-remember" style="width: 16px; height: 16px; accent-color: #7f3b08; margin-right: 8px;">
+                        <input type="checkbox" id="login-remember"
+                            style="width: 16px; height: 16px; accent-color: #7f3b08; margin-right: 8px;">
                         <span>Remember Me</span>
                     </label>
-                    <button type="button" onclick="switchView('reset-step1')" class="link-btn text-xs">Forgot password?</button>
+                    <button type="button" onclick="switchView('reset-step1')" class="link-btn text-xs">Forgot
+                        password?</button>
                 </div>
                 <button type="submit" class="btn-earth">Log In</button>
                 <div class="text-center text-xs text-gray" style="margin-top: 16px;">
-                    Don't have an account?<br><button type="button" onclick="switchView('signup')" class="link-btn" style="margin-top: 2px;">Sign Up Here</button>
+                    Don't have an account?<br><button type="button" onclick="switchView('signup')" class="link-btn"
+                        style="margin-top: 2px;">Sign Up Here</button>
                 </div>
             </form>
         </section>
@@ -461,38 +499,46 @@
 
         <!-- VIEW 2: SIGN UP -->
         <section id="view-signup" class="hidden" style="width: 100%; max-width: 1024px; position: relative;">
-            <img src="wooden_hat.png" class="modal-hat" style="right: 15px; top: -50px;">
+            <img src="../assets/images/wooden_hat.png" class="modal-hat" style="right: 15px; top: -50px;">
             <form id="form-signup" class="signup-grid" onsubmit="handleSignup(event)">
                 <div class="signup-box">
                     <div style="display: flex; flex-direction: column; gap: 16px;">
                         <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Firstname</label>
+                            <label class="form-label">Username</label>
                             <div class="input-wrapper">
                                 <span class="input-icon"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" id="signup-name" required class="custom-input" placeholder="Firstname">
+                                <input type="text" id="signup-name" required class="custom-input"
+                                    placeholder="Username">
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">Account Email</label>
                             <div class="input-wrapper">
                                 <span class="input-icon"><i class="fa-solid fa-at"></i></span>
-                                <input type="email" id="signup-email" required class="custom-input" placeholder="Email Address">
+                                <input type="email" id="signup-email" required class="custom-input"
+                                    placeholder="Email Address">
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">Password</label>
                             <div class="input-wrapper">
                                 <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                                <input type="password" id="signup-password" required minlength="6" class="custom-input has-right-icon" placeholder="Password">
-                                <button type="button" onclick="togglePasswordVisibility('signup-password', 'signup-eye1')" class="input-icon-right"><i id="signup-eye1" class="fa-solid fa-eye"></i></button>
+                                <input type="password" id="signup-password" required minlength="8"
+                                    class="custom-input has-right-icon" placeholder="Password">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('signup-password', 'signup-eye1')"
+                                    class="input-icon-right"><i id="signup-eye1" class="fa-solid fa-eye"></i></button>
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">Confirm password</label>
                             <div class="input-wrapper">
                                 <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                                <input type="password" id="signup-confirm" required class="custom-input has-right-icon" placeholder="Confirm password">
-                                <button type="button" onclick="togglePasswordVisibility('signup-confirm', 'signup-eye2')" class="input-icon-right"><i id="signup-eye2" class="fa-solid fa-eye"></i></button>
+                                <input type="password" id="signup-confirm" required class="custom-input has-right-icon"
+                                    placeholder="Confirm password">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('signup-confirm', 'signup-eye2')"
+                                    class="input-icon-right"><i id="signup-eye2" class="fa-solid fa-eye"></i></button>
                             </div>
                         </div>
                     </div>
@@ -504,26 +550,36 @@
                             <div class="input-wrapper">
                                 <select id="signup-question" required class="custom-input no-icon">
                                     <option value="" disabled selected>Select a security question</option>
-                                    <option value="What is the name of your first pet?">What is the name of your first pet?</option>
-                                    <option value="What is your mother's maiden name?">What is your mother's maiden name?</option>
-                                    <option value="What was your childhood nickname?">What was your childhood nickname?</option>
+                                    <option value="What is the name of your first pet?">What is the name of your first
+                                        pet?</option>
+                                    <option value="What is your mother's maiden name?">What is your mother's maiden
+                                        name?</option>
+                                    <option value="What was your childhood nickname?">What was your childhood nickname?
+                                    </option>
                                     <option value="In what town were you born?">In what town were you born?</option>
                                 </select>
-                                <span class="input-icon-right" style="pointer-events: none;"><i class="fa-solid fa-chevron-down text-xs"></i></span>
+                                <span class="input-icon-right" style="pointer-events: none;"><i
+                                        class="fa-solid fa-chevron-down text-xs"></i></span>
                             </div>
                         </div>
                         <div class="form-group" style="margin-bottom: 0;">
                             <label class="form-label">Answer:</label>
                             <div class="input-wrapper">
-                                <input type="text" id="signup-answer" required class="custom-input no-icon has-right-icon" placeholder="Security answer" style="padding-left: 16px;">
-                                <button type="button" onclick="togglePasswordVisibility('signup-answer', 'signup-ans-eye')" class="input-icon-right"><i id="signup-ans-eye" class="fa-solid fa-eye"></i></button>
+                                <input type="text" id="signup-answer" required
+                                    class="custom-input no-icon has-right-icon" placeholder="Security answer"
+                                    style="padding-left: 16px;">
+                                <button type="button"
+                                    onclick="togglePasswordVisibility('signup-answer', 'signup-ans-eye')"
+                                    class="input-icon-right"><i id="signup-ans-eye"
+                                        class="fa-solid fa-eye"></i></button>
                             </div>
                         </div>
                     </div>
                     <div style="padding-top: 16px;">
                         <button type="submit" class="btn-gold">Sign Up</button>
                         <div class="text-center text-xs text-gray" style="margin-top: 12px;">
-                            Already have an account?<br><button type="button" onclick="switchView('login')" class="link-btn" style="color: #7f3b08; margin-top: 2px;">Log In</button>
+                            Already have an account?<br><button type="button" onclick="switchView('login')"
+                                class="link-btn" style="color: #7f3b08; margin-top: 2px;">Log In</button>
                         </div>
                     </div>
                 </div>
@@ -533,21 +589,24 @@
 
         <!-- VIEW 3: RESET STEP 1 -->
         <section id="view-reset-step1" class="auth-card hidden">
-            <img src="wooden_hat.png" class="modal-hat">
-            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your email to verify your security question.</p>
+            <img src="../assets/images/wooden_hat.png" class="modal-hat">
+            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your email to verify your
+                security question.</p>
             <form id="form-reset-step1" onsubmit="handleResetStep1(event)">
                 <div class="form-group">
                     <label class="form-label">Account Email</label>
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fa-solid fa-at"></i></span>
-                        <input type="email" id="reset-email" required class="custom-input" placeholder="Enter your registered email">
+                        <input type="email" id="reset-email" required class="custom-input"
+                            placeholder="Enter your registered email">
                     </div>
                 </div>
                 <button type="submit" class="btn-earth">
                     <span>Find Account</span> <i class="fa-solid fa-magnifying-glass text-xs"></i>
                 </button>
                 <div class="text-center text-xs text-gray" style="margin-top: 16px;">
-                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn"
+                        style="margin-top: 2px;">Back to Login</button>
                 </div>
             </form>
         </section>
@@ -555,23 +614,29 @@
 
         <!-- VIEW 4: RESET STEP 2 -->
         <section id="view-reset-step2" class="auth-card hidden">
-            <img src="wooden_hat.png" class="modal-hat">
-            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your security answer to verify your account.</p>
+            <img src="../assets/images/wooden_hat.png" class="modal-hat">
+            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your security answer to verify
+                your account.</p>
             <form id="form-reset-step2" onsubmit="handleResetStep2(event)">
                 <div class="form-group">
                     <label class="form-label">Your security question:</label>
-                    <div id="display-security-question" style="padding: 12px; background: #fefae0; border: 1px solid #c8b6a6; border-radius: 12px; font-size: 14px; font-weight: 500; color: #4a4a4a;">Loading question...</div>
+                    <div id="display-security-question"
+                        style="padding: 12px; background: #fefae0; border: 1px solid #c8b6a6; border-radius: 12px; font-size: 14px; font-weight: 500; color: #4a4a4a;">
+                        Loading question...</div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Enter security answer</label>
                     <div class="input-wrapper">
-                        <input type="text" id="reset-answer-input" required class="custom-input no-icon has-right-icon" placeholder="Enter security answer" style="padding-left: 16px;">
-                        <button type="button" onclick="togglePasswordVisibility('reset-answer-input', 'ans-eye')" class="input-icon-right"><i id="ans-eye" class="fa-solid fa-eye"></i></button>
+                        <input type="text" id="reset-answer-input" required class="custom-input no-icon has-right-icon"
+                            placeholder="Enter security answer" style="padding-left: 16px;">
+                        <button type="button" onclick="togglePasswordVisibility('reset-answer-input', 'ans-eye')"
+                            class="input-icon-right"><i id="ans-eye" class="fa-solid fa-eye"></i></button>
                     </div>
                 </div>
                 <button type="submit" class="btn-earth">Verify Security Answer</button>
                 <div class="text-center text-xs text-gray" style="margin-top: 16px;">
-                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn"
+                        style="margin-top: 2px;">Back to Login</button>
                 </div>
             </form>
         </section>
@@ -579,7 +644,7 @@
 
         <!-- VIEW 5: RESET STEP 3 -->
         <section id="view-reset-step3" class="auth-card hidden">
-            <img src="wooden_hat.png" class="modal-hat">
+            <img src="../assets/images/wooden_hat.png" class="modal-hat">
             <div class="success-banner">
                 <i class="fa-solid fa-circle-check" style="font-size: 20px; flex-shrink: 0;"></i>
                 <p style="line-height: 1.2;">Security answer verified! Enter your new password below.</p>
@@ -589,23 +654,28 @@
                     <label class="form-label">New Password (min 6 characters)</label>
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" id="new-password" required minlength="6" class="custom-input has-right-icon" placeholder="New Password">
-                        <button type="button" onclick="togglePasswordVisibility('new-password', 'np-eye')" class="input-icon-right"><i id="np-eye" class="fa-solid fa-eye"></i></button>
+                        <input type="password" id="new-password" required minlength="8"
+                            class="custom-input has-right-icon" placeholder="New Password">
+                        <button type="button" onclick="togglePasswordVisibility('new-password', 'np-eye')"
+                            class="input-icon-right"><i id="np-eye" class="fa-solid fa-eye"></i></button>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="form-label">Re-enter new password</label>
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" id="confirm-new-password" required class="custom-input has-right-icon" placeholder="Re-enter password">
-                        <button type="button" onclick="togglePasswordVisibility('confirm-new-password', 'ncp-eye')" class="input-icon-right"><i id="ncp-eye" class="fa-solid fa-eye"></i></button>
+                        <input type="password" id="confirm-new-password" required class="custom-input has-right-icon"
+                            placeholder="Re-enter password">
+                        <button type="button" onclick="togglePasswordVisibility('confirm-new-password', 'ncp-eye')"
+                            class="input-icon-right"><i id="ncp-eye" class="fa-solid fa-eye"></i></button>
                     </div>
                 </div>
                 <button type="submit" class="btn-earth">
                     <span>Save New Password</span> <i class="fa-solid fa-check text-xs"></i>
                 </button>
                 <div class="text-center text-xs text-gray" style="margin-top: 16px;">
-                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn" style="margin-top: 2px;">Back to Login</button>
+                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn"
+                        style="margin-top: 2px;">Back to Login</button>
                 </div>
             </form>
         </section>
@@ -613,14 +683,19 @@
 
         <!-- VIEW 6: DASHBOARD -->
         <section id="view-dashboard" class="auth-card hidden text-center">
-            <img src="wooden_hat.png" class="modal-hat">
-            <div style="width: 80px; height: 80px; background: #fefae0; border: 2px solid #8c5830; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #7f3b08; font-size: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);">
+            <img src="../assets/images/wooden_hat.png" class="modal-hat">
+            <div
+                style="width: 80px; height: 80px; background: #fefae0; border: 2px solid #8c5830; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; color: #7f3b08; font-size: 30px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.06);">
                 <i class="fa-solid fa-hat-cowboy"></i>
             </div>
-            <h2 id="dash-welcome" class="serif-font" style="font-size: 1.5rem; font-weight: bold; color: #1e2b37; margin-bottom: 8px;">Mabuhay, Ka-salin!</h2>
+            <h2 id="dash-welcome" class="serif-font"
+                style="font-size: 1.5rem; font-weight: bold; color: #1e2b37; margin-bottom: 8px;">Mabuhay, Ka-salin!
+            </h2>
             <p class="text-sm text-gray" style="margin-bottom: 24px;">You are successfully logged in to Salinify.</p>
-            <div style="padding: 16px; background: #fefae0; border-radius: 12px; border: 1px solid #c8b6a6; text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
-                <div><span style="font-weight: bold; color: #7f3b08;">Name / Username:</span> <span id="dash-name">-</span></div>
+            <div
+                style="padding: 16px; background: #fefae0; border-radius: 12px; border: 1px solid #c8b6a6; text-align: left; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 14px;">
+                <div><span style="font-weight: bold; color: #7f3b08;">Name / Username:</span> <span
+                        id="dash-name">-</span></div>
                 <div><span style="font-weight: bold; color: #7f3b08;">Email:</span> <span id="dash-email">-</span></div>
             </div>
             <button onclick="handleLogout()" class="btn-earth">Log Out</button>
@@ -741,126 +816,229 @@
         }
 
 
-        function handleLogin(event) {
+
+        async function handleLogin(event) {
             event.preventDefault();
+
             const identifier = document.getElementById('login-identifier').value.trim();
             const password = document.getElementById('login-password').value;
 
-
-            const users = getUsers();
-            const user = users.find(u => u.email.toLowerCase() === identifier.toLowerCase() || u.name.toLowerCase() === identifier.toLowerCase());
-
-
-            if (!user || user.password !== password) {
-                showToast('Invalid email/username or password. Please try again.', 'error');
+            if (!identifier || !password) {
+                showToast('Please enter your email/username and password.', 'error');
                 return;
             }
 
+            try {
+                const response = await fetch('../api/login.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        identifier: identifier,
+                        password: password
+                    })
+                });
 
-            localStorage.setItem('salinify_logged_user', JSON.stringify(user));
-            setupDashboard(user);
-            switchView('dashboard');
-            showToast('Welcome back, ' + user.name + '!', 'success');
-            window.location.href = '../pages/home.html';
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showToast(
+                        result.message || 'Invalid email/username or password.',
+                        'error'
+                    );
+                    return;
+                }
+
+                showToast('Login successful! Welcome back.', 'success');
+
+                setTimeout(() => {
+                    window.location.href = '../pages/home.html';
+                }, 500);
+
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast(
+                    'Unable to connect to the server. Please try again.',
+                    'error'
+                );
+            }
         }
 
 
-        function handleSignup(event) {
+
+
+        async function handleSignup(event) {
             event.preventDefault();
-            const name = document.getElementById('signup-name').value.trim();
+
+            const username = document.getElementById('signup-name').value.trim();
             const email = document.getElementById('signup-email').value.trim();
             const password = document.getElementById('signup-password').value;
-            const confirm = document.getElementById('signup-confirm').value;
-            const question = document.getElementById('signup-question').value;
-            const answer = document.getElementById('signup-answer').value.trim().toLowerCase();
+            const confirmPassword = document.getElementById('signup-confirm').value;
+            const recoveryQuestion = document.getElementById('signup-question').value;
+            const recoveryAnswer = document.getElementById('signup-answer').value.trim();
 
-
-            if (password !== confirm) {
+            if (password !== confirmPassword) {
                 showToast('Passwords do not match. Please re-enter.', 'error');
                 return;
             }
 
-
-            const users = getUsers();
-            if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
-                showToast('An account with this email already exists.', 'error');
+            if (password.length < 8) {
+                showToast('Password must be at least 8 characters.', 'error');
                 return;
             }
 
+            if (!recoveryQuestion || !recoveryAnswer) {
+                showToast('Please select and answer a recovery question.', 'error');
+                return;
+            }
 
-            const newUser = { name, email, password, question, answer };
-            users.push(newUser);
-            saveUsers(users);
+            try {
+                const response = await fetch('../api/register.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        confirm_password: confirmPassword,
+                        recovery_question: recoveryQuestion,
+                        recovery_answer: recoveryAnswer
+                    })
+                });
 
+                const result = await response.json();
 
-            showToast('Account created successfully! Please log in.', 'success');
-            document.getElementById('form-signup').reset();
-            switchView('login');
+                if (!response.ok || !result.success) {
+                    showToast(
+                        result.message || 'Registration failed. Please try again.',
+                        'error'
+                    );
+                    return;
+                }
+
+                showToast('Account created successfully! Please log in.', 'success');
+
+                document.getElementById('form-signup').reset();
+                switchView('login');
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast(
+                    'Unable to connect to the server. Please try again.',
+                    'error'
+                );
+            }
         }
 
 
-        function handleResetStep1(event) {
+
+
+        async function handleResetStep1(event) {
             event.preventDefault();
+
             const email = document.getElementById('reset-email').value.trim();
-            const users = getUsers();
-            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
 
+            try {
+                const response = await fetch('../api/recovery_question.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                });
 
-            if (!user) {
-                showToast('No account found registered with this email address.', 'error');
-                return;
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showToast(result.message || 'Unable to find recovery information.', 'error');
+                    return;
+                }
+
+                document.getElementById('display-security-question').textContent =
+                    result.question;
+
+                document.getElementById('form-reset-step1').reset();
+                switchView('reset-step2');
+
+            } catch (error) {
+                console.error('Recovery question error:', error);
+                showToast('Unable to connect to the server.', 'error');
             }
-
-
-            resetSessionEmail = user.email;
-            document.getElementById('display-security-question').textContent = user.question;
-            switchView('reset-step2');
         }
 
 
-        function handleResetStep2(event) {
+
+
+        async function handleResetStep2(event) {
             event.preventDefault();
-            const enteredAnswer = document.getElementById('reset-answer-input').value.trim().toLowerCase();
-            const users = getUsers();
-            const user = users.find(u => u.email.toLowerCase() === resetSessionEmail.toLowerCase());
 
+            const answer = document.getElementById('reset-answer-input').value.trim();
 
-            if (!user || user.answer !== enteredAnswer) {
-                showToast('Incorrect security answer. Please try again.', 'error');
-                return;
+            try {
+                const response = await fetch('../api/verify_recovery.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ answer: answer })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showToast(result.message || 'Recovery answer could not be verified.', 'error');
+                    return;
+                }
+
+                document.getElementById('form-reset-step2').reset();
+                switchView('reset-step3');
+
+            } catch (error) {
+                console.error('Recovery verification error:', error);
+                showToast('Unable to connect to the server.', 'error');
             }
-
-
-            document.getElementById('form-reset-step2').reset();
-            switchView('reset-step3');
         }
 
-
-        function handleResetStep3(event) {
+        async function handleResetStep3(event) {
             event.preventDefault();
+
             const newPass = document.getElementById('new-password').value;
             const confirmPass = document.getElementById('confirm-new-password').value;
-
 
             if (newPass !== confirmPass) {
                 showToast('New passwords do not match.', 'error');
                 return;
             }
 
-
-            const users = getUsers();
-            const userIndex = users.findIndex(u => u.email.toLowerCase() === resetSessionEmail.toLowerCase());
-           
-            if (userIndex !== -1) {
-                users[userIndex].password = newPass;
-                saveUsers(users);
+            if (newPass.length < 8) {
+                showToast('Password must be at least 8 characters.', 'error');
+                return;
             }
 
+            try {
+                const response = await fetch('../api/reset_password.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password: newPass,
+                        confirm_password: confirmPass
+                    })
+                });
 
-            resetSessionEmail = null;
-            showToast('Password updated successfully! Please log in.', 'success');
-            document.getElementById('form-reset-step3').reset();
-            switchView('login');
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    showToast(result.message || 'Password reset failed.', 'error');
+                    return;
+                }
+
+                document.getElementById('form-reset-step3').reset();
+                showToast('Password reset successfully. Please log in.', 'success');
+                switchView('login');
+
+            } catch (error) {
+                console.error('Password reset error:', error);
+                showToast('Unable to connect to the server.', 'error');
+            }
         }
 
 
@@ -868,34 +1046,25 @@
             document.getElementById('dash-welcome').textContent = 'Mabuhay, ' + user.name + '!';
             document.getElementById('dash-name').textContent = user.name;
             document.getElementById('dash-email').textContent = user.email;
-           
+
             const badge = document.getElementById('status-badge');
             document.getElementById('logged-user-display').textContent = user.name;
             badge.classList.remove('hidden');
         }
 
-
-        function handleLogout() {
-            localStorage.removeItem('salinify_logged_user');
-            document.getElementById('status-badge').classList.add('hidden');
-            switchView('login');
-            showToast('Logged out successfully.', 'success');
-        }
-
-
-        window.onload = function() {
+        window.onload = function () {
             const loggedUser = localStorage.getItem('salinify_logged_user');
             if (loggedUser) {
                 try {
                     const user = JSON.parse(loggedUser);
                     setupDashboard(user);
                     switchView('dashboard');
-                } catch(e) {
+                } catch (e) {
                     localStorage.removeItem('salinify_logged_user');
                 }
             }
         };
     </script>
 </body>
-</html>
 
+</html>
