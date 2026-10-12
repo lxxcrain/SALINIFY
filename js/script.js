@@ -42,11 +42,13 @@ document.addEventListener("DOMContentLoaded", function () {
     const tabs = document.querySelectorAll('.tab-header');
     const tabContents = document.querySelectorAll('.tab-content');
 
+
     if (startBtn) {
         startBtn.addEventListener("click", () => {
-            homepage.classList.add("show");
+            window.location.href = "pages/login.html";
         });
     }
+
 
     function openClassTab(dialect) {
         if (!classSection) return;
@@ -95,27 +97,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // === 3. WORD OF THE DAY ===
     const dictionary = [
-                { eng: "Mother", tag: "Nanay", kap: "Íma", ilo: "Inán" },
-                { eng: "Father", tag: "Tatay", kap: "Tatáng", ilo: "Amá" },
-                { eng: "Older sister", tag: "Àte", kap: "Àtchi", ilo: "Manáng" },
-                { eng: "Older brother", tag: "Kúya", kap: "Kóya", ilo: "Manóng" },
-                { eng: "Beautiful", tag: "Maganda", kap: "Malagú", ilo: "Napíntas" },
-                { eng: "Handsome", tag: "Gwapo", kap: "Masantíng", ilo: "Natarakí" },
-                { eng: "Hot", tag: "Mainit", kap: "Mapalí", ilo: "Napudót" },
-                { eng: "Cold", tag: "Malamíg", kap: "Marimlá", ilo: "Nalamíis" },
-                { eng: "Good Morning", tag: "Magandáng Umaga", kap: "Mayap á abák", ilo: "Naimbág nga bigát" },
-                { eng: "Good Afternoon", tag: "Magandáng Hapon", kap: "Mayap á gatpanapún", ilo: "Naimbág nga malém" },
-                { eng: "Good Evening", tag: "Magandáng Gabi", kap: "Mayap á béngi", ilo: "Naimbág nga rabí-i" },
-                { eng: "Thank you very much", tag: "Maraming salamat", kap: "Dakal á Salamat", ilo: "Agyamanák Unay" },
-                { eng: "Food", tag: "Pagkain", kap: "Pamangan", ilo: "Makan" },
-                { eng: "Cooked Rice", tag: "Kanin", kap: "Nasi", ilo: "Inapúy" },
-                { eng: "Vegetable", tag: "Gulay", kap: "Gulé", ilo: "Naténg" },
-                { eng: "Fruit", tag: "Prutas", kap: "Busbus", ilo: "Bunga" },
-                { eng: "Mountain", tag: "Bundok", kap: "Bunduk", ilo: "Bantáy" },
-                { eng: "Ocean/Sea", tag: "Karagatan/Dagat", kap: "Dayat Malat", ilo: "Baybay" },
-                { eng: "Tree", tag: "Puno", kap: "Tanaman", ilo: "Kayú" },
-                { eng: "River", tag: "Ilog", kap: "Ilug", ilo: "Karayan" }
-            ];
+        { eng: "Mother", tag: "Nanay", kap: "Íma", ilo: "Inán" },
+        { eng: "Father", tag: "Tatay", kap: "Tatáng", ilo: "Amá" },
+        { eng: "Older sister", tag: "Àte", kap: "Àtchi", ilo: "Manáng" },
+        { eng: "Older brother", tag: "Kúya", kap: "Kóya", ilo: "Manóng" },
+        { eng: "Beautiful", tag: "Maganda", kap: "Malagú", ilo: "Napíntas" },
+        { eng: "Handsome", tag: "Gwapo", kap: "Masantíng", ilo: "Natarakí" },
+        { eng: "Hot", tag: "Mainit", kap: "Mapalí", ilo: "Napudót" },
+        { eng: "Cold", tag: "Malamíg", kap: "Marimlá", ilo: "Nalamíis" },
+        { eng: "Good Morning", tag: "Magandáng Umaga", kap: "Mayap á abák", ilo: "Naimbág nga bigát" },
+        { eng: "Good Afternoon", tag: "Magandáng Hapon", kap: "Mayap á gatpanapún", ilo: "Naimbág nga malém" },
+        { eng: "Good Evening", tag: "Magandáng Gabi", kap: "Mayap á béngi", ilo: "Naimbág nga rabí-i" },
+        { eng: "Thank you very much", tag: "Maraming salamat", kap: "Dakal á Salamat", ilo: "Agyamanák Unay" },
+        { eng: "Food", tag: "Pagkain", kap: "Pamangan", ilo: "Makan" },
+        { eng: "Cooked Rice", tag: "Kanin", kap: "Nasi", ilo: "Inapúy" },
+        { eng: "Vegetable", tag: "Gulay", kap: "Gulé", ilo: "Naténg" },
+        { eng: "Fruit", tag: "Prutas", kap: "Busbus", ilo: "Bunga" },
+        { eng: "Mountain", tag: "Bundok", kap: "Bunduk", ilo: "Bantáy" },
+        { eng: "Ocean/Sea", tag: "Karagatan/Dagat", kap: "Dayat Malat", ilo: "Baybay" },
+        { eng: "Tree", tag: "Puno", kap: "Tanaman", ilo: "Kayú" },
+        { eng: "River", tag: "Ilog", kap: "Ilug", ilo: "Karayan" }
+    ];
 
     const titleElement = document.getElementById('wotd-title');
     const defElement = document.getElementById('wotd-definition');
@@ -167,151 +169,151 @@ document.addEventListener("DOMContentLoaded", function () {
     if (closeBtn) closeBtn.addEventListener('click', updateActiveNav);
 });
 
-        // 1. Move scrollTab OUTSIDE DOMContentLoaded so the HTML buttons can find it
-        function scrollTab(tabId, direction) {
-            const wrapper = document.getElementById(tabId + '-wrapper');
-            const scrollAmount = 330; 
-            wrapper.scrollBy({ 
-                left: direction === 'left' ? -scrollAmount : scrollAmount, 
-                behavior: 'smooth' 
-            });
-        }
+// 1. Move scrollTab OUTSIDE DOMContentLoaded so the HTML buttons can find it
+function scrollTab(tabId, direction) {
+    const wrapper = document.getElementById(tabId + '-wrapper');
+    const scrollAmount = 330;
+    wrapper.scrollBy({
+        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        behavior: 'smooth'
+    });
+}
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const mainContent = document.querySelector('.main-content');
-            const tabs = document.querySelectorAll('.tab-header');
-            const tabContents = document.querySelectorAll('.tab-content');
-            const mainContainer = document.getElementById('mainContainer');
+document.addEventListener("DOMContentLoaded", function () {
+    const mainContent = document.querySelector('.main-content');
+    const tabs = document.querySelectorAll('.tab-header');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const mainContainer = document.getElementById('mainContainer');
 
-            // --- ENTRANCE ANIMATION ---
-            setTimeout(() => {
-                mainContent.classList.add('show');
-            }, 100);
+    // --- ENTRANCE ANIMATION ---
+    setTimeout(() => {
+        mainContent.classList.add('show');
+    }, 100);
 
-            // --- NAVIGATION & EXIT LOGIC ---
-            function slideDownAndRedirect(url) {
-                mainContent.classList.remove('show');
-                mainContent.classList.add('exit');
-                setTimeout(() => {
-                    window.location.href = url;
-                }, 600);
-            }
+    // --- NAVIGATION & EXIT LOGIC ---
+    function slideDownAndRedirect(url) {
+        mainContent.classList.remove('show');
+        mainContent.classList.add('exit');
+        setTimeout(() => {
+            window.location.href = url;
+        }, 600);
+    }
 
-            // Close Button
-            document.getElementById('closeBtn').addEventListener('click', () => {
-                slideDownAndRedirect("home.html");
-            });
+    // Close Button
+    document.getElementById('closeBtn').addEventListener('click', () => {
+        slideDownAndRedirect("home.html");
+    });
 
-            // Sidebar Links
-            const navLinks = document.querySelectorAll('.sidebar ul li a');
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const destination = this.getAttribute('href');
-                    slideDownAndRedirect(destination);
-                });
-            });
-
-            // --- TAB SWITCHING LOGIC ---
-            function switchTab(tabId) {
-                // Remove active classes
-                tabs.forEach(t => t.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-
-                // Activate selected tab header
-                const activeHeader = document.querySelector(`[data-tab="${tabId}"]`);
-                if (activeHeader) activeHeader.classList.add('active');
-
-                // Activate selected content
-                const activeContent = document.getElementById(tabId);
-                if (activeContent) activeContent.classList.add('active');
-
-                // Update container theme
-                if (mainContainer) {
-                    mainContainer.classList.remove('pampanga-active', 'ilocos-active');
-                    mainContainer.classList.add(`${tabId}-active`);
-                }
-            }
-
-            // Add Click listeners to tabs
-            tabs.forEach(tab => {
-                tab.addEventListener('click', () => {
-                    switchTab(tab.dataset.tab);
-                });
-            });
-
-            // --- HASH/URL CHECK ---
-            const currentHash = window.location.hash.substring(1);
-            if (currentHash === "ilocos" || currentHash === "pampanga") {
-                switchTab(currentHash);
-            }
+    // Sidebar Links
+    const navLinks = document.querySelectorAll('.sidebar ul li a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            const destination = this.getAttribute('href');
+            slideDownAndRedirect(destination);
         });
+    });
 
-            // === POP-UP LOGIC ===
-            // === 5. POP-UP MODAL LOGIC ===
-            const modal = document.getElementById("dashboardModal");
-            const dashboard = document.querySelector(".dashboard");
-            const closeModal = document.getElementById("closeModal");
+    // --- TAB SWITCHING LOGIC ---
+    function switchTab(tabId) {
+        // Remove active classes
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(c => c.classList.remove('active'));
 
+        // Activate selected tab header
+        const activeHeader = document.querySelector(`[data-tab="${tabId}"]`);
+        if (activeHeader) activeHeader.classList.add('active');
 
-            if (dashboard && modal) {
-                dashboard.addEventListener("click", (e) => {
-                    // Prevent opening modal if clicking direct links
-                    if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') return;
-                    modal.classList.add("show-modal");
-                    switchTab('kap');
-                });
-            }
+        // Activate selected content
+        const activeContent = document.getElementById(tabId);
+        if (activeContent) activeContent.classList.add('active');
 
-
-            if (closeModal) {
-                closeModal.addEventListener("click", () => {
-                    // 1. Start the Slide Down animation
-                    modal.classList.add("modal-closing");
-
-
-                    // 2. Wait 300ms for the animation to finish, then hide it
-                    setTimeout(() => {
-                        modal.classList.remove("show-modal");
-                        modal.classList.remove("modal-closing");
-                    }, 300);
-                });
-            }
-
-
-            // Close on outside click
-            window.addEventListener("click", (e) => {
-                if (e.target === modal) {
-                    modal.classList.add("modal-closing");
-                    setTimeout(() => {
-                        modal.classList.remove("show-modal");
-                        modal.classList.remove("modal-closing");
-                    }, 300);
-                }
-            });
-
-
-        function switchTab(dialect) {
-            // Update content visibility
-            document.querySelectorAll('.dialect-tab').forEach(tab => tab.classList.remove('active'));
-            const targetTab = document.getElementById('tab-' + dialect);
-            if (targetTab) targetTab.classList.add('active');
-
-
-            // Update footer button styling
-            document.querySelectorAll('.nav-dot-btn').forEach(btn => btn.classList.remove('active'));
-            const targetBtn = document.querySelector('.' + dialect + '-btn');
-            if (targetBtn) targetBtn.classList.add('active');
-
-
-            // Update the Mac-style window title
-            const title = document.getElementById('modalDynamicTitle');
-            if (title) {
-                title.innerText = (dialect === 'kap') ? 'Kapampangan Dialect' : 'Ilocano Dialect';
-            }
+        // Update container theme
+        if (mainContainer) {
+            mainContainer.classList.remove('pampanga-active', 'ilocos-active');
+            mainContainer.classList.add(`${tabId}-active`);
         }
+    }
 
-        document.addEventListener("DOMContentLoaded", function () {
+    // Add Click listeners to tabs
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchTab(tab.dataset.tab);
+        });
+    });
+
+    // --- HASH/URL CHECK ---
+    const currentHash = window.location.hash.substring(1);
+    if (currentHash === "ilocos" || currentHash === "pampanga") {
+        switchTab(currentHash);
+    }
+});
+
+// === POP-UP LOGIC ===
+// === 5. POP-UP MODAL LOGIC ===
+const modal = document.getElementById("dashboardModal");
+const dashboard = document.querySelector(".dashboard");
+const closeModal = document.getElementById("closeModal");
+
+
+if (dashboard && modal) {
+    dashboard.addEventListener("click", (e) => {
+        // Prevent opening modal if clicking direct links
+        if (e.target.tagName === 'A' || e.target.parentElement.tagName === 'A') return;
+        modal.classList.add("show-modal");
+        switchTab('kap');
+    });
+}
+
+
+if (closeModal) {
+    closeModal.addEventListener("click", () => {
+        // 1. Start the Slide Down animation
+        modal.classList.add("modal-closing");
+
+
+        // 2. Wait 300ms for the animation to finish, then hide it
+        setTimeout(() => {
+            modal.classList.remove("show-modal");
+            modal.classList.remove("modal-closing");
+        }, 300);
+    });
+}
+
+
+// Close on outside click
+window.addEventListener("click", (e) => {
+    if (e.target === modal) {
+        modal.classList.add("modal-closing");
+        setTimeout(() => {
+            modal.classList.remove("show-modal");
+            modal.classList.remove("modal-closing");
+        }, 300);
+    }
+});
+
+
+function switchTab(dialect) {
+    // Update content visibility
+    document.querySelectorAll('.dialect-tab').forEach(tab => tab.classList.remove('active'));
+    const targetTab = document.getElementById('tab-' + dialect);
+    if (targetTab) targetTab.classList.add('active');
+
+
+    // Update footer button styling
+    document.querySelectorAll('.nav-dot-btn').forEach(btn => btn.classList.remove('active'));
+    const targetBtn = document.querySelector('.' + dialect + '-btn');
+    if (targetBtn) targetBtn.classList.add('active');
+
+
+    // Update the Mac-style window title
+    const title = document.getElementById('modalDynamicTitle');
+    if (title) {
+        title.innerText = (dialect === 'kap') ? 'Kapampangan Dialect' : 'Ilocano Dialect';
+    }
+}
+
+document.addEventListener("DOMContentLoaded", function () {
     // Select the links inside the class cards
     const classLinks = document.querySelectorAll('.class-sub a');
 
@@ -335,13 +337,4 @@ document.addEventListener("DOMContentLoaded", function () {
     const startBtn = document.getElementById('startBtn');
     const welcomePage = document.querySelector('.welcome-page');
     const homepage = document.querySelector('.homepage');
-
-    if (startBtn) {
-        startBtn.addEventListener('click', () => {
-            welcomePage.classList.remove('visible');
-            welcomePage.classList.add('hidden');
-            homepage.classList.remove('hidden');
-            homepage.classList.add('visible');
-        });
-    }
 });
