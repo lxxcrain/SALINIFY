@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 
 <body>
     <div class="homepage">
@@ -16,6 +18,7 @@
                     <img src="../assets/images/salinify.png" alt="salinify">
                     <li><a href="#home"><span class="material-icons">home</span> Home </a></li>
                     <li><a href="classes.html"><span class="material-icons">school</span> Origin </a> </li>
+
 
                     <li class="has-subnav">
                         <a href="javascript:void(0)" id="learnToggle">
@@ -28,12 +31,6 @@
                     </li>
                     <li><a href="play-ui.html"><span class="material-icons">sports_esports</span> Play </a> </li>
                 </ul>
-                <form action="../api/logout.php" method="POST" class="logout-form">
-                    <button type="submit" class="logout-link">
-                        <span class="material-icons">logout</span>
-                        Log Out
-                    </button>
-                </form>
             </div>
         </div>
         <div class="content">
@@ -57,6 +54,7 @@
                             </div>
                         </div>
 
+
                         <div class="class-card">
                             <img src="../assets/images/ilocos.png" alt="Ilocos">
                             <div class="class-sub">
@@ -65,6 +63,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <div class="container-1">
                     <div class="h1"> Get Started </div>
@@ -76,6 +75,7 @@
                             <div class="gs-p"> Master the roots and grammar. </div>
                         </div>
 
+
                         <div class="gs-card">
                             <div class="gs-title">
                                 <a href="play-ui.html"><span class="material-icons">sports_esports</span> Play </a>
@@ -83,6 +83,7 @@
                             <div class="gs-p"> Challenge yourself with mini-games. </div>
                         </div>
                     </div>
+
 
                     <div class="wotd-card">
                         <div class="wotd-info">
@@ -99,6 +100,7 @@
         </div>
     </div>
 
+
     <div id="dashboardModal" class="modal-overlay">
         <div class="mac-window">
             <div class="mac-header">
@@ -110,6 +112,7 @@
                 <div class="mac-title" id="modalDynamicTitle">Kapampangan Info</div>
                 <div class="close-x" id="closeModal">✖</div>
             </div>
+
 
             <div class="mac-content">
                 <div id="tab-kap" class="dialect-tab active">
@@ -128,11 +131,13 @@
                                 <li>🔤 Words may sound different from Tagalog</li>
                                 <li>💡 One of the older native languages</li>
                             </ul>
-                            <button class="learn-more-btn" onclick="window.location.href='classes.html#pampanga'">Learn
+                            <button class="learn-more-btn"
+                                onclick="window.location.href='classes.html#pampanga'">Learn
                                 More</button>
                         </div>
                     </div>
                 </div>
+
 
                 <div id="tab-ilo" class="dialect-tab">
                     <div class="tab-grid">
@@ -150,12 +155,14 @@
                                 <li>🔤 Easier to recognize for beginners</li>
                                 <li>💡 One of the most widely spoken</li>
                             </ul>
-                            <button class="learn-more-btn" onclick="window.location.href='classes.html#ilocos'">Learn
+                            <button class="learn-more-btn"
+                                onclick="window.location.href='classes.html#ilocos'">Learn
                                 More</button>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="mac-footer-nav">
                 <button class="nav-dot-btn kap-btn" onclick="switchTab('kap')">KAPAMPANGAN</button>
@@ -165,11 +172,13 @@
         </div>
     </div>
 
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const homepage = document.querySelector(".homepage");
             const classSection = document.getElementById("classes");
             const navLinks = document.querySelectorAll('.nav a');
+
 
             if (homepage) {
                 setTimeout(() => {
@@ -178,9 +187,11 @@
                 }, 100);
             }
 
+
             function setupToggle() {
                 const learnBtn = document.getElementById("learnToggle");
                 const learnSubnav = document.getElementById("learnSubnav");
+
 
                 if (learnBtn && learnSubnav) {
                     learnBtn.addEventListener("click", function (e) {
@@ -192,6 +203,7 @@
                     });
                 }
 
+
                 document.addEventListener("click", function (e) {
                     if (learnSubnav && learnSubnav.classList.contains("show-menu")) {
                         if (!learnBtn.contains(e.target) && !learnSubnav.contains(e.target)) {
@@ -202,6 +214,7 @@
                 });
             }
             setupToggle();
+
 
             // Word of the Day Logic
             const dictionary = [
@@ -227,8 +240,10 @@
                 { eng: "River", tag: "Ilog", kap: "Ilug", ilo: "Karayan" }
             ];
 
+
             const titleElement = document.getElementById('wotd-title');
             const defElement = document.getElementById('wotd-definition');
+
 
             if (titleElement && defElement) {
                 const now = new Date();
@@ -238,6 +253,7 @@
                 defElement.innerHTML = `<strong>Tagalog:</strong> ${word.tag} | <strong>Kapampangan:</strong> ${word.kap} | <strong>Ilokano:</strong> ${word.ilo}`;
             }
 
+
             // Highlighting active nav
             function updateActiveNav() {
                 navLinks.forEach(link => link.classList.remove('active'));
@@ -245,10 +261,12 @@
                 if (homepageLink) homepageLink.classList.add('active');
             }
 
+
             // Modal Logic
             const modal = document.getElementById("dashboardModal");
             const dashboard = document.querySelector(".dashboard");
             const closeModal = document.getElementById("closeModal");
+
 
             if (dashboard && modal) {
                 dashboard.addEventListener("click", (e) => {
@@ -257,6 +275,7 @@
                     switchTab('kap');
                 });
             }
+
 
             if (closeModal) {
                 closeModal.addEventListener("click", () => {
@@ -269,14 +288,17 @@
             }
         });
 
+
         function switchTab(dialect) {
             document.querySelectorAll('.dialect-tab').forEach(tab => tab.classList.remove('active'));
             const targetTab = document.getElementById('tab-' + dialect);
             if (targetTab) targetTab.classList.add('active');
 
+
             document.querySelectorAll('.nav-dot-btn').forEach(btn => btn.classList.remove('active'));
             const targetBtn = document.querySelector('.' + dialect + '-btn');
             if (targetBtn) targetBtn.classList.add('active');
+
 
             const title = document.getElementById('modalDynamicTitle');
             if (title) {
@@ -285,5 +307,4 @@
         }
     </script>
 </body>
-
 </html>
