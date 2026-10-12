@@ -37,13 +37,25 @@ $username = trim($data['username'] ?? '');
 $email = strtolower(trim($data['email'] ?? ''));
 $password = $data['password'] ?? '';
 $confirmPassword = $data['confirm_password'] ?? '';
+$recoveryQuestion = trim($data['recovery_question'] ?? '');
+$recoveryAnswer = trim($data['recovery_answer'] ?? '');
 
-// Must fill required fields.
+// Recovery questions.
+$allowedQuestions = [
+    'What is the name of your first pet?',
+    'What is your mother\'s maiden name?',
+    'What was your childhood nickname?',
+    'In what town were you born?'
+];
+
+// Required fields.
 if (
     $username === '' ||
     $email === '' ||
     $password === '' ||
-    $confirmPassword === ''
+    $confirmPassword === '' ||
+    $recoveryQuestion === '' ||
+    $recoveryAnswer === ''
 ) {
     http_response_code(400);
     echo json_encode([
@@ -89,13 +101,47 @@ if (strlen($password) < 8) {
     exit;
 }
 
-// Hash the password before storing it.
+if (!in_array($recoveryQuestion, $allowedQuestions, true)) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Please select a valid recovery question.'
+    ]);
+    exit;
+}
+
+if (strlen($recoveryAnswer) > 255) {
+    http_response_code(400);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Recovery answer must not exceed 255 characters.'
+    ]);
+    exit;
+}
+
+// Hash the password and recovery answer.
 $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+$recoveryAnswerHash = password_hash(
+    mb_strtolower($recoveryAnswer, 'UTF-8'),
+    PASSWORD_DEFAULT
+);
 
 try {
     $sql = '
-        INSERT INTO users (username, email, password_hash)
-        VALUES (:username, :email, :password_hash)
+        INSERT INTO users (
+            username,
+            email,
+            password_hash,
+            recovery_question,
+            recovery_answer_hash
+        )
+        VALUES (
+            :username,
+            :email,
+            :password_hash,
+            :recovery_question,
+            :recovery_answer_hash
+        )
         RETURNING user_id
     ';
 
@@ -103,7 +149,9 @@ try {
     $stmt->execute([
         ':username' => $username,
         ':email' => $email,
-        ':password_hash' => $passwordHash
+        ':password_hash' => $passwordHash,
+        ':recovery_question' => $recoveryQuestion,
+        ':recovery_answer_hash' => $recoveryAnswerHash
     ]);
 
     http_response_code(201);

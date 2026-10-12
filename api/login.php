@@ -1,111 +1,74 @@
 <?php
+header('Content-Type: application/json');
 
-$sessionPath = 'C:/Users/PC/php_sessions';
-
-if (!is_dir($sessionPath) || !is_writable($sessionPath)) {
-    error_log('Session directory is missing or not writable.');
-    http_response_code(500);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode([
-        'success' => false,
-        'message' => 'Session storage is unavailable.'
-    ]);
-    exit;
-}
-
-session_save_path($sessionPath);
-session_start();
-
-header('Content-Type: application/json; charset=utf-8');
-
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Allow: POST');
-    http_response_code(405);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Method not allowed.'
-    ]);
-    exit;
-}
+session_save_path('C:/Users/PC/php_sessions');
+session_start();!
 
 require_once __DIR__ . '/db.php';
 
-$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-$data = [];
+function respond($status, $message, $extra = [])
+{
+    http_response_code($status);
 
-if (stripos($contentType, 'application/json') !== false) {
-    $rawBody = file_get_contents('php://input');
-    $data = json_decode($rawBody, true);
+    echo json_encode(array_merge([
+        'success' => $status >= 200 && $status < 300,
+        'message' => $message
+    ], $extra));
 
-    if (!is_array($data)) {
-        http_response_code(400);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Invalid request data.'
-        ]);
-        exit;
-    }
-} else {
-    $data = $_POST;
+    exit;
 }
 
-$email = strtolower(trim($data['email'] ?? ''));
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header('Allow: POST');
+    respond(405, 'Method not allowed.');
+}
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!is_array($data)) {
+    respond(400, 'Invalid request data.');
+}
+
+$identifier = trim($data['identifier'] ?? '');
 $password = $data['password'] ?? '';
 
-if ($email === '' || $password === '') {
-    http_response_code(400);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Email and password are required.'
-    ]);
-    exit;
+if ($identifier === '' || $password === '') {
+    respond(400, 'Please enter your email/username and password.');
 }
 
 try {
     $sql = '
         SELECT user_id, username, email, password_hash
         FROM users
-        WHERE email = :email
+        WHERE LOWER(username) = LOWER(:username)
+           OR LOWER(email) = LOWER(:email)
         LIMIT 1
     ';
 
     $stmt = $conn->prepare($sql);
-    $stmt->execute([':email' => $email]);
+    $stmt->execute([
+        'username' => $identifier,
+        'email' => $identifier
+    ]);
 
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$user || !password_verify($password, $user['password_hash'])) {
-        http_response_code(401);
-        echo json_encode([
-            'success' => false,
-            'message' => 'Invalid email or password.'
-        ]);
-        exit;
+        respond(401, 'Invalid email/username or password.');
     }
 
-    if (!session_regenerate_id(true)) {
-        throw new RuntimeException('Unable to regenerate session ID.');
-    }
+    session_regenerate_id(true);
+    $_SESSION['user_id'] = $user['user_id'];
 
-    $_SESSION['user_id'] = (int) $user['user_id'];
-
-    echo json_encode([
-        'success' => true,
-        'message' => 'Login successful.',
+    respond(200, 'Login successful.', [
         'user' => [
-            'user_id' => (int) $user['user_id'],
+            'user_id' => $user['user_id'],
             'username' => $user['username'],
             'email' => $user['email']
         ]
     ]);
 
-} catch (Throwable $e) {
-    error_log('Login failed: ' . $e->getMessage());
-
-    http_response_code(500);
-    echo json_encode([
-        'success' => false,
-        'message' => 'Unable to log in right now.'
-    ]);
+} catch (PDOException $e) {
+    error_log('Login database error: ' . $e->getMessage());
+    respond(500, 'A server error occurred. Please try again.');
 }
-?>

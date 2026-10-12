@@ -1,15 +1,7 @@
-
 <?php
-
+session_save_path('C:/Users/PC/php_sessions');
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Allow: POST');
-    http_response_code(405);
-    exit('Method not allowed.');
-}
-
-// Remove all session data.
 $_SESSION = [];
 
 if (ini_get('session.use_cookies')) {
@@ -28,6 +20,6 @@ if (ini_get('session.use_cookies')) {
 
 session_destroy();
 
-// Redirect to the login page.
+// Return the user to the login page.
 header('Location: ../pages/login.html');
 exit;
