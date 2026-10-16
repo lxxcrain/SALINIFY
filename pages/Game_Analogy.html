@@ -857,16 +857,19 @@ async function fetchQuestions() {
           box.onclick = (e) => checkAnswer(q.choices[index], e);
         });
        
-      updateProgress((currentQuestion / questions.length) * 100);
+      const answeredCount = userAnswers.filter(a => a !== null).length;
+      updateProgress((answeredCount / questions.length) * 100);
       updateNavigation();
     }
 
 
       function checkAnswer(choice, e) {
+        if (!questions.length) return;
         let q = questions[currentQuestion];
         const correctSound = document.getElementById("correctSound");
         const wrongSound = document.getElementById("wrongSound");
 
+        if (!questions.length) return;
 
         if (revealed[currentQuestion]) {
           if (choice === q.answer) {
@@ -891,6 +894,8 @@ async function fetchQuestions() {
 
           if (attemptsCount[currentQuestion] <= 2) {
             userAnswers[currentQuestion] = choice;
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            updateProgress((answeredCount / questions.length) * 100);
             const plusOne = document.createElement("div");
             plusOne.classList.add("plus-one");
             plusOne.innerText = "+1";
@@ -898,9 +903,14 @@ async function fetchQuestions() {
             setTimeout(() => plusOne.remove(), 1000);
           } else {
             userAnswers[currentQuestion] = "no-point";
+            const answeredCount = userAnswers.filter(a => a !== null).length;
+            updateProgress((answeredCount / questions.length) * 100);
           }
 
-
+          function refreshProgress() {
+          const answeredCount = userAnswers.filter(a => a !== null).length;
+          updateProgress((answeredCount / questions.length) * 100);
+          }
           questionText.innerHTML = q.word.replace("_____", "<i>" + q.answer + "</i>");
           updateScore();
           updateNavigation();
@@ -918,6 +928,21 @@ async function fetchQuestions() {
         updateNavigation();
       }
 
+
+      function showHint() {
+        if (!questions.length) return;
+        if (hintsLeft <= 0) return;
+
+    const hintSound = document.getElementById("hintSound");
+    hintSound.play().catch(() => {});
+
+    const hintBox = document.getElementById("hintBox");
+    hintBox.innerText = "Hint: " + questions[currentQuestion].hint;
+    hintBox.style.display = "block";
+
+    hintsLeft--;
+    updateButtonLabels();
+}
 
       function revealAnswer() {
         if (revealed[currentQuestion] || userAnswers[currentQuestion] === questions[currentQuestion].answer) return;
@@ -946,51 +971,43 @@ async function fetchQuestions() {
 
 
       function nextQuestion() {
-        currentQuestion++;
-        if (currentQuestion < questions.length) loadQuestion();
-        else showCongrats();
-      }
+    if (currentQuestion < questions.length - 1) {
+    currentQuestion++;
+    loadQuestion();
+} else {
+    showCongrats();
+}
+}
 
+function goNext() {
+    const isSolved =
+        userAnswers[currentQuestion] === questions[currentQuestion].answer ||
+        revealed[currentQuestion];
 
-      function goNext() {
-        const isSolved = (userAnswers[currentQuestion] === questions[currentQuestion].answer) || revealed[currentQuestion];
- 
-          if (isSolved) {
-            nextQuestion();
-          } else {
-          }
-        }
+    if (isSolved) {
+        nextQuestion();
+    }
+}
 
-
-      function goPrevious() {
-        if (currentQuestion > 0) {
-          currentQuestion--;
-          loadQuestion();
-        }
-      }
+function goPrevious() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+    }
+}
 
 
       function updateNavigation() {
-        const nextBtn = document.getElementById("nextBtn");
-        const isSolved = (userAnswers[currentQuestion] === questions[currentQuestion].answer) || revealed[currentQuestion];
-        nextBtn.disabled = !isSolved;
-      }
+    const nextBtn = document.getElementById("nextBtn");
 
+    if (currentQuestion >= questions.length) return;
 
-      function showHint() {
-        if (hintsLeft <= 0) return;
-        const hintSound = document.getElementById("hintSound");
-        hintSound.play().catch(d => {});
+    const isSolved =
+        userAnswers[currentQuestion] === questions[currentQuestion].answer ||
+        revealed[currentQuestion];
 
-
-        const hintBox = document.getElementById("hintBox");
-        hintBox.innerText = "Hint: " + questions[currentQuestion].hint;
-        hintBox.style.display = "block";
-        hintsLeft--;
-        updateButtonLabels();
-      }
-
-
+    nextBtn.disabled = !isSolved;
+}
 
 
       function updateProgress(value) {
@@ -1025,41 +1042,50 @@ async function fetchQuestions() {
  
       function showCongrats() {
 
-        fetch("../api/save_quiz_attempt.php", {
-    method: "POST",
-    credentials: "same-origin",
-    headers: {
-        "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-        quiz_id: 3,
-        score: points,
-        total_questions: 20
-    })
-});
-        const screen = document.getElementById("congratsScreen");
-        const finalScoreText = document.getElementById("finalScore");
-       
-        const totalScore = updateScore();
-        finalScoreText.innerText = `Score: ${totalScore} / ${questions.length}`;
-       
-        screen.style.display = "flex";
-        const sound = document.getElementById("congratsSound");
-        sound.play().catch(error => console.log("Audio failed:", error));
-      }
+    const totalpoints = updateScore();
+
+    fetch("../api/save_quiz_attempt.php", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            quiz_id: 3,
+            score: totalpoints,
+            total_questions: questions.length
+        })
+    });
+
+    const screen = document.getElementById("congratsScreen");
+    const finalScoreText = document.getElementById("finalScore");
+
+    finalScoreText.innerText =
+        `Score: ${totalpoints} / ${questions.length}`;
+
+    screen.style.display = "flex";
+
+    const sound = document.getElementById("congratsSound");
+    sound.play().catch(error =>
+        console.log("Audio failed:", error)
+    );
+}
+      
 
 
       function restartGame() {
         currentQuestion = 0;
         hintsLeft = 3;
         revealsLeft = 3;
+
+        document.getElementById("hintBox").style.display = "none";
         updateButtonLabels();
         shuffleArray(questions);
         questions.forEach(q => shuffleArray(q.choices));
         userAnswers.fill(null);
         revealed.fill(false);
         attemptsCount.fill(0);
-        updateProgress(0);
+        refreshProgress();
         updateScore();
         document.getElementById("congratsScreen").style.display = "none";
         loadQuestion();
