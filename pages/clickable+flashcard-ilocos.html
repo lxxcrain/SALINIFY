@@ -398,18 +398,18 @@
             justify-content: flex-end;
             margin-bottom: 20px;
         }
-        .learning-center{
-            display:flex;
-            flex-direction:column;
-            align-items:center;
-            gap:5px;
+
+        .learning-center {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
-        #learnStatus{
-            font-size:13px;
-            color:#666;
+        #learnStatus {
+            font-size: 13px;
+            color: #666;
         }
-
     </style>
 </head>
 
@@ -464,37 +464,24 @@
             <div class="english-container" id="englishText"></div>
 
             <div class="button-group">
-                <button
-                    class="nav-btn"
-                    onclick="prevWord()">
+                <button class="nav-btn" onclick="prevWord()">
                     ⬅ Previous Word
                 </button>
 
-            <div class="learning-center">
-                <button
-                    id="learnBtn"
-                    class="nav-btn"
-                    onclick="toggleLearned()">
-                    ✔ Mark as Learned
-                </button>
+                <div class="learning-center">
+                    <button id="learnBtn" class="nav-btn" onclick="toggleLearned()">
+                        ✔ Mark as Learned
+                    </button>
 
-                <button
-                    id="reviewBtn"
-                    class="nav-btn"
-                    onclick="reviewAgain()"
-                    style="display:none;">
-                    🔄 Review Again
-                </button>
+                    <button id="reviewBtn" class="nav-btn" onclick="reviewAgain()" style="display:none;">
+                        🔄 Review Again
+                    </button>
 
-                <small
-                    id="learnStatus"
-                    style="display:none;">
-                </small>
-        </div>
+                    <small id="learnStatus" style="display:none;">
+                    </small>
+                </div>
 
-                <button
-                    class="nav-btn"
-                    onclick="nextWord()">
+                <button class="nav-btn" onclick="nextWord()">
                     Next Word ➡
                 </button>
             </div>
@@ -504,10 +491,10 @@
     <script>
         let words = [];
 
-    const container = document.getElementById("flashcards");
-    let currentIndex = 0;
-    let lastCat = "";
-    let learnedWords = new Set();
+        const container = document.getElementById("flashcards");
+        let currentIndex = 0;
+        let lastCat = "";
+        let learnedWords = new Set();
 
         async function loadWords() {
             container.textContent = "Loading words...";
@@ -622,13 +609,69 @@
             document.getElementById("exampleText").textContent = w.example;
             document.getElementById("wordImage").src = w.image;
 
-<<<<<<< HEAD
             // Audio logic
             const audio = document.getElementById("audioElement");
             audio.pause();
             audio.src = w.audio;
             document.getElementById("playBtn").onclick = () =>
                 audio.play().catch(console.error);
+
+            const learnBtn =
+                document.getElementById("learnBtn");
+
+            const reviewBtn =
+                document.getElementById("reviewBtn");
+
+            const status =
+                document.getElementById("learnStatus");
+
+            const currentWord =
+                words[currentIndex].dialect;
+
+            if (learnedWords.has(currentWord)) {
+
+                learnBtn.style.display = "none";
+
+                reviewBtn.style.display =
+                    "inline-flex";
+
+                status.style.display =
+                    "block";
+
+                status.textContent =
+                    "✅ Already Learned";
+
+            } else {
+
+                learnBtn.style.display =
+                    "inline-flex";
+
+                reviewBtn.style.display =
+                    "none";
+
+                status.style.display =
+                    "none";
+            }
+        }
+
+        function toggleLearned() {
+
+            const currentWord =
+                words[currentIndex].dialect;
+
+            learnedWords.add(currentWord);
+
+            displayWord();
+        }
+
+        function reviewAgain() {
+
+            const currentWord =
+                words[currentIndex].dialect;
+
+            learnedWords.delete(currentWord);
+
+            displayWord();
         }
 
         function nextWord() {
@@ -636,78 +679,6 @@
             currentIndex = (currentIndex + 1) % words.length;
             displayWord();
         }
-=======
-        // Audio logic
-        const audio = document.getElementById("audioElement");
-        audio.pause();
-        audio.src = w.audio;
-        document.getElementById("playBtn").onclick = () =>
-            audio.play().catch(console.error);
-
-        const learnBtn =
-    document.getElementById("learnBtn");
-
-const reviewBtn =
-    document.getElementById("reviewBtn");
-
-const status =
-    document.getElementById("learnStatus");
-
-const currentWord =
-    words[currentIndex].dialect;
-
-if (learnedWords.has(currentWord)) {
-
-    learnBtn.style.display = "none";
-
-    reviewBtn.style.display =
-        "inline-flex";
-
-    status.style.display =
-        "block";
-
-    status.textContent =
-        "✅ Already Learned";
-
-} else {
-
-    learnBtn.style.display =
-        "inline-flex";
-
-    reviewBtn.style.display =
-        "none";
-
-    status.style.display =
-        "none";
-}
-    }
-
-    function toggleLearned() {
-
-    const currentWord =
-        words[currentIndex].dialect;
-
-    learnedWords.add(currentWord);
-
-    displayWord();
-}
-
-    function reviewAgain() {
-
-    const currentWord =
-        words[currentIndex].dialect;
-
-    learnedWords.delete(currentWord);
-
-    displayWord();
-}
-
-    function nextWord() {
-        if (!words.length) return;
-        currentIndex = (currentIndex + 1) % words.length;
-        displayWord();
-    }
->>>>>>> fabb803f4208277133f9291b363f2717e2eee956
 
         function prevWord() {
             if (!words.length) return;
