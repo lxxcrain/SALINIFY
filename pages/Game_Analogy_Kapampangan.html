@@ -10,13 +10,10 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <title>Kapampangan Analogy Game</title>
 
-  <style>
-    @font-face {
-      font-family: "bright DEMO";
-      src: url('../assets/fonts/BrightDemo.otf') format('opentype');
-      font-weight: normal;
-    }
 
+
+
+  <style>
     html,
     body {
       margin: 0;
@@ -264,7 +261,6 @@
         opacity: 1;
         transform: translateY(0);
       }
-
       100% {
         opacity: 0;
         transform: translateY(-30px);
@@ -419,12 +415,11 @@
     }
 
 
-    button:disabled,
-    .circle-btn:disabled {
+    button:disabled,.circle-btn:disabled {
       background-color: #a1a1a1 !important;
-      color: #d3d3d3 !important;
-      cursor: not-allowed;
-      transform: none !important;
+      color: #d3d3d3 !important;          
+      cursor: not-allowed;              
+      transform: none !important;        
       box-shadow: none !important;
       opacity: 0.6;
     }
@@ -457,15 +452,8 @@
 
 
     @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(-5px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
 
@@ -483,8 +471,7 @@
 
 
 
-    .action-buttons,
-    .nav-buttons {
+    .action-buttons, .nav-buttons {
       display: flex;
       gap: 15px;
     }
@@ -641,13 +628,14 @@
     }
 
 
-    button:disabled {
+    button:disabled{
       background-color: #a1a1a1 !important;
-      color: #d3d3d3 !important;
-      cursor: not-allowed;
-      transform: none !important;
+      color: #d3d3d3 !important;          
+      cursor: not-allowed;              
+      transform: none !important;        
       box-shadow: none !important;
     }
+       
   </style>
 </head>
 
@@ -661,12 +649,9 @@
     </div>
     <ul>
       <li><a href="home.html"><span class="material-icons">home</span><span class="nav-label">Home</span></a></li>
-      <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Origin</span></a>
-      </li>
-      <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span
-            class="nav-label">Dialect</span></a></li>
-      <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span
-            class="nav-label">Play</span></a></li>
+      <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Origin</span></a></li>
+      <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span class="nav-label">Dialect</span></a></li>
+      <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span class="nav-label">Play</span></a></li>
     </ul>
   </div>
 
@@ -729,7 +714,7 @@
 
         <div class="circle-container">
           <button class="circle-btn" onclick="goPrevious()">&lt;</button>
-          <button id="nextBtn" class="circle-btn" onclick="goNext()">&gt;</button>
+          <button id="nextBtn"class="circle-btn" onclick="goNext()">&gt;</button>
         </div>
       </div>
     </div>
@@ -769,51 +754,51 @@
 
       let questions = [];
 
-
-      async function fetchQuestions() {
-        try {
-          const response = await fetch(
+   
+async function fetchQuestions() {
+    try {
+        const response = await fetch(
             "../api/quizzes.php?dialect=Kapampangan&type=Analogy"
-          );
+        );
 
-          if (!response.ok) {
+        if (!response.ok) {
             throw new Error("Failed to fetch Kapampangan analogy questions");
-          }
+        }
 
-          const data = await response.json();
+        const data = await response.json();
 
-          questions = data.map(q => {
+        questions = data.map(q => {
             const correctOption = q.options.find(
-              opt => Number(opt.is_correct) === 1
+                opt => Number(opt.is_correct) === 1
             );
 
             return {
-              word: q.question.trim() + " _____",
-              choices: q.options.map(opt => opt.text),
-              answer: correctOption ? correctOption.text : "",
-              hint: q.hint || ""
+                word: q.question.trim() + " _____",
+                choices: q.options.map(opt => opt.text),
+                answer: correctOption ? correctOption.text : "",
+                hint: q.hint || ""
             };
-          });
+        });
 
-          if (
+        if (
             questions.length === 0 ||
             questions.some(q =>
-              q.choices.length !== 3 ||
-              !q.answer
+                q.choices.length !== 3 ||
+                !q.answer
             )
-          ) {
+        ) {
             throw new Error("Invalid or missing analogy questions");
-          }
-
-          console.log("Kapampangan analogy questions loaded:", questions.length);
-
-          return true;
-
-        } catch (error) {
-          console.error("Error loading Kapampangan analogy questions:", error);
-          return false;
         }
-      }
+
+        console.log("Kapampangan analogy questions loaded:", questions.length);
+
+        return true;
+
+    } catch (error) {
+        console.error("Error loading Kapampangan analogy questions:", error);
+        return false;
+    }
+}
 
 
       let hintsLeft = 3;
@@ -875,10 +860,10 @@
           if (revealed[currentQuestion] && q.choices[index] === q.answer) box.classList.add("correct");
           box.onclick = (e) => checkAnswer(q.choices[index], e);
         });
-
-        updateProgress((currentQuestion / questions.length) * 100);
-        updateNavigation();
-      }
+       
+      updateProgress((currentQuestion / questions.length) * 100);
+      updateNavigation();
+    }
 
 
       function checkAnswer(choice, e) {
@@ -890,11 +875,11 @@
         if (revealed[currentQuestion]) {
           if (choice === q.answer) {
             e.target.classList.add("correct");
-            correctSound.play().catch(d => { });
+            correctSound.play().catch(d => {});
             setTimeout(() => nextQuestion(), 600);
           } else {
             e.target.classList.add("wrong");
-            wrongSound.play().catch(d => { });
+            wrongSound.play().catch(d => {});
           }
           return;
         }
@@ -904,7 +889,7 @@
 
 
         if (choice === q.answer) {
-          correctSound.play().catch(d => { });
+          correctSound.play().catch(d => {});
           e.target.classList.add("correct");
 
 
@@ -927,7 +912,7 @@
 
 
         } else {
-          wrongSound.play().catch(d => { });
+          wrongSound.play().catch(d => {});
           e.target.classList.add("wrong");
           if (attemptsCount[currentQuestion] >= 2) {
             userAnswers[currentQuestion] = "no-point";
@@ -948,7 +933,7 @@
 
 
         const revealSound = document.getElementById("revealSound");
-        revealSound.play().catch(d => { });
+        revealSound.play().catch(d => {});
 
 
         let q = questions[currentQuestion];
@@ -973,12 +958,12 @@
 
       function goNext() {
         const isSolved = (userAnswers[currentQuestion] === questions[currentQuestion].answer) || revealed[currentQuestion];
-
-        if (isSolved) {
-          nextQuestion();
-        } else {
+ 
+          if (isSolved) {
+            nextQuestion();
+          } else {
+          }
         }
-      }
 
 
       function goPrevious() {
@@ -999,7 +984,7 @@
       function showHint() {
         if (hintsLeft <= 0) return;
         const hintSound = document.getElementById("hintSound");
-        hintSound.play().catch(d => { });
+        hintSound.play().catch(d => {});
 
 
         const hintBox = document.getElementById("hintBox");
@@ -1015,40 +1000,53 @@
       function updateProgress(value) {
         progressBar.style.width = value + "%";
       }
-
+     
       function updateButtonLabels() {
-        const hintIcons = "I".repeat(hintsLeft);
-        const revealIcons = "I".repeat(revealsLeft);
-
-        const hBtn = document.getElementById("hintBtn");
-        const rBtn = document.getElementById("revealBtn");
-
-
-        hBtn.innerText = `HINT: ${hintIcons || "NONE"}`;
-        rBtn.innerText = `REVEAL: ${revealIcons || "NONE"}`;
+      const hintIcons = "I".repeat(hintsLeft);
+      const revealIcons = "I".repeat(revealsLeft);
+     
+      const hBtn = document.getElementById("hintBtn");
+      const rBtn = document.getElementById("revealBtn");
 
 
-        if (hintsLeft <= 0) {
-          hBtn.disabled = true;
-        } else {
-          hBtn.disabled = false;
-        }
+      hBtn.innerText = `HINT: ${hintIcons || "NONE"}`;
+      rBtn.innerText = `REVEAL: ${revealIcons || "NONE"}`;
 
 
-        if (revealsLeft <= 0) {
-          rBtn.disabled = true;
-        } else {
-          rBtn.disabled = false;
-        }
+      if (hintsLeft <= 0) {
+        hBtn.disabled = true;
+      } else {
+        hBtn.disabled = false;
       }
 
+
+      if (revealsLeft <= 0) {
+        rBtn.disabled = true;
+      } else {
+        rBtn.disabled = false;
+      }
+    }
+ 
       function showCongrats() {
+
+        fetch("../api/save_quiz_attempt.php", {
+    method: "POST",
+    credentials: "same-origin",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        quiz_id: 6,
+        score: points,
+        total_questions: 20
+    })
+});
         const screen = document.getElementById("congratsScreen");
         const finalScoreText = document.getElementById("finalScore");
-
+       
         const totalScore = updateScore();
         finalScoreText.innerText = `Score: ${totalScore} / ${questions.length}`;
-
+       
         screen.style.display = "flex";
         const sound = document.getElementById("congratsSound");
         sound.play().catch(error => console.log("Audio failed:", error));
@@ -1073,27 +1071,27 @@
 
 
 
+   
+async function initializeGame() {
+    const success = await fetchQuestions();
 
-      async function initializeGame() {
-        const success = await fetchQuestions();
+    if (!success) {
+        alert("Unable to load Kapampangan analogy questions.");
+        return;
+    }
 
-        if (!success) {
-          alert("Unable to load Kapampangan analogy questions.");
-          return;
-        }
+    shuffleArray(questions);
+    questions.forEach(q => shuffleArray(q.choices));
 
-        shuffleArray(questions);
-        questions.forEach(q => shuffleArray(q.choices));
+    userAnswers = new Array(questions.length).fill(null);
+    revealed = new Array(questions.length).fill(false);
+    attemptsCount = new Array(questions.length).fill(0);
 
-        userAnswers = new Array(questions.length).fill(null);
-        revealed = new Array(questions.length).fill(false);
-        attemptsCount = new Array(questions.length).fill(0);
+    updateButtonLabels();
+    loadQuestion();
+}
 
-        updateButtonLabels();
-        loadQuestion();
-      }
-
-      initializeGame();
+initializeGame();
 
     </script>
 
