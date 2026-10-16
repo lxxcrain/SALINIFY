@@ -21,14 +21,73 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     respond(405, ['success' => false, 'message' => 'Method not allowed.']);
 }
 
-$input = json_decode(file_get_contents('php://input'), true);
+$input = json_decode(
+    file_get_contents('php://input'),
+    true
+);
 
 if (!is_array($input)) {
-    respond(400, ['success' => false, 'message' => 'Invalid JSON body.']);
+    respond(400, [
+        'success' => false,
+        'message' => 'Invalid JSON body.'
+    ]);
 }
 
-$quizId = filter_var($input['quiz_id'] ?? null, FILTER_VALIDATE_INT);
+$quizId = filter_var(
+    $input['quiz_id'] ?? null,
+    FILTER_VALIDATE_INT
+);
+
 $answers = $input['answers'] ?? null;
+
+$score = filter_var(
+    $input['score'] ?? null,
+    FILTER_VALIDATE_INT
+);
+
+$totalQuestions = filter_var(
+    $input['total_questions'] ?? null,
+    FILTER_VALIDATE_INT
+);
+ if (
+    $quizId &&
+    $score !== null &&
+    $totalQuestions !== null
+) {
+
+    $stmt = $conn->prepare(
+        "INSERT INTO quiz_attempts
+        (
+            user_id,
+            quiz_id,
+            score,
+            total_questions,
+            started_at,
+            completed_at
+        )
+        VALUES
+        (
+            :user_id,
+            :quiz_id,
+            :score,
+            :total_questions,
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )"
+    );
+
+    $stmt->execute([
+        'user_id' => $_SESSION['user_id'],
+        'quiz_id' => $quizId,
+        'score' => $score,
+        'total_questions' => $totalQuestions
+    ]);
+
+    respond(201, [
+        'success' => true,
+        'message' => 'Matching game saved.'
+    ]);
+}
 
 if (!$quizId || !is_array($answers) || count($answers) === 0) {
     respond(400, [
@@ -39,6 +98,11 @@ if (!$quizId || !is_array($answers) || count($answers) === 0) {
 
 $userId = (int) $_SESSION['user_id'];
 
+if (
+    $quizId &&
+    $score !== null &&
+    $totalQuestions !== null
+) 
 try {
     // Confirm the quiz exists.
     $quizStmt = $conn->prepare(
