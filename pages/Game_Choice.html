@@ -8,13 +8,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ilocano Quiz</title>
 
-    <style>
-        @font-face {
-            font-family: "bright DEMO";
-            src: url('../assets/fonts/BrightDemo.otf') format('opentype');
-            font-weight: normal;
-        }
 
+    <style>
         html,
         body {
             margin: 0;
@@ -326,105 +321,105 @@
         }
 
 
-        #congratsScreen::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('../assets/images/green1.png');
-            background-size: cover;
-            background-position: center;
-            opacity: 0.3;
-            z-index: -1;
-        }
+    #congratsScreen::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../assets/images/green1.png');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+      z-index: -1;
+    }
 
-        .congrats {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-            flex-direction: column;
-            gap: 30px;
-        }
+    .congrats {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      flex-direction: column;
+      gap: 30px;
+    }
 
-        .card {
-            width: 750px;
-            height: auto;
-            padding: 40px 20px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            border-radius: 25px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
-            overflow: hidden;
-            text-align: center;
-        }
+    .card {
+      width: 750px;
+      height: auto;
+      padding: 40px 20px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      position: relative;
+      overflow: hidden;
+      text-align: center;
+    }
 
-        .card-gif {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: 1;
-        }
+    .card-gif {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: 1;
+    }
 
-        .card-img {
-            height: 200px;
-            z-index: 1;
-        }
+    .card-img {
+      height: 200px;
+      z-index: 1;
+    }
 
-        .card p {
-            z-index: 2;
-            position: relative;
-        }
+    .card p {
+      z-index: 2;
+      position: relative;
+    }
 
-        .card h1 {
-            font-size: 50px;
-            color: #2e4365;
-            z-index: 2;
-        }
+    .card h1 {
+      font-size: 50px;
+      color: #2e4365;
+      z-index: 2;
+    }
 
-        .button-group {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-        }
+    .button-group {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    }
 
-        .button {
-            background-color: #2e4365;
-            width: 130px;
-            height: 45px;
-            border-radius: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+    .button {
+    background-color: #2e4365;
+    width: 130px;
+    height: 45px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    }
 
-        .restart-btn {
-            background-color: #8c3b06;
-        }
+    .restart-btn {
+    background-color: #8c3b06;
+    }
 
-        .button p {
-            color: #fff;
-        }
+    .button p {
+    color: #fff;
+    }
 
-        #finalScore {
-            font-size: 32px;
-            color: #8c3b06;
-            font-weight: bold;
-            z-index: 2;
-            margin: 0;
-        }
+    #finalScore {
+      font-size: 32px;
+      color: #8c3b06;
+      font-weight: bold;
+      z-index: 2;
+      margin: 0;
+    }
 
-        #congratsScreen {
+    #congratsScreen {
             position: fixed;
             top: 0;
             left: 100px;
@@ -436,7 +431,8 @@
             justify-content: center;
             background: #fff8df;
             z-index: 200;
-        }
+    }
+
     </style>
 </head>
 
@@ -448,12 +444,9 @@
         </div>
         <ul>
             <li><a href="home.html"><span class="material-icons">home</span><span class="nav-label">Home</span></a></li>
-            <li><a href="classes.html"><span class="material-icons">school</span><span
-                        class="nav-label">Origin</span></a></li>
-            <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span
-                        class="nav-label">Dialect</span></a></li>
-            <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span
-                        class="nav-label">Play</span></a></li>
+            <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Origin</span></a></li>
+            <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span class="nav-label">Dialect</span></a></li>
+            <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span class="nav-label">Play</span></a></li>
         </ul>
     </div>
 
@@ -506,317 +499,344 @@
 
 
     <div id="congratsScreen">
-        <div class="congrats">
-
-            <div class="card">
-                <img src="../assets/images/confetti.gif" class="card-gif" />
-                <img src="../assets/images/sali_congrats.png" class="card-img" />
-
-                <h1>Congratulations!</h1>
-                <p id="finalScore">Score: 0 / 20</p>
-                <p>You did a great job on this game.</p>
-            </div>
-
-            <audio id="congratsSound" src="../assets/audio/congrats.mp3" preload="auto"></audio>
-
-            <div class="button-group">
-                <div class="button restart-btn" onclick="restartGame()">
-                    <p>Restart</p>
-                </div>
-                <div class="button" onclick="window.location.href='play-ui.html'">
-                    <p>Back</p>
-                </div>
-            </div>
-
+    <div class="congrats">
+        
+        <div class="card">
+        <img src="../assets/images/confetti.gif" class="card-gif" />
+        <img src="../assets/images/sali_congrats.png" class="card-img" />
+        
+        <h1>Congratulations!</h1>
+        <p id="finalScore">Score: 0 / 20</p>
+        <p>You did a great job on this game.</p>
         </div>
+
+        <audio id="congratsSound" src="../assets/audio/congrats.mp3" preload="auto"></audio>
+
+        <div class="button-group">
+        <div class="button restart-btn" onclick="restartGame()">
+            <p>Restart</p>
+        </div>
+        <div class="button" onclick="window.location.href='play-ui.html'">
+            <p>Back</p>
+        </div>
+        </div>
+
+    </div>
     </div>
 
 
     <audio id="correctSound" src="../assets/audio/correct.mp3" preload="auto">
-        <audio id="wrongSound" src="../assets/audio/wrong.mp3" preload="auto">
-            <audio id="hintSound" src="../assets/audio/hint.mp3" preload="auto">
-                <audio id="revealSound" src="../assets/audio/reveal.mp3" preload="auto">
-                    <audio id="congratsSound" src="../assets/audio/congrats.mp3" preload="auto">
+    <audio id="wrongSound" src="../assets/audio/wrong.mp3" preload="auto">
+    <audio id="hintSound" src="../assets/audio/hint.mp3" preload="auto">
+    <audio id="revealSound" src="../assets/audio/reveal.mp3" preload="auto">
+    <audio id="congratsSound" src="../assets/audio/congrats.mp3" preload="auto">
 
 
-                        <script>
-                            let originalQuestions = [];
+<script>
+        let originalQuestions = [];
+
+    
+async function fetchQuestions() {
+    try {
+        const response = await fetch(
+            "../api/quizzes.php?dialect=Ilocano&type=Choice"
+        );
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch questions");
+        }
+
+        const data = await response.json();
+
+        originalQuestions = data.map(q => ({
+            text: q.question,
+            options: q.options.map(opt => opt.text),
+            correct: q.options.findIndex(
+                opt => Number(opt.is_correct) === 1
+            ),
+            hint: q.hint
+        }));
+
+        if (
+            originalQuestions.length !== 20 ||
+            originalQuestions.some(q =>
+                q.correct === -1 || q.options.length !== 4
+            )
+        ) {
+            throw new Error("Invalid or missing quiz data");
+        }
+
+        console.log("Kapampangan questions loaded:", originalQuestions.length);
+
+        return true;
+
+        } catch (error) {
+            console.error("Error loading questions:", error);
+            return false;
+        }
+    }
+
+        
+        const roman = ["", "I", "II", "III"];
+        let hintCount = 3;
+        let revealCount = 3;
+        let questions = [];
+        let currentQ = 0;
+        let gameState = [];
+
+        const optBtns = [
+            document.getElementById("opt1"),
+            document.getElementById("opt2"),
+            document.getElementById("opt3"),
+            document.getElementById("opt4")
+        ];
+
+        function shuffleArray(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function loadQ() {
+            const q = questions[currentQ];
+            const state = gameState[currentQ];
+
+            document.getElementById("hintBtn").innerHTML = `Hint: ${roman[hintCount]}`;
+            document.getElementById("revealBtn").innerHTML = `Reveal: ${roman[revealCount]}`;
+            
+            document.getElementById("hintBtn").disabled = hintCount === 0;
+            document.getElementById("revealBtn").disabled = revealCount === 0 || state.answered;
+            
+            if(hintCount === 0) document.getElementById("hintBtn").style.opacity = "0.5";
+            else document.getElementById("hintBtn").style.opacity = "1";
+            
+            if(revealCount === 0 || state.answered) document.getElementById("revealBtn").style.opacity = "0.5";
+            else document.getElementById("revealBtn").style.opacity = "1";
+
+            document.getElementById("questionText").textContent = q.text;
+            
+            if (!state.shownHint) {
+                document.querySelector('.hint-box').style.display = "none";
+                document.getElementById('hintDisplay').textContent = "";
+            }
+
+            optBtns.forEach((btn, i) => {
+                btn.textContent = q.options[i];
+                btn.className = "opt-btn";
+                btn.disabled = state.answered; 
+                
+                if (state.answered || state.revealed) {
+                    if (i === q.correct) {
+                        btn.classList.add("correct");
+                    }
+                    if (state.userChoice === i && state.userChoice !== q.correct) {
+                        btn.classList.add("wrong");
+                    }
+                }
+            });
+
+            document.getElementById("prevBtn").disabled = currentQ === 0;
+            
+            const nextBtn = document.getElementById("nextBtn");
+            nextBtn.disabled = !state.answered;
+            if(nextBtn.disabled) {
+                nextBtn.style.opacity = "0.5";
+            } else {
+                nextBtn.style.opacity = "1";
+            }
+
+            updateScore();
+            updateProgress();
+        }
+
+        function checkAns(choice) {
+            const q = questions[currentQ];
+            const state = gameState[currentQ];
+
+            if (state.answered) return;
+
+            if (choice === q.correct) {
+                document.getElementById("correctSound").play().catch(()=>{});
+                state.userChoice = choice;
+                state.answered = true;
+                optBtns.forEach(btn => btn.disabled = true);
+                optBtns[choice].classList.add("correct");
+
+                if (state.wrongAttempts === 0 && !state.revealed) {
+                    const plusOne = document.createElement('div');
+                    plusOne.className = "plus-one";
+                    plusOne.textContent = "+1";
+                    document.querySelector('.progress-container').appendChild(plusOne);
+                    setTimeout(() => plusOne.remove(), 1000);
+                }
+
+                setTimeout(() => {
+                    if (currentQ < questions.length - 1) {
+                        currentQ++;
+                        loadQ();
+                    } else {
+                        showCongrats();
+                    }
+                }, 1500);
+
+            } else {
+                document.getElementById("wrongSound").play().catch(()=>{});
+                optBtns[choice].classList.add("wrong");
+                optBtns[choice].disabled = true;
+                state.wrongAttempts++;
+            }
+            
+            updateScore();
+            updateProgress();
+        }
+
+        function revealAnswer() {
+            if(revealCount <= 0) return;
+            document.getElementById("revealSound").play().catch(()=>{});
+            revealCount--;
+            
+            const q = questions[currentQ];
+            const state = gameState[currentQ];
+            
+            state.revealed = true;
+            optBtns[q.correct].classList.add("correct");
+            
+            updateScore();
+            updateProgress();
+        }
+
+        function updateScore() {
+            let score = gameState.filter(s => 
+                s.answered && 
+                !s.revealed && 
+                s.wrongAttempts === 0 && 
+                s.userChoice === questions[gameState.indexOf(s)].correct
+            ).length;
+            
+            document.getElementById("score").textContent = `${score} / ${questions.length}`;
+            return score;
+        }
+
+        function updateProgress() {
+            const answered = gameState.filter(s => s.answered).length;
+            const percent = (answered / questions.length) * 100;
+            document.getElementById("progress").style.width = percent + "%";
+        }
+
+        function showHint() {
+            if(hintCount <= 0) return;
+            document.getElementById("hintSound").play().catch(()=>{});
+            hintCount--;
+            
+            const state = gameState[currentQ];
+            state.shownHint = true;
+            
+            const hintBox = document.querySelector('.hint-box');
+            document.getElementById('hintDisplay').textContent = "Hint: " + questions[currentQ].hint;
+            hintBox.style.display = "block";
+            
+            document.getElementById('hintBtn').innerHTML = `Hint: ${roman[hintCount]}`;
+            document.getElementById('hintBtn').disabled = hintCount === 0;
+            if(hintCount === 0) document.getElementById('hintBtn').style.opacity = "0.5";
+        }
+
+        function showCongrats() {
+
+            function showCongrats() {
+
+    fetch("../api/save_quiz_attempt.php", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            quiz_id: 2,
+            score: points,
+            total_questions: 20
+        })
+    });
+
+    const screen =
+        document.getElementById("congratsScreen");
+
+    const finalScoreText =
+        document.getElementById("finalScore");
+
+    finalScoreText.innerText =
+        `Score: ${points} / ${totalPairs}`;
+
+    screen.style.display = "flex";
+}
+
+            const screen = document.getElementById("congratsScreen");
+            const finalScoreText = document.getElementById("finalScore");
+            
+            const totalScore = updateScore();
+            finalScoreText.innerText = `Score: ${totalScore} / ${questions.length}`;
+            
+            screen.style.display = "flex";
+            const sound = document.getElementById("congratsSound");
+            sound.play().catch(()=>{});
+        }
+
+        function restartGame() {
+            hintCount = 3;
+            revealCount = 3;
+            questions = shuffleArray([...originalQuestions]);
+            currentQ = 0;
+            gameState = questions.map(() => ({
+                answered: false,
+                userChoice: -1,
+                revealed: false,
+                shownHint: false,
+                wrongAttempts: 0
+            }));
+            
+            document.getElementById("congratsScreen").style.display = "none";
+            document.getElementById("quizContainer").style.display = "flex";
+            document.getElementById("progress").style.width = "0%";
+            document.getElementById("score").textContent = `0 / ${questions.length}`;
+            
+            loadQ();
+        }
+
+        optBtns.forEach((btn, i) => btn.addEventListener("click", () => checkAns(i)));
+        document.getElementById("hintBtn").addEventListener("click", showHint);
+        document.getElementById("revealBtn").addEventListener("click", revealAnswer);
+        
+        document.getElementById("nextBtn").addEventListener("click", () => {
+            if (!document.getElementById("nextBtn").disabled && currentQ < questions.length - 1) {
+                currentQ++;
+                loadQ();
+            }
+        });
+        
+        document.getElementById("prevBtn").addEventListener("click", () => {
+            if (currentQ > 0) {
+                currentQ--;
+                loadQ();
+            }
+        });
 
 
-                            async function fetchQuestions() {
-                                try {
-                                    const response = await fetch(
-                                        "../api/quizzes.php?dialect=Ilocano&type=Choice"
-                                    );
+        window.onload = async () => {
+            const success = await fetchQuestions();
 
-                                    if (!response.ok) {
-                                        throw new Error("Failed to fetch questions");
-                                    }
+            if (!success) {
+                alert("Unable to load quiz questions. Please try again.");
+                return;
+            }
 
-                                    const data = await response.json();
+            restartGame();
+        };
 
-                                    originalQuestions = data.map(q => ({
-                                        text: q.question,
-                                        options: q.options.map(opt => opt.text),
-                                        correct: q.options.findIndex(
-                                            opt => Number(opt.is_correct) === 1
-                                        ),
-                                        hint: q.hint
-                                    }));
-
-                                    if (
-                                        originalQuestions.length !== 20 ||
-                                        originalQuestions.some(q =>
-                                            q.correct === -1 || q.options.length !== 4
-                                        )
-                                    ) {
-                                        throw new Error("Invalid or missing quiz data");
-                                    }
-
-                                    console.log("Kapampangan questions loaded:", originalQuestions.length);
-
-                                    return true;
-
-                                } catch (error) {
-                                    console.error("Error loading questions:", error);
-                                    return false;
-                                }
-                            }
-
-
-                            const roman = ["", "I", "II", "III"];
-                            let hintCount = 3;
-                            let revealCount = 3;
-                            let questions = [];
-                            let currentQ = 0;
-                            let gameState = [];
-
-                            const optBtns = [
-                                document.getElementById("opt1"),
-                                document.getElementById("opt2"),
-                                document.getElementById("opt3"),
-                                document.getElementById("opt4")
-                            ];
-
-                            function shuffleArray(array) {
-                                let currentIndex = array.length, randomIndex;
-                                while (currentIndex != 0) {
-                                    randomIndex = Math.floor(Math.random() * currentIndex);
-                                    currentIndex--;
-                                    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-                                }
-                                return array;
-                            }
-
-                            function loadQ() {
-                                const q = questions[currentQ];
-                                const state = gameState[currentQ];
-
-                                document.getElementById("hintBtn").innerHTML = `Hint: ${roman[hintCount]}`;
-                                document.getElementById("revealBtn").innerHTML = `Reveal: ${roman[revealCount]}`;
-
-                                document.getElementById("hintBtn").disabled = hintCount === 0;
-                                document.getElementById("revealBtn").disabled = revealCount === 0 || state.answered;
-
-                                if (hintCount === 0) document.getElementById("hintBtn").style.opacity = "0.5";
-                                else document.getElementById("hintBtn").style.opacity = "1";
-
-                                if (revealCount === 0 || state.answered) document.getElementById("revealBtn").style.opacity = "0.5";
-                                else document.getElementById("revealBtn").style.opacity = "1";
-
-                                document.getElementById("questionText").textContent = q.text;
-
-                                if (!state.shownHint) {
-                                    document.querySelector('.hint-box').style.display = "none";
-                                    document.getElementById('hintDisplay').textContent = "";
-                                }
-
-                                optBtns.forEach((btn, i) => {
-                                    btn.textContent = q.options[i];
-                                    btn.className = "opt-btn";
-                                    btn.disabled = state.answered;
-
-                                    if (state.answered || state.revealed) {
-                                        if (i === q.correct) {
-                                            btn.classList.add("correct");
-                                        }
-                                        if (state.userChoice === i && state.userChoice !== q.correct) {
-                                            btn.classList.add("wrong");
-                                        }
-                                    }
-                                });
-
-                                document.getElementById("prevBtn").disabled = currentQ === 0;
-
-                                const nextBtn = document.getElementById("nextBtn");
-                                nextBtn.disabled = !state.answered;
-                                if (nextBtn.disabled) {
-                                    nextBtn.style.opacity = "0.5";
-                                } else {
-                                    nextBtn.style.opacity = "1";
-                                }
-
-                                updateScore();
-                                updateProgress();
-                            }
-
-                            function checkAns(choice) {
-                                const q = questions[currentQ];
-                                const state = gameState[currentQ];
-
-                                if (state.answered) return;
-
-                                if (choice === q.correct) {
-                                    document.getElementById("correctSound").play().catch(() => { });
-                                    state.userChoice = choice;
-                                    state.answered = true;
-                                    optBtns.forEach(btn => btn.disabled = true);
-                                    optBtns[choice].classList.add("correct");
-
-                                    if (state.wrongAttempts === 0 && !state.revealed) {
-                                        const plusOne = document.createElement('div');
-                                        plusOne.className = "plus-one";
-                                        plusOne.textContent = "+1";
-                                        document.querySelector('.progress-container').appendChild(plusOne);
-                                        setTimeout(() => plusOne.remove(), 1000);
-                                    }
-
-                                    setTimeout(() => {
-                                        if (currentQ < questions.length - 1) {
-                                            currentQ++;
-                                            loadQ();
-                                        } else {
-                                            showCongrats();
-                                        }
-                                    }, 1500);
-
-                                } else {
-                                    document.getElementById("wrongSound").play().catch(() => { });
-                                    optBtns[choice].classList.add("wrong");
-                                    optBtns[choice].disabled = true;
-                                    state.wrongAttempts++;
-                                }
-
-                                updateScore();
-                                updateProgress();
-                            }
-
-                            function revealAnswer() {
-                                if (revealCount <= 0) return;
-                                document.getElementById("revealSound").play().catch(() => { });
-                                revealCount--;
-
-                                const q = questions[currentQ];
-                                const state = gameState[currentQ];
-
-                                state.revealed = true;
-                                optBtns[q.correct].classList.add("correct");
-
-                                updateScore();
-                                updateProgress();
-                            }
-
-                            function updateScore() {
-                                let score = gameState.filter(s =>
-                                    s.answered &&
-                                    !s.revealed &&
-                                    s.wrongAttempts === 0 &&
-                                    s.userChoice === questions[gameState.indexOf(s)].correct
-                                ).length;
-
-                                document.getElementById("score").textContent = `${score} / ${questions.length}`;
-                                return score;
-                            }
-
-                            function updateProgress() {
-                                const answered = gameState.filter(s => s.answered).length;
-                                const percent = (answered / questions.length) * 100;
-                                document.getElementById("progress").style.width = percent + "%";
-                            }
-
-                            function showHint() {
-                                if (hintCount <= 0) return;
-                                document.getElementById("hintSound").play().catch(() => { });
-                                hintCount--;
-
-                                const state = gameState[currentQ];
-                                state.shownHint = true;
-
-                                const hintBox = document.querySelector('.hint-box');
-                                document.getElementById('hintDisplay').textContent = "Hint: " + questions[currentQ].hint;
-                                hintBox.style.display = "block";
-
-                                document.getElementById('hintBtn').innerHTML = `Hint: ${roman[hintCount]}`;
-                                document.getElementById('hintBtn').disabled = hintCount === 0;
-                                if (hintCount === 0) document.getElementById('hintBtn').style.opacity = "0.5";
-                            }
-
-                            function showCongrats() {
-                                const screen = document.getElementById("congratsScreen");
-                                const finalScoreText = document.getElementById("finalScore");
-
-                                const totalScore = updateScore();
-                                finalScoreText.innerText = `Score: ${totalScore} / ${questions.length}`;
-
-                                screen.style.display = "flex";
-                                const sound = document.getElementById("congratsSound");
-                                sound.play().catch(() => { });
-                            }
-
-                            function restartGame() {
-                                hintCount = 3;
-                                revealCount = 3;
-                                questions = shuffleArray([...originalQuestions]);
-                                currentQ = 0;
-                                gameState = questions.map(() => ({
-                                    answered: false,
-                                    userChoice: -1,
-                                    revealed: false,
-                                    shownHint: false,
-                                    wrongAttempts: 0
-                                }));
-
-                                document.getElementById("congratsScreen").style.display = "none";
-                                document.getElementById("quizContainer").style.display = "flex";
-                                document.getElementById("progress").style.width = "0%";
-                                document.getElementById("score").textContent = `0 / ${questions.length}`;
-
-                                loadQ();
-                            }
-
-                            optBtns.forEach((btn, i) => btn.addEventListener("click", () => checkAns(i)));
-                            document.getElementById("hintBtn").addEventListener("click", showHint);
-                            document.getElementById("revealBtn").addEventListener("click", revealAnswer);
-
-                            document.getElementById("nextBtn").addEventListener("click", () => {
-                                if (!document.getElementById("nextBtn").disabled && currentQ < questions.length - 1) {
-                                    currentQ++;
-                                    loadQ();
-                                }
-                            });
-
-                            document.getElementById("prevBtn").addEventListener("click", () => {
-                                if (currentQ > 0) {
-                                    currentQ--;
-                                    loadQ();
-                                }
-                            });
-
-
-                            window.onload = async () => {
-                                const success = await fetchQuestions();
-
-                                if (!success) {
-                                    alert("Unable to load quiz questions. Please try again.");
-                                    return;
-                                }
-
-                                restartGame();
-                            };
-
-                        </script>
+</script>
 
 
 </body>
-
 </html>
