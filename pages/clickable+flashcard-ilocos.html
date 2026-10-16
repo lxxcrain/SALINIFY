@@ -7,12 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ilocano Flashcards</title>
     <style>
-        @font-face {
-            font-family: "bright DEMO";
-            src: url('../assets/fonts/BrightDemo.otf') format('opentype');
-            font-weight: normal;
-        }
-
         html,
         body {
             margin: 0;
@@ -46,7 +40,7 @@
             transform: translateY(0);
         }
 
-        /* SIDEBAR STYLES */
+/* SIDEBAR STYLES */
         .sidebar {
             width: 100px;
             height: 100vh;
@@ -137,7 +131,7 @@
         }
 
         .header h1 {
-            font-family: bright DEMO, Georgia, serif;
+            font-family: 'bright DEMO', Georgia, serif;
             color: #2e4365;
             font-size: 45px;
             margin: 0;
@@ -305,8 +299,8 @@
 
         .main-container {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            justify-content:space-between;
+            align-items:center;
             flex-wrap: wrap;
             gap: 40px;
             border: 4px solid #8a3b08;
@@ -327,7 +321,7 @@
             font-size: 22px;
             color: #8a3b08;
             margin: 15px 0;
-            margin-bottom: 10px;
+            margin-bottom:10px;
         }
 
         .image-container {
@@ -368,10 +362,10 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 15px;
-            font-size: 18px;
-            font-style: italic;
-            color: #555;
-            margin: 8px 0;
+            font-size:18px;
+            font-style:italic;
+            color:#555;
+            margin:8px 0;
         }
 
         .audio-icon {
@@ -398,18 +392,18 @@
             justify-content: flex-end;
             margin-bottom: 20px;
         }
-
-        .learning-center {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
+        .learning-center{
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            gap:5px;
         }
 
-        #learnStatus {
-            font-size: 13px;
-            color: #666;
+        #learnStatus{
+            font-size:13px;
+            color:#666;
         }
+
     </style>
 </head>
 
@@ -464,24 +458,37 @@
             <div class="english-container" id="englishText"></div>
 
             <div class="button-group">
-                <button class="nav-btn" onclick="prevWord()">
+                <button
+                    class="nav-btn"
+                    onclick="prevWord()">
                     ⬅ Previous Word
                 </button>
 
-                <div class="learning-center">
-                    <button id="learnBtn" class="nav-btn" onclick="toggleLearned()">
-                        ✔ Mark as Learned
-                    </button>
+            <div class="learning-center">
+                <button
+                    id="learnBtn"
+                    class="nav-btn"
+                    onclick="toggleLearned()">
+                    ✔ Mark as Learned
+                </button>
 
-                    <button id="reviewBtn" class="nav-btn" onclick="reviewAgain()" style="display:none;">
-                        🔄 Review Again
-                    </button>
+                <button
+                    id="reviewBtn"
+                    class="nav-btn"
+                    onclick="reviewAgain()"
+                    style="display:none;">
+                    🔄 Review Again
+                </button>
 
-                    <small id="learnStatus" style="display:none;">
-                    </small>
-                </div>
+                <small
+                    id="learnStatus"
+                    style="display:none;">
+                </small>
+        </div>
 
-                <button class="nav-btn" onclick="nextWord()">
+                <button
+                    class="nav-btn"
+                    onclick="nextWord()">
                     Next Word ➡
                 </button>
             </div>
@@ -489,82 +496,83 @@
     </div>
 
     <script>
-        let words = [];
+    let words = [];
 
-        const container = document.getElementById("flashcards");
-        let currentIndex = 0;
-        let lastCat = "";
-        let learnedWords = new Set();
+    const container = document.getElementById("flashcards");
+    let currentIndex = 0;
+    let lastCat = "";
+    let learnedWords = new Set();
 
-        async function loadWords() {
-            container.textContent = "Loading words...";
+    async function loadWords() {
+        container.textContent = "Loading words...";
 
-            try {
-                const response = await fetch(
-                    "../api/words.php?dialect=Ilocano"
-                );
+        try {
+            const response = await fetch(
+                "../api/words.php?dialect=Ilocano"
+            );
 
-                const data = await response.json();
+            const data = await response.json();
 
-                if (!response.ok || !Array.isArray(data)) {
-                    throw new Error(data.error || "Unable to load words.");
-                }
-
-                data.sort((a, b) =>
-                    Number(a.category_id) - Number(b.category_id) ||
-                    Number(a.word_id) - Number(b.word_id)
-                );
-
-                words = data.map(w => ({
-                    cat: w.category_name,
-                    dialect: w.word,
-                    pron: w.pronunciation,
-                    tagalog: w.tagalog,
-                    english: w.english,
-                    example: w.example,
-                    image: "../" + w.image_path,
-                    audio: "../" + w.audio_path
-                }));
-
-                container.textContent = "";
-                lastCat = "";
-
-                if (!words.length) {
-                    container.textContent = "No Ilocano words found.";
-                    return;
-                }
-
-                renderFlashcards();
-            } catch (error) {
-                container.textContent =
-                    "Unable to load words. Check the PHP endpoint.";
-                console.error(error);
+            if (!response.ok || !Array.isArray(data)) {
+                throw new Error(data.error || "Unable to load words.");
             }
-        }
 
-        function escapeHTML(text) {
-            const span = document.createElement("span");
-            span.textContent = text ?? "";
-            return span.innerHTML;
-        }
+            data.sort((a, b) =>
+                Number(a.category_id) - Number(b.category_id) ||
+                Number(a.word_id) - Number(b.word_id)
+            );
 
-        // Render Grid
-        function renderFlashcards() {
-            words.forEach((w, i) => {
-                if (w.cat !== lastCat) {
-                    const div = document.createElement("div");
-                    div.className = "section-divider";
-                    div.innerHTML = `
+            words = data.map(w => ({
+    word_id: w.word_id,
+    cat: w.category_name,
+    dialect: w.word,
+    pron: w.pronunciation,
+    tagalog: w.tagalog,
+    english: w.english,
+    example: w.example,
+    image: "../" + w.image_path,
+    audio: "../" + w.audio_path
+}));
+
+            container.textContent = "";
+            lastCat = "";
+
+            if (!words.length) {
+                container.textContent = "No Ilocano words found.";
+                return;
+            }
+
+            renderFlashcards();
+        } catch (error) {
+            container.textContent =
+                "Unable to load words. Check the PHP endpoint.";
+            console.error(error);
+        }
+    }
+
+    function escapeHTML(text) {
+        const span = document.createElement("span");
+        span.textContent = text ?? "";
+        return span.innerHTML;
+    }
+
+    // Render Grid
+    function renderFlashcards() {
+        words.forEach((w, i) => {
+            if (w.cat !== lastCat) {
+                const div = document.createElement("div");
+                div.className = "section-divider";
+                div.innerHTML = `
                     <span class="material-icons">label</span>
                     ${escapeHTML(w.cat)}
                 `;
-                    container.appendChild(div);
-                    lastCat = w.cat;
-                }
+                container.appendChild(div);
+                lastCat = w.cat;
+            }
 
-                const card = document.createElement("div");
-                card.className = "flashcard";
-                card.innerHTML = `
+            const card = document.createElement("div");
+            card.className = "flashcard";
+            card.innerHTML = `
                 <div class="card-inner">
                     <div class="card-front">
                         <div class="upper-text">${escapeHTML(w.dialect)}</div>
@@ -579,137 +587,203 @@
                 </div>
             `;
 
-                card.onclick = () => {
-                    currentIndex = i;
-                    showDetails();
-                };
+            card.onclick = () => {
+                currentIndex = i;
+                showDetails();
+            };
 
-                container.appendChild(card);
-            });
-        }
+            container.appendChild(card);
+        });
+    }
 
-        function showDetails() {
-            document.getElementById("flashcards").style.display = "none";
-            document.getElementById("mainHeader").style.display = "none";
-            document.getElementById("details").style.display = "block";
-            displayWord();
-        }
+    function showDetails() {
+        document.getElementById("flashcards").style.display = "none";
+        document.getElementById("mainHeader").style.display = "none";
+        document.getElementById("details").style.display = "block";
+        displayWord();
+    }
 
-        function displayWord() {
-            const w = words[currentIndex];
-            if (!w) return;
+    function displayWord() {
+        const w = words[currentIndex];
+        if (!w) return;
 
-            document.getElementById("dialectWord").innerText = w.dialect;
-            document.getElementById("pronunciationText").innerText =
-                `[ ${w.pron} ]`;
-            document.getElementById("tagalogWord").innerText =
-                "Tagalog: " + w.tagalog;
-            document.getElementById("englishText").innerText =
-                "English Definition: " + w.english;
-            document.getElementById("exampleText").textContent = w.example;
-            document.getElementById("wordImage").src = w.image;
+        document.getElementById("dialectWord").innerText = w.dialect;
+        document.getElementById("pronunciationText").innerText =
+            `[ ${w.pron} ]`;
+        document.getElementById("tagalogWord").innerText =
+            "Tagalog: " + w.tagalog;
+        document.getElementById("englishText").innerText =
+            "English Definition: " + w.english;
+        document.getElementById("exampleText").textContent = w.example;
+        document.getElementById("wordImage").src = w.image;
 
-            // Audio logic
-            const audio = document.getElementById("audioElement");
-            audio.pause();
-            audio.src = w.audio;
-            document.getElementById("playBtn").onclick = () =>
-                audio.play().catch(console.error);
+        // Audio logic
+        const audio = document.getElementById("audioElement");
+        audio.pause();
+        audio.src = w.audio;
+        document.getElementById("playBtn").onclick = () =>
+            audio.play().catch(console.error);
 
-            const learnBtn =
-                document.getElementById("learnBtn");
+        const learnBtn =
+    document.getElementById("learnBtn");
 
-            const reviewBtn =
-                document.getElementById("reviewBtn");
+const reviewBtn =
+    document.getElementById("reviewBtn");
 
-            const status =
-                document.getElementById("learnStatus");
+const status =
+    document.getElementById("learnStatus");
 
-            const currentWord =
-                words[currentIndex].dialect;
+const currentWord =
+    words[currentIndex].dialect;
 
-            if (learnedWords.has(currentWord)) {
+if (learnedWords.has(currentWord)) {
 
-                learnBtn.style.display = "none";
+    learnBtn.style.display = "none";
 
-                reviewBtn.style.display =
-                    "inline-flex";
+    reviewBtn.style.display =
+        "inline-flex";
 
-                status.style.display =
-                    "block";
+    status.style.display =
+        "block";
 
-                status.textContent =
-                    "✅ Already Learned";
+    status.textContent =
+        "✅ Already Learned";
 
-            } else {
+} else {
 
-                learnBtn.style.display =
-                    "inline-flex";
+    learnBtn.style.display =
+        "inline-flex";
 
-                reviewBtn.style.display =
-                    "none";
+    reviewBtn.style.display =
+        "none";
 
-                status.style.display =
-                    "none";
+    status.style.display =
+        "none";
+}
+    }
+
+    async function toggleLearned() {
+
+    const wordId = words[currentIndex].word_id;
+
+    try {
+
+        const response = await fetch(
+            "../api/word_progress.php",
+            {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    word_id: wordId,
+                    action: "mark_learned"
+                })
             }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
         }
 
-        function toggleLearned() {
+        learnedWords.add(words[currentIndex].dialect);
 
-            const currentWord =
-                words[currentIndex].dialect;
+        displayWord();
 
-            learnedWords.add(currentWord);
+        console.log(result);
 
-            displayWord();
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "Unable to save progress."
+        );
+    }
+}
+
+    async function reviewAgain() {
+
+    const wordId = words[currentIndex].word_id;
+
+    try {
+
+        const response = await fetch(
+            "../api/word_progress.php",
+            {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    word_id: wordId,
+                    action: "mark_learning"
+                })
+            }
+        );
+
+        const result = await response.json();
+
+        if (!result.success) {
+            throw new Error(result.message);
         }
 
-        function reviewAgain() {
+        learnedWords.delete(
+            words[currentIndex].dialect
+        );
 
-            const currentWord =
-                words[currentIndex].dialect;
+        displayWord();
 
-            learnedWords.delete(currentWord);
+    } catch (error) {
 
-            displayWord();
-        }
+        console.error(error);
 
-        function nextWord() {
-            if (!words.length) return;
-            currentIndex = (currentIndex + 1) % words.length;
-            displayWord();
-        }
+        alert(
+            "Unable to update progress."
+        );
+    }
+}
 
-        function prevWord() {
-            if (!words.length) return;
-            currentIndex = (currentIndex - 1 + words.length) % words.length;
-            displayWord();
-        }
+    function nextWord() {
+        if (!words.length) return;
+        currentIndex = (currentIndex + 1) % words.length;
+        displayWord();
+    }
 
-        function goBack() {
-            document.getElementById("flashcards").style.display = "grid";
-            document.getElementById("mainHeader").style.display = "flex";
-            document.getElementById("details").style.display = "none";
-        }
+    function prevWord() {
+        if (!words.length) return;
+        currentIndex = (currentIndex - 1 + words.length) % words.length;
+        displayWord();
+    }
 
-        // Flip All functionality
-        document.getElementById("flipAllBtn").onclick = function () {
-            const cards = document.querySelectorAll(".flashcard");
-            if (!cards.length) return;
+    function goBack() {
+        document.getElementById("flashcards").style.display = "grid";
+        document.getElementById("mainHeader").style.display = "flex";
+        document.getElementById("details").style.display = "none";
+    }
 
-            const isFlipped = cards[0].classList.contains("flipped");
-            cards.forEach(c => c.classList.toggle("flipped", !isFlipped));
-            this.textContent = !isFlipped ? "🙈 Hide All" : "👀 Show All";
-        };
+    // Flip All functionality
+    document.getElementById("flipAllBtn").onclick = function () {
+        const cards = document.querySelectorAll(".flashcard");
+        if (!cards.length) return;
 
-        window.onload = () => {
-            setTimeout(() => {
-                document.querySelector(".learn_pampanga").classList.add("show");
-            }, 100);
+        const isFlipped = cards[0].classList.contains("flipped");
+        cards.forEach(c => c.classList.toggle("flipped", !isFlipped));
+        this.textContent = !isFlipped ? "🙈 Hide All" : "👀 Show All";
+    };
 
-            loadWords();
-        };
-    </script>
+    window.onload = () => {
+        setTimeout(() => {
+            document.querySelector(".learn_pampanga").classList.add("show");
+        }, 100);
+
+        loadWords();
+    };
+</script>
 </body>
 
 </html>
