@@ -10,10 +10,13 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <title>Ilocano Analogy Game</title>
 
-
-
-
   <style>
+    @font-face {
+      font-family: "bright DEMO";
+      src: url('../assets/fonts/BrightDemo.otf') format('opentype');
+      font-weight: normal;
+    }
+
     html,
     body {
       margin: 0;
@@ -24,18 +27,12 @@
       display: flex;
     }
 
-
-
-
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: "Georgia", serif;
     }
-
-
-
 
     .analogy_i {
       width: 100vw;
@@ -45,27 +42,15 @@
       top: 0;
       left: 0;
 
-
-
-
       transform: translateY(100%);
       transition: transform 0.6s ease;
-
-
-
 
       z-index: 5;
     }
 
-
-
-
     .analogy_i.show {
       transform: translateY(0);
     }
-
-
-
 
     /* ================= SIDEBAR STYLES ================= */
     .sidebar {
@@ -84,9 +69,6 @@
       z-index: 100;
     }
 
-
-
-
     .sidebar ul {
       list-style: none;
       padding: 0;
@@ -94,17 +76,11 @@
       width: 100%;
     }
 
-
-
-
     .sidebar ul li {
       width: 100%;
       margin-bottom: 35px;
       text-align: center;
     }
-
-
-
 
     .sidebar ul li a {
       color: #e59d2c;
@@ -118,32 +94,20 @@
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-
-
-
     .sidebar ul li a:hover {
       transform: scale(1.15);
       background-color: #fff8df;
       color: #8a3b08;
     }
 
-
-
-
     .sidebar ul li a .material-icons {
       font-size: 36px;
       transition: transform 0.3s ease;
     }
 
-
-
-
     .sidebar ul li a:hover .material-icons {
       transform: rotate(-5deg);
     }
-
-
-
 
     .icon {
       width: 80px;
@@ -154,17 +118,11 @@
       cursor: pointer;
     }
 
-
-
-
     .icon img {
       max-width: 100%;
       max-height: 100%;
       object-fit: contain;
     }
-
-
-
 
     .nav-label {
       font-size: 10px;
@@ -173,9 +131,6 @@
       font-family: "Georgia", sans-serif;
       letter-spacing: 1px;
     }
-
-
-
 
     /* ================= GAME CONTENT STYLES ================= */
     .container {
@@ -186,9 +141,6 @@
       flex-direction: column;
     }
 
-
-
-
     h1 {
       font-size: 48px;
       font-family: bright DEMO, arial;
@@ -197,17 +149,11 @@
       text-align: left;
     }
 
-
-
-
     .progress-container {
       position: relative;
       width: 80%;
       margin: 0 auto 40px auto;
     }
-
-
-
 
     .progress-bar {
       width: 100%;
@@ -218,9 +164,6 @@
       overflow: hidden;
     }
 
-
-
-
     .progress {
       height: 100%;
       width: 0%;
@@ -228,9 +171,6 @@
       border-radius: 25px;
       transition: width 0.3s ease;
     }
-
-
-
 
     .score {
       position: absolute;
@@ -253,30 +193,22 @@
       animation: floatUp 1s ease forwards;
     }
 
-
-
-
     @keyframes floatUp {
       0% {
         opacity: 1;
         transform: translateY(0);
       }
+
       100% {
         opacity: 0;
         transform: translateY(-30px);
       }
     }
 
-
-
-
     .instruction {
       font-size: 20px;
       margin-bottom: 20px;
     }
-
-
-
 
     .question {
       font-size: 40px;
@@ -286,15 +218,9 @@
       justify-content: center;
     }
 
-
-
-
     .question i {
       margin-left: 8px;
     }
-
-
-
 
     .answer-boxes {
       display: flex;
@@ -306,9 +232,6 @@
       max-width: 1000px;
       background: #fff8df;
     }
-
-
-
 
     .box {
       flex: 1;
@@ -327,39 +250,25 @@
       padding: 10px;
     }
 
-
-
-
     .box:not(.correct):not(.wrong):hover {
       transform: scale(1.05);
       background-color: #f2ebbb;
     }
 
 
-
-
     .box.correct {
       background-color: #b9f9c8;
     }
 
-
-
-
     .box.wrong {
       background-color: #f8d7da;
     }
-
-
-
 
     .buttons {
       display: flex;
       justify-content: center;
       gap: 220px;
     }
-
-
-
 
     button {
       padding: 12px 40px;
@@ -373,23 +282,14 @@
       transition: 0.2s;
     }
 
-
-
-
     button:hover {
       background: #2e4365;
     }
-
-
-
 
     .circle-container {
       display: flex;
       gap: clamp(10px, 2vw, 15px);
     }
-
-
-
 
     .circle-btn {
       width: 60px;
@@ -407,32 +307,25 @@
       padding: 0;
     }
 
-
-
-
     .circle-btn:hover {
       background-color: #8c3b06;
     }
 
-
-    button:disabled,.circle-btn:disabled {
+    button:disabled,
+    .circle-btn:disabled {
       background-color: #a1a1a1 !important;
-      color: #d3d3d3 !important;          
-      cursor: not-allowed;              
-      transform: none !important;        
+      color: #d3d3d3 !important;
+      cursor: not-allowed;
+      transform: none !important;
       box-shadow: none !important;
       opacity: 0.6;
     }
-
 
     .hint-container {
       display: flex;
       justify-content: flex-start;
       margin-top: 20px;
     }
-
-
-
 
     #hintBox {
       max-width: 60%;
@@ -448,16 +341,17 @@
       animation: fadeIn 0.3s ease;
     }
 
-
-
-
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(-5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-
-
-
 
     .footer-row {
       display: flex;
@@ -468,16 +362,11 @@
       margin: auto auto 20px auto;
     }
 
-
-
-
-    .action-buttons, .nav-buttons {
+    .action-buttons,
+    .nav-buttons {
       display: flex;
       gap: 15px;
     }
-
-
-
 
     #congratsScreen {
       position: fixed;
@@ -491,9 +380,6 @@
       z-index: 8;
       background-color: #fff8df;
     }
-
-
-
 
     #congratsScreen::before {
       content: "";
@@ -509,9 +395,6 @@
       z-index: -1;
     }
 
-
-
-
     .congrats {
       position: relative;
       display: flex;
@@ -521,9 +404,6 @@
       flex-direction: column;
       gap: 30px;
     }
-
-
-
 
     .card {
       width: 750px;
@@ -542,9 +422,6 @@
       text-align: center;
     }
 
-
-
-
     .card-gif {
       position: absolute;
       width: 100%;
@@ -553,33 +430,21 @@
       z-index: 1;
     }
 
-
-
-
     .card-img {
       height: 200px;
       z-index: 1;
     }
-
-
-
 
     .card p {
       z-index: 2;
       position: relative;
     }
 
-
-
-
     .card h1 {
       font-size: 50px;
       color: #2e4365;
       z-index: 2;
     }
-
-
-
 
     /* Score styling in Congrats Card */
     #finalScore {
@@ -590,17 +455,11 @@
       margin: 0;
     }
 
-
-
-
     .button-group {
       display: flex;
       gap: 20px;
       justify-content: center;
     }
-
-
-
 
     .button {
       background-color: #2e4365;
@@ -621,26 +480,20 @@
       color: #fff;
     }
 
-
     .btn-brown {
       min-width: 160px;
       text-align: center;
     }
 
-
-    button:disabled{
+    button:disabled {
       background-color: #a1a1a1 !important;
-      color: #d3d3d3 !important;          
-      cursor: not-allowed;              
-      transform: none !important;        
+      color: #d3d3d3 !important;
+      cursor: not-allowed;
+      transform: none !important;
       box-shadow: none !important;
     }
-       
   </style>
 </head>
-
-
-
 
 <body>
   <div class="sidebar">
@@ -649,9 +502,12 @@
     </div>
     <ul>
       <li><a href="home.html"><span class="material-icons">home</span><span class="nav-label">Home</span></a></li>
-      <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Origin</span></a></li>
-      <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span class="nav-label">Dialect</span></a></li>
-      <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span class="nav-label">Play</span></a></li>
+      <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Origin</span></a>
+      </li>
+      <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span
+            class="nav-label">Dialect</span></a></li>
+      <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span
+            class="nav-label">Play</span></a></li>
     </ul>
   </div>
 
@@ -714,7 +570,7 @@
 
         <div class="circle-container">
           <button class="circle-btn" onclick="goPrevious()">&lt;</button>
-          <button id="nextBtn"class="circle-btn" onclick="goNext()">&gt;</button>
+          <button id="nextBtn" class="circle-btn" onclick="goNext()">&gt;</button>
         </div>
       </div>
     </div>
@@ -752,59 +608,59 @@
 
       let questions = [];
 
-    
-async function fetchQuestions() {
-    try {
-        const response = await fetch(
+
+      async function fetchQuestions() {
+        try {
+          const response = await fetch(
             "../api/quizzes.php?dialect=Ilocano&type=Analogy"
-        );
+          );
 
-        if (!response.ok) {
+          if (!response.ok) {
             throw new Error("Failed to fetch Ilocano analogy questions");
-        }
+          }
 
-        const data = await response.json();
+          const data = await response.json();
 
-        questions = data.map(q => {
+          questions = data.map(q => {
             const correctOption = q.options.find(
-                opt => Number(opt.is_correct) === 1
+              opt => Number(opt.is_correct) === 1
             );
 
             return {
-                word: q.question.trim() + " _____",
-                choices: q.options.map(opt => opt.text),
-                answer: correctOption ? correctOption.text : "",
-                hint: q.hint || ""
+              word: q.question.trim() + " _____",
+              choices: q.options.map(opt => opt.text),
+              answer: correctOption ? correctOption.text : "",
+              hint: q.hint || ""
             };
-        });
+          });
 
-        if (
+          if (
             questions.length === 0 ||
             questions.some(q =>
-                q.choices.length !== 3 ||
-                !q.answer
+              q.choices.length !== 3 ||
+              !q.answer
             )
-        ) {
+          ) {
             throw new Error("Invalid or missing analogy questions");
+          }
+
+          console.log("Ilocano analogy questions loaded:", questions.length);
+
+          return true;
+
+        } catch (error) {
+          console.error("Error loading Ilocano analogy questions:", error);
+          return false;
         }
+      }
 
-        console.log("Ilocano analogy questions loaded:", questions.length);
+      let hintsLeft = 3;
+      let revealsLeft = 3;
+      let currentQuestion = 0;
 
-        return true;
-
-    } catch (error) {
-        console.error("Error loading Ilocano analogy questions:", error);
-        return false;
-    }
-}
-
-        let hintsLeft = 3;
-        let revealsLeft = 3;
-        let currentQuestion = 0;
-
-        let userAnswers = [];
-        let revealed = [];
-        let attemptsCount = [];
+      let userAnswers = [];
+      let revealed = [];
+      let attemptsCount = [];
 
 
       const questionText = document.getElementById("question");
@@ -856,10 +712,10 @@ async function fetchQuestions() {
           if (revealed[currentQuestion] && q.choices[index] === q.answer) box.classList.add("correct");
           box.onclick = (e) => checkAnswer(q.choices[index], e);
         });
-       
-      updateProgress((currentQuestion / questions.length) * 100);
-      updateNavigation();
-    }
+
+        updateProgress((currentQuestion / questions.length) * 100);
+        updateNavigation();
+      }
 
 
       function checkAnswer(choice, e) {
@@ -871,11 +727,11 @@ async function fetchQuestions() {
         if (revealed[currentQuestion]) {
           if (choice === q.answer) {
             e.target.classList.add("correct");
-            correctSound.play().catch(d => {});
+            correctSound.play().catch(d => { });
             setTimeout(() => nextQuestion(), 600);
           } else {
             e.target.classList.add("wrong");
-            wrongSound.play().catch(d => {});
+            wrongSound.play().catch(d => { });
           }
           return;
         }
@@ -885,7 +741,7 @@ async function fetchQuestions() {
 
 
         if (choice === q.answer) {
-          correctSound.play().catch(d => {});
+          correctSound.play().catch(d => { });
           e.target.classList.add("correct");
 
 
@@ -908,7 +764,7 @@ async function fetchQuestions() {
 
 
         } else {
-          wrongSound.play().catch(d => {});
+          wrongSound.play().catch(d => { });
           e.target.classList.add("wrong");
           if (attemptsCount[currentQuestion] >= 2) {
             userAnswers[currentQuestion] = "no-point";
@@ -929,7 +785,7 @@ async function fetchQuestions() {
 
 
         const revealSound = document.getElementById("revealSound");
-        revealSound.play().catch(d => {});
+        revealSound.play().catch(d => { });
 
 
         let q = questions[currentQuestion];
@@ -954,12 +810,12 @@ async function fetchQuestions() {
 
       function goNext() {
         const isSolved = (userAnswers[currentQuestion] === questions[currentQuestion].answer) || revealed[currentQuestion];
- 
-          if (isSolved) {
-            nextQuestion();
-          } else {
-          }
+
+        if (isSolved) {
+          nextQuestion();
+        } else {
         }
+      }
 
 
       function goPrevious() {
@@ -980,7 +836,7 @@ async function fetchQuestions() {
       function showHint() {
         if (hintsLeft <= 0) return;
         const hintSound = document.getElementById("hintSound");
-        hintSound.play().catch(d => {});
+        hintSound.play().catch(d => { });
 
 
         const hintBox = document.getElementById("hintBox");
@@ -996,40 +852,40 @@ async function fetchQuestions() {
       function updateProgress(value) {
         progressBar.style.width = value + "%";
       }
-     
+
       function updateButtonLabels() {
-      const hintIcons = "I".repeat(hintsLeft);
-      const revealIcons = "I".repeat(revealsLeft);
-     
-      const hBtn = document.getElementById("hintBtn");
-      const rBtn = document.getElementById("revealBtn");
+        const hintIcons = "I".repeat(hintsLeft);
+        const revealIcons = "I".repeat(revealsLeft);
+
+        const hBtn = document.getElementById("hintBtn");
+        const rBtn = document.getElementById("revealBtn");
 
 
-      hBtn.innerText = `HINT: ${hintIcons || "NONE"}`;
-      rBtn.innerText = `REVEAL: ${revealIcons || "NONE"}`;
+        hBtn.innerText = `HINT: ${hintIcons || "NONE"}`;
+        rBtn.innerText = `REVEAL: ${revealIcons || "NONE"}`;
 
 
-      if (hintsLeft <= 0) {
-        hBtn.disabled = true;
-      } else {
-        hBtn.disabled = false;
+        if (hintsLeft <= 0) {
+          hBtn.disabled = true;
+        } else {
+          hBtn.disabled = false;
+        }
+
+
+        if (revealsLeft <= 0) {
+          rBtn.disabled = true;
+        } else {
+          rBtn.disabled = false;
+        }
       }
 
-
-      if (revealsLeft <= 0) {
-        rBtn.disabled = true;
-      } else {
-        rBtn.disabled = false;
-      }
-    }
- 
       function showCongrats() {
         const screen = document.getElementById("congratsScreen");
         const finalScoreText = document.getElementById("finalScore");
-       
+
         const totalScore = updateScore();
         finalScoreText.innerText = `Score: ${totalScore} / ${questions.length}`;
-       
+
         screen.style.display = "flex";
         const sound = document.getElementById("congratsSound");
         sound.play().catch(error => console.log("Audio failed:", error));
@@ -1052,27 +908,27 @@ async function fetchQuestions() {
         loadQuestion();
       }
 
-     
-    async function initializeGame() {
-    const success = await fetchQuestions();
 
-    if (!success) {
-        alert("Unable to load Ilocano analogy questions.");
-        return;
-    }
+      async function initializeGame() {
+        const success = await fetchQuestions();
 
-    shuffleArray(questions);
-    questions.forEach(q => shuffleArray(q.choices));
+        if (!success) {
+          alert("Unable to load Ilocano analogy questions.");
+          return;
+        }
 
-    userAnswers = new Array(questions.length).fill(null);
-    revealed = new Array(questions.length).fill(false);
-    attemptsCount = new Array(questions.length).fill(0);
+        shuffleArray(questions);
+        questions.forEach(q => shuffleArray(q.choices));
 
-    updateButtonLabels();
-    loadQuestion();
-}
+        userAnswers = new Array(questions.length).fill(null);
+        revealed = new Array(questions.length).fill(false);
+        attemptsCount = new Array(questions.length).fill(0);
 
-initializeGame();
+        updateButtonLabels();
+        loadQuestion();
+      }
+
+      initializeGame();
 
     </script>
 
