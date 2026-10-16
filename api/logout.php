@@ -1,5 +1,4 @@
 <?php
-session_save_path('C:/Users/PC/php_sessions');
 session_start();
 
 $_SESSION = [];
