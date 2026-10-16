@@ -1,10 +1,11 @@
 <?php
 header('Content-Type: application/json');
 
-session_save_path('C:/Users/PC/php_sessions');
-session_start();!
+// Using standard relative pathing for the sessions folder
+session_start(); 
 
-require_once __DIR__ . '/db.php';
+// Corrected to use the magic constant __DIR__ pointing to db.php in the same folder
+require_once __DIR__ . '/db.php'; 
 
 function respond($status, $message, $extra = [])
 {
@@ -57,10 +58,15 @@ try {
         respond(401, 'Invalid email/username or password.');
     }
 
-    session_regenerate_id(true);
-    $_SESSION['user_id'] = $user['user_id'];
+   session_regenerate_id(true);
 
-    respond(200, 'Login successful.', [
+$_SESSION['user_id'] = $user['user_id'];
+$_SESSION['username'] = $user['username'];
+
+error_log('LOGIN SESSION');
+error_log(print_r($_SESSION, true));
+
+respond(200, 'Login successful.', [
         'user' => [
             'user_id' => $user['user_id'],
             'username' => $user['username'],
