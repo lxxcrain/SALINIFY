@@ -54,6 +54,67 @@ g
                 <img src="../assets/images/dashboard.png" alt="Dashboard Visual">
             </div>
             <br>
+
+            <div class="learning-progress">
+
+    <h1>Learning Progress</h1>
+
+    <div class="progress-stats">
+
+        <div class="stat-box">
+            <h3>📖 Words Learned</h3>
+            <span id="wordsLearned">0/40</span>
+        </div>
+
+        <div class="stat-box">
+            <h3>📝 Quizzes Completed</h3>
+            <span id="quizzesCompleted">0</span>
+        </div>
+
+        <div class="stat-box">
+            <h3>📈 Quiz Average</h3>
+            <span id="quizAverage">0%</span>
+        </div>
+
+    </div>
+
+    <div class="progress-section">
+
+        <h2>Overall Progress</h2>
+
+        <div class="progress-bar">
+            <div class="progress-fill"
+                 id="progressFill">
+            </div>
+        </div>
+
+        <span class="progress-percent"
+              id="progressPercent">
+            0%
+        </span>
+
+        <small id="progressDialect">
+            Kapampangan: 0 learned • Ilocano: 0 learned
+        </small>
+
+    </div>
+
+    <div class="recent-words">
+
+        <h2>Recently Learned Words</h2>
+
+        <div id="recentWordsContainer">
+
+            <div class="empty-progress">
+                No learned words yet.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
             <div class="cl-gs-container">
                 <div class="container-1">
                     <div class="h1"> Origin </div>
@@ -300,6 +361,7 @@ g
                 });
             }
             setupToggle();
+            loadProgress();
 
 
             // Word of the Day Logic
@@ -588,6 +650,120 @@ if (avatarBtn && pictureInput) {
                 title.innerText = (dialect === 'kap') ? 'Kapampangan Dialect' : 'Ilocano Dialect';
             }
         }
+
+        async function loadProgress() {
+
+    try {
+
+        const response =
+            await fetch("../api/get_progress.php");
+
+        const data =
+            await response.json();
+
+        if (!data.success) {
+            return;
+        }
+
+        const learned =
+            Number(
+                data.word_statistics.learned_words
+            ) || 0;
+
+        const total =
+            Number(
+                data.word_statistics.tracked_words
+            ) || 0;
+
+        document.getElementById(
+            "wordsLearned"
+        ).textContent =
+            `${learned}/${total}`;
+
+        document.getElementById(
+            "quizzesCompleted"
+        ).textContent =
+            data.quiz_statistics.attempts_count || 0;
+
+        document.getElementById(
+            "quizAverage"
+        ).textContent =
+            `${Math.round(
+                data.quiz_statistics.accuracy_percentage || 0
+            )}%`;
+
+        const progressPercentage =
+            total > 0
+                ? Math.round(
+                    (learned / total) * 100
+                )
+                : 0;
+
+        document.getElementById(
+            "progressFill"
+        ).style.width =
+            progressPercentage + "%";
+
+        document.getElementById(
+            "progressPercent"
+        ).textContent =
+            progressPercentage + "%";
+
+        const recentWordsContainer =
+            document.getElementById(
+                "recentWordsContainer"
+            );
+
+        recentWordsContainer.innerHTML = "";
+
+        const recentWords =
+            data.word_progress
+                .filter(
+                    word => word.status === "learned"
+                )
+                .slice(0, 4);
+
+        if (recentWords.length === 0) {
+
+            recentWordsContainer.innerHTML = `
+                <div class="empty-progress">
+                    No learned words yet.
+                </div>
+            `;
+
+        } else {
+
+            recentWords.forEach(word => {
+
+                recentWordsContainer.innerHTML += `
+                    <div class="recent-card">
+
+                        <div>
+                            <h3>${word.word}</h3>
+                            <small>${word.status}</small>
+                        </div>
+
+                        <span class="learned-badge">
+                            Learned
+                        </span>
+
+                    </div>
+                `;
+
+            });
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Progress loading error:",
+            error
+        );
+
+    }
+}
+
     </script>
 </body>
 
