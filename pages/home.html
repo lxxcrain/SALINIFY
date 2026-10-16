@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="../css/style.css">
 </head>
-g
+
 <body>
     <div class="homepage">
         <div class="nav">
@@ -322,6 +322,7 @@ g
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            loadProgress();
             const homepage = document.querySelector(".homepage");
             const classSection = document.getElementById("classes");
             const navLinks = document.querySelectorAll('.nav a');
@@ -362,7 +363,6 @@ g
             }
             setupToggle();
             loadProgress();
-
 
             // Word of the Day Logic
             const dictionary = [
@@ -652,116 +652,113 @@ if (avatarBtn && pictureInput) {
         }
 
         async function loadProgress() {
-
     try {
+        const response = await fetch("../api/get_progress.php", {
+            method: "GET",
+            credentials: "same-origin",
+            headers: {
+                "Accept": "application/json"
+            }
+        });
 
-        const response =
-            await fetch("../api/get_progress.php");
+        const data = await response.json();
 
-        const data =
-            await response.json();
+        console.log("Progress API:", data);
+
+        if (!response.ok) {
+            throw new Error(data.message || "Failed to load progress");
+        }
 
         if (!data.success) {
-            return;
+            throw new Error(data.message);
         }
 
-        const learned =
-            Number(
-                data.word_statistics.learned_words
-            ) || 0;
+        // Words learned
+        document.getElementById("wordsLearned").textContent =
+            `${data.word_statistics.learned_words || 0}/40`;
 
-        const total =
-            Number(
-                data.word_statistics.tracked_words
-            ) || 0;
-
-        document.getElementById(
-            "wordsLearned"
-        ).textContent =
-            `${learned}/${total}`;
-
-        document.getElementById(
-            "quizzesCompleted"
-        ).textContent =
+        // Quizes completed
+        document.getElementById("quizzesCompleted").textContent =
             data.quiz_statistics.attempts_count || 0;
 
-        document.getElementById(
-            "quizAverage"
-        ).textContent =
-            `${Math.round(
-                data.quiz_statistics.accuracy_percentage || 0
-            )}%`;
+        // Quiz average
+        document.getElementById("quizAverage").textContent =
+            `${Math.round(data.quiz_statistics.accuracy_percentage || 0)}%`;
 
-        const progressPercentage =
-            total > 0
-                ? Math.round(
-                    (learned / total) * 100
-                )
-                : 0;
+        // Progress bar
+        const learned = Number(data.word_statistics.learned_words || 0);
+        const totalWords = 40;
+        const percent =
+            Math.round((learned / totalWords) * 100);
 
-        document.getElementById(
-            "progressFill"
-        ).style.width =
-            progressPercentage + "%";
+        document.getElementById("progressFill").style.width =
+            `${percent}%`;
 
-        document.getElementById(
-            "progressPercent"
-        ).textContent =
-            progressPercentage + "%";
+        document.getElementById("progressPercent").textContent =
+            `${percent}%`;
+        
+        let kapCount = 0;
+        let iloCount = 0;
 
-        const recentWordsContainer =
-            document.getElementById(
-                "recentWordsContainer"
+            const learnedWords = data.word_progress.filter(
+                item => item.status === "learned"
             );
 
-        recentWordsContainer.innerHTML = "";
-
-        const recentWords =
-            data.word_progress
-                .filter(
-                    word => word.status === "learned"
-                )
-                .slice(0, 4);
-
-        if (recentWords.length === 0) {
-
-            recentWordsContainer.innerHTML = `
-                <div class="empty-progress">
-                    No learned words yet.
-                </div>
-            `;
-
-        } else {
-
-            recentWords.forEach(word => {
-
-                recentWordsContainer.innerHTML += `
-                    <div class="recent-card">
-
-                        <div>
-                            <h3>${word.word}</h3>
-                            <small>${word.status}</small>
-                        </div>
-
-                        <span class="learned-badge">
-                            Learned
-                        </span>
-
-                    </div>
-                `;
-
-            });
-
+        learnedWords.forEach(word => {
+            const dialect = (word.dialect_name || "").toLowerCase();
+        if (dialect.includes("kapampangan")) {
+            kapCount++;
         }
 
-    } catch (error) {
+        if (
+            dialect.includes("ilocano") ||
+            dialect.includes("ilokano")
+        ) {
+        iloCount++;
+        }
+    });
 
-        console.error(
-            "Progress loading error:",
-            error
-        );
+        document.getElementById("progressDialect").textContent =
+            `Kapampangan: ${kapCount} learned • Ilocano: ${iloCount} learned`;
 
+        const recentContainer =
+            document.getElementById("recentWordsContainer");
+
+if (recentContainer) {
+
+    recentContainer.innerHTML = "";
+
+    if (learnedWords.length === 0) {
+
+        recentContainer.innerHTML = `
+            <div class="empty-progress">
+                No learned words yet.
+            </div>
+        `;
+
+    } else {
+
+        learnedWords.slice(0, 5).forEach(word => {
+
+            recentContainer.innerHTML += `
+                <div class="recent-word-card">
+                    <strong>${word.word}</strong>
+                    <small>
+                        ${word.english}
+                        • ${word.dialect_name}
+                    </small>
+                </div>
+            `;
+        });
     }
+}
+        } catch (error) {
+            console.error("Progress loading error:", error);
+
+            document.getElementById("wordsLearned").textContent = "0/0";
+            document.getElementById("quizzesCompleted").textContent = "0";
+            document.getElementById("quizAverage").textContent = "0%";
+        }
 }
 
     </script>
