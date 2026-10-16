@@ -1,17 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <title>Matching Game - Ilocano</title>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <style>
-    @font-face {
-      font-family: "bright DEMO";
-      src: url('../assets/fonts/BrightDemo.otf') format('opentype');
-      font-weight: normal;
-    }
-
     * {
       margin: 0;
       padding: 0;
@@ -19,8 +12,7 @@
       font-family: Georgia, serif;
     }
 
-    html,
-    body {
+    html, body {
       height: 100%;
       width: 100%;
       font-family: Arial, Helvetica, sans-serif;
@@ -128,7 +120,7 @@
     }
 
     .Ilocano {
-      font-family: bright DEMO, serif;
+      font-family: 'bright demo', serif;
       font-size: 50px;
       color: #2e4365;
       font-weight: bold;
@@ -183,15 +175,8 @@
     }
 
     @keyframes floatUp {
-      0% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      100% {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
+      0% { opacity: 1; transform: translateY(0); }
+      100% { opacity: 0; transform: translateY(-30px); }
     }
 
     .instruction {
@@ -246,19 +231,9 @@
     }
 
     @keyframes shake {
-
-      0%,
-      100% {
-        transform: translateX(0);
-      }
-
-      25% {
-        transform: translateX(-5px);
-      }
-
-      75% {
-        transform: translateX(5px);
-      }
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
     }
 
     .action-bar {
@@ -281,10 +256,7 @@
       transition: all 0.2s;
     }
 
-    .pair-btn:hover {
-      background: #a3480c;
-      transform: scale(1.05);
-    }
+    .pair-btn:hover { background: #a3480c; transform: scale(1.05); }
 
     .pair-words {
       background: #ffffff;
@@ -297,20 +269,13 @@
       justify-content: center;
       margin-top: 10px;
       margin-bottom: 50px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       animation: slideDown 0.4s ease forwards;
     }
 
     @keyframes slideDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .pair {
@@ -445,21 +410,18 @@
       font-weight: bold;
       margin: 0;
     }
+
   </style>
 </head>
-
 <body>
   <div class="container">
     <div class="sidebar">
       <div class="icon"><img src="../assets/images/salinify.png" alt="Salin Icon"></div>
       <ul>
         <li><a href="home.html"><span class="material-icons">home</span><span class="nav-label">Home</span></a></li>
-        <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Classes</span></a>
-        </li>
-        <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span
-              class="nav-label">Learn</span></a></li>
-        <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span
-              class="nav-label">Play</span></a></li>
+        <li><a href="classes.html"><span class="material-icons">school</span><span class="nav-label">Classes</span></a></li>
+        <li><a href="learn-ui.html"><span class="material-icons">menu_book</span><span class="nav-label">Learn</span></a></li>
+        <li><a href="play-ui.html"><span class="material-icons">sports_esports</span><span class="nav-label">Play</span></a></li>
       </ul>
     </div>
 
@@ -467,14 +429,11 @@
       <div class="Ilocano">Kapampangan</div>
 
       <div class="progress-container">
-        <div class="progress">
-          <div class="progress-bar" id="progress"></div>
-        </div>
+        <div class="progress"><div class="progress-bar" id="progress"></div></div>
         <div class="points" id="points">0 / 20</div>
       </div>
 
-      <div class="instruction">Instruction: Click two boxes that belong together. If they match, they will disappear and
-        be recorded as a pair. Continue until all pairs are matched.</div>
+      <div class="instruction">Instruction: Click two boxes that belong together. If they match, they will disappear and be recorded as a pair. Continue until all pairs are matched.</div>
 
       <div class="word-boxes" id="wordBoxes"></div>
 
@@ -510,63 +469,63 @@
   </div>
 
   <script>
-    const wordBoxesContainer = document.getElementById('wordBoxes');
-    let boxes = [];
-    const pairWords = document.getElementById('pairWords');
-    const progressBar = document.getElementById('progress');
-    const showPairsBtn = document.getElementById('showPairs');
-    const pointsDisplay = document.getElementById('points');
-    const correctSound = new Audio('../assets/audio/correct.mp3');
-    const wrongSound = new Audio('../assets/audio/wrong.mp3');
-    const congratsSound = document.getElementById("congratsSound");
+  const wordBoxesContainer = document.getElementById('wordBoxes');
+  let boxes = [];
+  const pairWords = document.getElementById('pairWords');
+  const progressBar = document.getElementById('progress');
+  const showPairsBtn = document.getElementById('showPairs');
+  const pointsDisplay = document.getElementById('points');
+  const correctSound = new Audio('../assets/audio/correct.mp3');
+  const wrongSound = new Audio('../assets/audio/wrong.mp3');
+  const congratsSound = document.getElementById("congratsSound");
 
-    let selected = [];
-    let correctPairs = 0;
-    let storedPairs = [];
-    let points = 0;
-    let gameCompleted = false;
-    let totalPairs = 0;
+  let selected = [];
+  let correctPairs = 0;
+  let storedPairs = [];
+  let points = 0;
+  let gameCompleted = false;
+  let totalPairs = 0;
 
-    async function fetchMatchingPairs() {
-      try {
+async function fetchMatchingPairs() {
+    try {
         const response = await fetch(
-          "../api/matching.php?dialect=Kapampangan"
+            "../api/matching.php?dialect=Kapampangan"
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch Kapampangan matching pairs");
+            throw new Error("Failed to fetch Kapampangan matching pairs");
         }
 
         const data = await response.json();
 
         if (!Array.isArray(data) || data.length === 0) {
-          throw new Error("No matching pairs found");
+            throw new Error("No matching pairs found");
         }
 
         const fragment = document.createDocumentFragment();
 
         data.forEach((pair, index) => {
-          const pairId = String(pair.pair_id ?? index);
+            const pairId = String(pair.pair_id ?? index);
 
-          const dialectBox = document.createElement("div");
-          dialectBox.className = "word-box";
-          dialectBox.dataset.pair = pairId;
-          dialectBox.textContent = pair.word;
+            const dialectBox = document.createElement("div");
+            dialectBox.className = "word-box";
+            dialectBox.dataset.pair = pairId;
+            dialectBox.textContent = pair.word;
 
-          const translationBox = document.createElement("div");
-          translationBox.className = "word-box";
-          translationBox.dataset.pair = pairId;
-          translationBox.textContent = pair.match_text;
+            const translationBox = document.createElement("div");
+            translationBox.className = "word-box";
+            translationBox.dataset.pair = pairId;
+            translationBox.textContent = pair.match_text;
 
-          if (
-            !dialectBox.textContent.trim() ||
-            !translationBox.textContent.trim()
-          ) {
-            throw new Error("Missing matching pair text");
-          }
+            if (
+                !dialectBox.textContent.trim() ||
+                !translationBox.textContent.trim()
+            ) {
+                throw new Error("Missing matching pair text");
+            }
 
-          fragment.appendChild(dialectBox);
-          fragment.appendChild(translationBox);
+            fragment.appendChild(dialectBox);
+            fragment.appendChild(translationBox);
         });
 
         totalPairs = data.length;
@@ -575,175 +534,202 @@
         console.log("Kapampangan matching pairs loaded:", totalPairs);
         return true;
 
-      } catch (error) {
+    } catch (error) {
         console.error("Error loading Kapampangan matching pairs:", error);
         return false;
-      }
     }
+}
 
 
-    function shuffleArray(array) {
-      const shuffled = [...array];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
+    return shuffled;
+  }
 
-    function resetAndShuffleBoxes() {
-      const allBoxes = document.querySelectorAll('.word-box');
-      allBoxes.forEach(box => {
-        box.classList.remove('matched', 'shake');
-        box.style.background = '#ffffff';
-      });
+  function resetAndShuffleBoxes() {
+    const allBoxes = document.querySelectorAll('.word-box');
+    allBoxes.forEach(box => {
+      box.classList.remove('matched', 'shake');
+      box.style.background = '#ffffff';
+    });
 
-      const boxesArray = Array.from(document.querySelectorAll('.word-box'));
-      const shuffledBoxes = shuffleArray(boxesArray);
+    const boxesArray = Array.from(document.querySelectorAll('.word-box'));
+    const shuffledBoxes = shuffleArray(boxesArray);
 
-      wordBoxesContainer.innerHTML = '';
-      shuffledBoxes.forEach(box => {
-        wordBoxesContainer.appendChild(box);
-      });
+    wordBoxesContainer.innerHTML = '';
+    shuffledBoxes.forEach(box => {
+      wordBoxesContainer.appendChild(box);
+    });
+  
+    boxes = Array.from(document.querySelectorAll('.word-box'));
+    attachClickListeners();
+  }
 
-      boxes = Array.from(document.querySelectorAll('.word-box'));
-      attachClickListeners();
-    }
+  function attachClickListeners() {
+    boxes.forEach(box => {
+      box.removeEventListener('click', handleBoxClick); 
+      box.addEventListener('click', handleBoxClick);
+    });
+  }
 
-    function attachClickListeners() {
-      boxes.forEach(box => {
-        box.removeEventListener('click', handleBoxClick);
-        box.addEventListener('click', handleBoxClick);
-      });
-    }
+  function handleBoxClick(e) {
+    const box = e.currentTarget;
+    if (box.classList.contains('matched') || gameCompleted || selected.includes(box)) return;
+    
+    selected.push(box);
+    box.style.background = '#e3d6ad';
 
-    function handleBoxClick(e) {
-      const box = e.currentTarget;
-      if (box.classList.contains('matched') || gameCompleted || selected.includes(box)) return;
-
-      selected.push(box);
-      box.style.background = '#e3d6ad';
-
-      if (selected.length === 2) {
-        const [f, s] = selected;
-        if (f.dataset.pair === s.dataset.pair && f !== s) {
-          playCorrectSound();
-          storedPairs.push(`${f.textContent} ↔ ${s.textContent}`);
-          f.classList.add('matched');
-          s.classList.add('matched');
-          correctPairs++;
-          points++;
-          pointsDisplay.textContent = `${points} / ${totalPairs}`;
-          progressBar.style.width = `${(correctPairs / totalPairs) * 100}%`;
-          showPlusOne();
-          if (correctPairs === totalPairs) {
+    if (selected.length === 2) {
+      const [f, s] = selected;
+      if (f.dataset.pair === s.dataset.pair && f !== s) {
+        playCorrectSound();
+        storedPairs.push(`${f.textContent} ↔ ${s.textContent}`);
+        f.classList.add('matched');
+        s.classList.add('matched');
+        correctPairs++;
+        points++;
+        pointsDisplay.textContent = `${points} / ${totalPairs}`;
+        progressBar.style.width = `${(correctPairs / totalPairs) * 100}%`;
+        showPlusOne();
+        if (correctPairs === totalPairs) {
             gameCompleted = true;
             setTimeout(() => showCongrats(), 800);
-          }
-        } else {
-          playWrongSound();
-          f.classList.add('shake');
-          s.classList.add('shake');
-          setTimeout(() => {
-            f.classList.remove('shake');
-            s.classList.remove('shake');
-            f.style.background = '#ffffff';
-            s.style.background = '#ffffff';
-          }, 500);
         }
-        selected = [];
+      } else {
+        playWrongSound();
+        f.classList.add('shake');
+        s.classList.add('shake');
+        setTimeout(() => {
+          f.classList.remove('shake');
+          s.classList.remove('shake');
+          f.style.background = '#ffffff';
+          s.style.background = '#ffffff';
+        }, 500);
       }
+      selected = [];
     }
+  }
 
-    function playWrongSound() {
-      wrongSound.currentTime = 0;
-      wrongSound.play().catch(e => console.log(e));
-    }
+  function playWrongSound() {
+    wrongSound.currentTime = 0;
+    wrongSound.play().catch(e => console.log(e));
+  }
 
-    function playCorrectSound() {
-      correctSound.currentTime = 0;
-      correctSound.play().catch(e => console.log(e));
-    }
+  function playCorrectSound() {
+    correctSound.currentTime = 0;
+    correctSound.play().catch(e => console.log(e));
+  }
 
-    function showPlusOne() {
-      const existing = pointsDisplay.parentNode.querySelector('.plus-one');
-      if (existing) existing.remove();
-      const p1 = document.createElement('span');
-      p1.className = 'plus-one';
-      p1.textContent = '+1';
-      pointsDisplay.parentNode.appendChild(p1);
-      setTimeout(() => p1.remove(), 1000);
-    }
+  function showPlusOne() {
+    const existing = pointsDisplay.parentNode.querySelector('.plus-one');
+    if (existing) existing.remove();
+    const p1 = document.createElement('span');
+    p1.className = 'plus-one';
+    p1.textContent = '+1';
+    pointsDisplay.parentNode.appendChild(p1);
+    setTimeout(() => p1.remove(), 1000);
+  }
+
+  function showCongrats() {
 
     function showCongrats() {
-      const screen = document.getElementById("congratsScreen");
-      const finalScoreText = document.getElementById("finalScore");
-      finalScoreText.innerText = `Score: ${points} / ${totalPairs}`;
-      screen.style.display = "flex";
-      congratsSound.play().catch(e => console.log(e));
-    }
 
-    function restartGame() {
-      selected = [];
-      correctPairs = 0;
-      storedPairs = [];
-      points = 0;
-      gameCompleted = false;
-      pointsDisplay.textContent = `0 / ${totalPairs}`;
-      progressBar.style.width = `0%`;
-      pairWords.innerHTML = "";
-      pairWords.style.display = "none";
-      document.getElementById("congratsScreen").style.display = "none";
-      resetAndShuffleBoxes();
-    }
-
-    function nextGame() {
-      document.querySelector('.container').style.opacity = '0';
-      setTimeout(() => {
-        window.location.href = "play-ui.html";
-      }, 300);
-    }
-
-    showPairsBtn.addEventListener('click', () => {
-      if (pairWords.style.display === "flex") {
-        pairWords.style.display = "none";
-      } else {
-        pairWords.innerHTML = "";
-        if (storedPairs.length === 0) {
-          pairWords.innerHTML = "<p style='color:#8A3B08;'>No matches yet! Keep playing.</p>";
-        } else {
-          storedPairs.forEach(p => {
-            const d = document.createElement('div');
-            d.className = 'pair';
-            d.textContent = p;
-            pairWords.appendChild(d);
-          });
-        }
-        pairWords.style.display = "flex";
-      }
+    fetch("../api/save_quiz_attempt.php", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            quiz_id: 4,
+            score: points,
+            total_questions: totalPairs
+        })
     });
 
-    document.addEventListener("DOMContentLoaded", async function () {
-      const success = await fetchMatchingPairs();
+    const screen =
+        document.getElementById("congratsScreen");
 
-      if (!success) {
+    const finalScoreText =
+        document.getElementById("finalScore");
+
+    finalScoreText.innerText =
+        `Score: ${points} / ${totalPairs}`;
+
+    screen.style.display = "flex";
+}
+
+    const screen = document.getElementById("congratsScreen");
+    const finalScoreText = document.getElementById("finalScore");
+    finalScoreText.innerText = `Score: ${points} / ${totalPairs}`;
+    screen.style.display = "flex";
+    congratsSound.play().catch(e => console.log(e));
+  }
+
+  function restartGame() {
+    selected = [];
+    correctPairs = 0;
+    storedPairs = [];
+    points = 0;
+    gameCompleted = false;
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
+    progressBar.style.width = `0%`;
+    pairWords.innerHTML = "";
+    pairWords.style.display = "none";
+    document.getElementById("congratsScreen").style.display = "none";
+    resetAndShuffleBoxes();
+  }
+
+  function nextGame() {
+    document.querySelector('.container').style.opacity = '0';
+    setTimeout(() => {
+      window.location.href = "play-ui.html";
+    }, 300);
+  }
+
+  showPairsBtn.addEventListener('click', () => {
+    if (pairWords.style.display === "flex") {
+      pairWords.style.display = "none";
+    } else {
+      pairWords.innerHTML = "";
+      if (storedPairs.length === 0) {
+        pairWords.innerHTML = "<p style='color:#8A3B08;'>No matches yet! Keep playing.</p>";
+      } else {
+        storedPairs.forEach(p => {
+          const d = document.createElement('div');
+          d.className = 'pair';
+          d.textContent = p;
+          pairWords.appendChild(d);
+        });
+      }
+      pairWords.style.display = "flex";
+    }
+  });
+
+  document.addEventListener("DOMContentLoaded", async function () {
+    const success = await fetchMatchingPairs();
+
+    if (!success) {
         alert("Unable to load Kapampangan matching pairs.");
         return;
-      }
+    }
 
-      pointsDisplay.textContent = `0 / ${totalPairs}`;
-      resetAndShuffleBoxes();
-      const navLinks = document.querySelectorAll('.sidebar ul li a');
-      navLinks.forEach(link => {
-        link.addEventListener("click", function (e) {
-          e.preventDefault();
-          const targetUrl = this.getAttribute('href');
-          document.querySelector('.container').style.opacity = '0';
-          setTimeout(() => { window.location.href = targetUrl; }, 300);
-        });
+    pointsDisplay.textContent = `0 / ${totalPairs}`;
+    resetAndShuffleBoxes();
+    const navLinks = document.querySelectorAll('.sidebar ul li a');
+    navLinks.forEach(link => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        const targetUrl = this.getAttribute('href');
+        document.querySelector('.container').style.opacity = '0';
+        setTimeout(() => { window.location.href = targetUrl; }, 300);
       });
     });
-  </script>
+  });
+</script>
 </body>
-
 </html>
