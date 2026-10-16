@@ -62,7 +62,7 @@ try {
         "SELECT
             qa.attempt_id,
             qa.quiz_id,
-            q.quiz_name,
+            q.title AS quiz_name,  
             qa.score,
             qa.total_questions,
             ROUND(
@@ -84,20 +84,32 @@ try {
 
     // Word progress details.
     $progressStmt = $conn->prepare(
-        "SELECT
-            uwp.progress_id,
-            uwp.word_id,
-            uwp.status,
-            uwp.source,
-            uwp.review_count,
-            uwp.correct_count,
-            uwp.manually_marked_learned,
-            uwp.last_reviewed_at,
-            uwp.updated_at
-         FROM user_word_progress uwp
-         WHERE uwp.user_id = :user_id
-         ORDER BY uwp.updated_at DESC"
-    );
+    "SELECT
+        uwp.progress_id,
+        uwp.word_id,
+        uwp.status,
+        uwp.source,
+        uwp.review_count,
+        uwp.correct_count,
+        uwp.manually_marked_learned,
+        uwp.last_reviewed_at,
+        uwp.updated_at,
+
+        w.word,
+        w.english,
+        d.dialect_name
+
+     FROM user_word_progress uwp
+
+     JOIN words w
+        ON uwp.word_id = w.word_id
+
+     JOIN dialect d
+        ON w.dialect_id = d.dialect_id
+
+     WHERE uwp.user_id = :user_id
+     ORDER BY uwp.updated_at DESC"
+);
 
     $progressStmt->execute(['user_id' => $userId]);
     $wordProgress = $progressStmt->fetchAll();
@@ -111,9 +123,10 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    error_log('get_progress.php: ' . $e->getMessage());
-    respond(500, [
-        'success' => false,
-        'message' => 'Unable to retrieve progress. Check the server log.'
-    ]);
+
+    echo "<pre>";
+    echo $e->getMessage();
+    echo "</pre>";
+    exit;
+
 }
