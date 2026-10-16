@@ -1,6 +1,5 @@
 <?php
 
-session_save_path('C:/Users/PC/php_sessions');
 session_start();
 
 header('Content-Type: application/json');
