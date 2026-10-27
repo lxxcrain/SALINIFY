@@ -545,34 +545,75 @@
                 </div>
                 <div class="signup-box">
                     <div style="display: flex; flex-direction: column; gap: 16px;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Password recovery question:</label>
-                            <div class="input-wrapper">
-                                <select id="signup-question" required class="custom-input no-icon">
-                                    <option value="" disabled selected>Select a security question</option>
-                                    <option value="What is the name of your first pet?">What is the name of your first
-                                        pet?</option>
-                                    <option value="What is your mother's maiden name?">What is your mother's maiden
-                                        name?</option>
-                                    <option value="What was your childhood nickname?">What was your childhood nickname?
-                                    </option>
-                                    <option value="In what town were you born?">In what town were you born?</option>
-                                </select>
-                                <span class="input-icon-right" style="pointer-events: none;"><i
-                                        class="fa-solid fa-chevron-down text-xs"></i></span>
+                        <div id="signup-security-questions"
+                            style="display: flex; flex-direction: column; gap: 16px;">
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Password Recovery Question 1:</label>
+                                <div class="input-wrapper">
+                                    <select id="signup-question1"
+                                            class="custom-input no-icon security-question"
+                                            required>
+                                        <option value="">Select a security question</option>
+                                    </select>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label class="form-label">Answer:</label>
-                            <div class="input-wrapper">
-                                <input type="text" id="signup-answer" required
-                                    class="custom-input no-icon has-right-icon" placeholder="Security answer"
-                                    style="padding-left: 16px;">
-                                <button type="button"
-                                    onclick="togglePasswordVisibility('signup-answer', 'signup-ans-eye')"
-                                    class="input-icon-right"><i id="signup-ans-eye"
-                                        class="fa-solid fa-eye"></i></button>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Answer 1:</label>
+                                <input type="text"
+                                    id="signup-answer1"
+                                    class="custom-input no-icon"
+                                    placeholder="Enter your first security answer"
+                                    maxlength="255"
+                                    autocomplete="off"
+                                    required>
                             </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Password Recovery Question 2:</label>
+                                <div class="input-wrapper">
+                                    <select id="signup-question2"
+                                            class="custom-input no-icon security-question"
+                                            required>
+                                        <option value="">Select a security question</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Answer 2:</label>
+                                <input type="text"
+                                    id="signup-answer2"
+                                    class="custom-input no-icon"
+                                    placeholder="Enter your second security answer"
+                                    maxlength="255"
+                                    autocomplete="off"
+                                    required>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Password Recovery Question 3:</label>
+                                <div class="input-wrapper">
+                                    <select id="signup-question3"
+                                            class="custom-input no-icon security-question"
+                                            required>
+                                        <option value="">Select a security question</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" style="margin-bottom: 0;">
+                                <label class="form-label">Answer 3:</label>
+                                <input type="text"
+                                    id="signup-answer3"
+                                    class="custom-input no-icon"
+                                    placeholder="Enter your third security answer"
+                                    maxlength="255"
+                                    autocomplete="off"
+                                    required>
+                            </div>
+
                         </div>
                     </div>
                     <div style="padding-top: 16px;">
@@ -613,33 +654,39 @@
 
 
         <!-- VIEW 4: RESET STEP 2 -->
-        <section id="view-reset-step2" class="auth-card hidden">
-            <img src="../assets/images/wooden_hat.png" class="modal-hat">
-            <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">Enter your security answer to verify
-                your account.</p>
-            <form id="form-reset-step2" onsubmit="handleResetStep2(event)">
-                <div class="form-group">
-                    <label class="form-label">Your security question:</label>
-                    <div id="display-security-question"
-                        style="padding: 12px; background: #fefae0; border: 1px solid #c8b6a6; border-radius: 12px; font-size: 14px; font-weight: 500; color: #4a4a4a;">
-                        Loading question...</div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Enter security answer</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="reset-answer-input" required class="custom-input no-icon has-right-icon"
-                            placeholder="Enter security answer" style="padding-left: 16px;">
-                        <button type="button" onclick="togglePasswordVisibility('reset-answer-input', 'ans-eye')"
-                            class="input-icon-right"><i id="ans-eye" class="fa-solid fa-eye"></i></button>
-                    </div>
-                </div>
-                <button type="submit" class="btn-earth">Verify Security Answer</button>
-                <div class="text-center text-xs text-gray" style="margin-top: 16px;">
-                    Remembered your password?<br><button type="button" onclick="switchView('login')" class="link-btn"
-                        style="margin-top: 2px;">Back to Login</button>
-                </div>
-            </form>
-        </section>
+<section id="view-reset-step2" class="auth-card hidden">
+
+    <img src="../assets/images/wooden_hat.png" class="modal-hat">
+
+    <p class="text-sm text-gray text-center" style="margin-bottom: 24px;">
+        Answer all your security questions to verify your account.
+    </p>
+
+    <form id="form-reset-step2" onsubmit="handleResetStep2(event)">
+
+        <!-- Security questions and answer fields appear here automatically -->
+        <div id="recovery-questions-container"></div>
+
+        <button type="submit" class="btn-earth">
+            Verify Security Answers
+        </button>
+
+        <div class="text-center text-xs text-gray" style="margin-top: 16px;">
+
+            Remembered your password?<br>
+
+            <button
+                type="button"
+                onclick="switchView('login')"
+                class="link-btn"
+                style="margin-top: 2px;">
+
+                Back to Login
+
+            </button>
+        </div>
+    </form>
+</section>
 
 
         <!-- VIEW 5: RESET STEP 3 -->
@@ -869,69 +916,85 @@
 
 
         async function handleSignup(event) {
-            event.preventDefault();
+    event.preventDefault();
 
-            const username = document.getElementById('signup-name').value.trim();
-            const email = document.getElementById('signup-email').value.trim();
-            const password = document.getElementById('signup-password').value;
-            const confirmPassword = document.getElementById('signup-confirm').value;
-            const recoveryQuestion = document.getElementById('signup-question').value;
-            const recoveryAnswer = document.getElementById('signup-answer').value.trim();
+    const username = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const confirmPassword = document.getElementById('signup-confirm').value;
 
-            if (password !== confirmPassword) {
-                showToast('Passwords do not match. Please re-enter.', 'error');
-                return;
-            }
+    const recoveryQuestions = [
+        document.getElementById('signup-question1').value,
+        document.getElementById('signup-question2').value,
+        document.getElementById('signup-question3').value
+    ];
 
-            if (password.length < 8) {
-                showToast('Password must be at least 8 characters.', 'error');
-                return;
-            }
+    const recoveryAnswers = [
+        document.getElementById('signup-answer1').value.trim(),
+        document.getElementById('signup-answer2').value.trim(),
+        document.getElementById('signup-answer3').value.trim()
+    ];
 
-            if (!recoveryQuestion || !recoveryAnswer) {
-                showToast('Please select and answer a recovery question.', 'error');
-                return;
-            }
+    if (password !== confirmPassword) {
+        showToast('Passwords do not match.', 'error');
+        return;
+    }
 
-            try {
-                const response = await fetch('../api/register.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        username: username,
-                        email: email,
-                        password: password,
-                        confirm_password: confirmPassword,
-                        recovery_question: recoveryQuestion,
-                        recovery_answer: recoveryAnswer
-                    })
-                });
+    if (password.length < 8) {
+        showToast('Password must be at least 8 characters.', 'error');
+        return;
+    }
 
-                const result = await response.json();
+    if (
+        recoveryQuestions.some(question => !question) ||
+        recoveryAnswers.some(answer => !answer)
+    ) {
+        showToast('Please complete all three security questions and answers.', 'error');
+        return;
+    }
 
-                if (!response.ok || !result.success) {
-                    showToast(
-                        result.message || 'Registration failed. Please try again.',
-                        'error'
-                    );
-                    return;
-                }
+    if (new Set(recoveryQuestions).size !== 3) {
+        showToast('Please select three different security questions.', 'error');
+        return;
+    }
 
-                showToast('Account created successfully! Please log in.', 'success');
+    try {
+        const response = await fetch('../api/register.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: username,
+                email: email,
+                password: password,
+                confirm_password: confirmPassword,
+                recovery_questions: recoveryQuestions,
+                recovery_answers: recoveryAnswers
+            })
+        });
 
-                document.getElementById('form-signup').reset();
-                switchView('login');
+        const result = await response.json();
 
-            } catch (error) {
-                console.error('Registration error:', error);
-                showToast(
-                    'Unable to connect to the server. Please try again.',
-                    'error'
-                );
-            }
+        if (!response.ok || !result.success) {
+            showToast(
+                result.message || 'Registration failed. Please try again.',
+                'error'
+            );
+            return;
         }
+
+        document.getElementById('form-signup').reset();
+        updateSecurityQuestions();
+
+        switchView('login');
+        showToast('Account created successfully! Please log in.', 'success');
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        showToast('Unable to connect to the server. Please try again.', 'error');
+    }
+}
 
 
 
@@ -944,21 +1007,59 @@
             try {
                 const response = await fetch('../api/recovery_question.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
                     body: JSON.stringify({ email: email })
                 });
 
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
-                    showToast(result.message || 'Unable to find recovery information.', 'error');
+                    showToast(
+                        result.message || 'Unable to find recovery information.',
+                        'error'
+                    );
                     return;
                 }
 
-                document.getElementById('display-security-question').textContent =
-                    result.question;
+                const container = document.getElementById(
+                    'recovery-questions-container'
+                );
+
+                container.replaceChildren();
+
+                result.questions.forEach((question, index) => {
+                    const group = document.createElement('div');
+                    group.className = 'form-group';
+
+                    const label = document.createElement('label');
+                    label.className = 'form-label';
+                    label.textContent = `Security Question ${index + 1}:`;
+
+                    const questionBox = document.createElement('div');
+                    questionBox.textContent = question;
+                    questionBox.style.cssText =
+                        'padding: 12px; background: #fefae0; ' +
+                        'border: 1px solid #c8b6a6; border-radius: 12px; ' +
+                        'font-size: 14px; margin-bottom: 10px;';
+
+                    const answerInput = document.createElement('input');
+                    answerInput.type = 'password';
+                    answerInput.required = true;
+                    answerInput.autocomplete = 'off';
+                    answerInput.placeholder = 'Enter security answer';
+                    answerInput.className = 'custom-input no-icon recovery-answer';
+
+                    group.appendChild(label);
+                    group.appendChild(questionBox);
+                    group.appendChild(answerInput);
+
+                    container.appendChild(group);
+                });
 
                 document.getElementById('form-reset-step1').reset();
+
                 switchView('reset-step2');
 
             } catch (error) {
@@ -973,23 +1074,38 @@
         async function handleResetStep2(event) {
             event.preventDefault();
 
-            const answer = document.getElementById('reset-answer-input').value.trim();
+            const answers = Array.from(
+                document.querySelectorAll('.recovery-answer')
+            ).map(input => input.value.trim());
+
+            if (answers.some(answer => answer === '')) {
+                showToast('Please answer all security questions.', 'error');
+                return;
+            }
 
             try {
                 const response = await fetch('../api/verify_recovery.php', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ answer: answer })
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        answers: answers
+                    })
                 });
 
                 const result = await response.json();
 
                 if (!response.ok || !result.success) {
-                    showToast(result.message || 'Recovery answer could not be verified.', 'error');
+                    showToast(
+                        result.message || 'Recovery answers could not be verified.',
+                        'error'
+                    );
                     return;
                 }
 
                 document.getElementById('form-reset-step2').reset();
+
                 switchView('reset-step3');
 
             } catch (error) {
@@ -1064,6 +1180,59 @@
                 }
             }
         };
+
+        const securityQuestions = [
+            "What is the name of your first pet?",
+            "What is your mother's maiden name?",
+            "What was your childhood nickname?",
+            "In what town were you born?",
+            "What was the name of your first school?",
+            "What is the name of your favorite childhood teacher?",
+            "What was your favorite childhood game?",
+            "What was the name of your childhood best friend?",
+            "What is the name of the street you grew up on?",
+            "What was your favorite subject in elementary school?",
+            "What was the name of your first stuffed toy?",
+            "What was your childhood dream job?",
+            "What is the name of your favorite childhood cartoon?",
+            "What was the first movie you watched in a cinema?",
+            "What was your favorite childhood book?"
+        ];
+
+        const securityDropdowns = document.querySelectorAll(
+            ".security-question"
+        );
+
+        securityDropdowns.forEach(dropdown => {
+            securityQuestions.forEach(question => {
+                const option = document.createElement("option");
+
+                option.value = question;
+                option.textContent = question;
+
+                dropdown.appendChild(option);
+            });
+        });
+
+        function updateSecurityQuestions() {
+            const selected = Array.from(securityDropdowns)
+                .map(dropdown => dropdown.value)
+                .filter(Boolean);
+
+            securityDropdowns.forEach(dropdown => {
+                Array.from(dropdown.options).forEach(option => {
+                    if (!option.value) return;
+
+                    option.disabled =
+                        selected.includes(option.value) &&
+                        option.value !== dropdown.value;
+                });
+            });
+        }
+
+        securityDropdowns.forEach(dropdown => {
+            dropdown.addEventListener("change", updateSecurityQuestions);
+        });
     </script>
 </body>
 

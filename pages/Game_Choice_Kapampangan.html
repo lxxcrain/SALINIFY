@@ -579,12 +579,59 @@ async function fetchQuestions() {
     }
 }
         
-        const roman = ["", "I", "II", "III"];
-        let hintCount = 3;
-        let revealCount = 3;
+        const REQUIRED_STREAK = 3;
+        const MAX_REWARDS = 3;
+
+        let correctStreak = 0;
+        let hintCount = 0;
+        let revealCount = 0;
+
         let questions = [];
         let currentQ = 0;
         let gameState = [];
+
+        function updateRewardButtons() {
+            const hintBtn = document.getElementById("hintBtn");
+            const revealBtn = document.getElementById("revealBtn");
+            const state = gameState[currentQ];
+
+            if (!state) return;
+
+            hintBtn.textContent = `Hint: ${hintCount}`;
+            revealBtn.textContent = `Reveal: ${revealCount}`;
+
+            hintBtn.disabled =
+                hintCount === 0 ||
+                state.answered ||
+                state.shownHint ||
+                state.revealed;
+
+            revealBtn.disabled =
+                revealCount === 0 ||
+                state.answered ||
+                state.revealed;
+
+            hintBtn.style.opacity = hintBtn.disabled ? "0.5" : "1";
+            revealBtn.style.opacity = revealBtn.disabled ? "0.5" : "1";
+        }
+
+        function recordCorrectAnswer() {
+            correctStreak++;
+
+            if (correctStreak >= REQUIRED_STREAK) {
+                hintCount = Math.min(MAX_REWARDS, hintCount + 1);
+                revealCount = Math.min(MAX_REWARDS, revealCount + 1);
+
+                correctStreak = 0;
+            }
+
+            updateRewardButtons();
+        }
+
+        function recordWrongAnswer() {
+            correctStreak = 0;
+            updateRewardButtons();
+        }
 
         const optBtns = [
             document.getElementById("opt1"),
@@ -607,18 +654,7 @@ async function fetchQuestions() {
             const q = questions[currentQ];
             const state = gameState[currentQ];
 
-            document.getElementById("hintBtn").innerHTML = `Hint: ${roman[hintCount]}`;
-            document.getElementById("revealBtn").innerHTML = `Reveal: ${roman[revealCount]}`;
-            
-            document.getElementById("hintBtn").disabled = hintCount === 0;
-            document.getElementById("revealBtn").disabled = revealCount === 0 || state.answered;
-            
-            if(hintCount === 0) document.getElementById("hintBtn").style.opacity = "0.5";
-            else document.getElementById("hintBtn").style.opacity = "1";
-            
-            if(revealCount === 0 || state.answered) document.getElementById("revealBtn").style.opacity = "0.5";
-            else document.getElementById("revealBtn").style.opacity = "1";
-
+            updateRewardButtons();
             document.getElementById("questionText").textContent = q.text;
             
             if (!state.shownHint) {
@@ -662,6 +698,15 @@ async function fetchQuestions() {
             if (state.answered) return;
 
             if (choice === q.correct) {
+                if (
+                state.wrongAttempts === 0 &&
+                !state.revealed &&
+                !state.shownHint
+            ) {
+                recordCorrectAnswer();
+            } else {
+                recordWrongAnswer();
+            }
                 document.getElementById("correctSound").play().catch(()=>{});
                 state.userChoice = choice;
                 state.answered = true;
@@ -687,6 +732,7 @@ async function fetchQuestions() {
 
             } else {
                 document.getElementById("wrongSound").play().catch(()=>{});
+                recordWrongAnswer();
                 optBtns[choice].classList.add("wrong");
                 optBtns[choice].disabled = true;
                 state.wrongAttempts++;
@@ -697,18 +743,41 @@ async function fetchQuestions() {
         }
 
         function revealAnswer() {
-            if(revealCount <= 0) return;
-            document.getElementById("revealSound").play().catch(()=>{});
-            revealCount--;
-            
-            const q = questions[currentQ];
             const state = gameState[currentQ];
-            
+
+            if (
+                revealCount <= 0 ||
+                state.answered ||
+                state.revealed
+            ) {
+                return;
+            }
+
+            revealCount--;
+
+            const q = questions[currentQ];
+
             state.revealed = true;
+            state.answered = true;
+
+            document.getElementById("revealSound")
+                .play().catch(() => {});
+
+            optBtns.forEach(btn => btn.disabled = true);
             optBtns[q.correct].classList.add("correct");
-            
+
+            updateRewardButtons();
             updateScore();
             updateProgress();
+
+            setTimeout(() => {
+                if (currentQ < questions.length - 1) {
+                    currentQ++;
+                    loadQ();
+                } else {
+                    showCongrats();
+                }
+            }, 1500);
         }
 
         function updateScore() {
@@ -730,20 +799,29 @@ async function fetchQuestions() {
         }
 
         function showHint() {
-            if(hintCount <= 0) return;
-            document.getElementById("hintSound").play().catch(()=>{});
-            hintCount--;
-            
             const state = gameState[currentQ];
+
+            if (
+                hintCount <= 0 ||
+                state.answered ||
+                state.shownHint ||
+                state.revealed
+            ) {
+                return;
+            }
+
+            hintCount--;
             state.shownHint = true;
-            
-            const hintBox = document.querySelector('.hint-box');
-            document.getElementById('hintDisplay').textContent = "Hint: " + questions[currentQ].hint;
-            hintBox.style.display = "block";
-            
-            document.getElementById('hintBtn').innerHTML = `Hint: ${roman[hintCount]}`;
-            document.getElementById('hintBtn').disabled = hintCount === 0;
-            if(hintCount === 0) document.getElementById('hintBtn').style.opacity = "0.5";
+
+            document.getElementById("hintSound")
+                .play().catch(() => {});
+
+            document.getElementById("hintDisplay").textContent =
+                "Hint: " + questions[currentQ].hint;
+
+            document.querySelector(".hint-box").style.display = "block";
+
+            updateRewardButtons();
         }
 
         function showCongrats() {
@@ -786,8 +864,9 @@ async function fetchQuestions() {
         }
 
         function restartGame() {
-            hintCount = 3;
-            revealCount = 3;
+            correctStreak = 0;
+            hintCount = 0;
+            revealCount = 0;
             questions = shuffleArray([...originalQuestions]);
             currentQ = 0;
             gameState = questions.map(() => ({

@@ -798,14 +798,18 @@ async function fetchQuestions() {
     }
 }
 
-        let hintsLeft = 3;
-        let revealsLeft = 3;
+        const REQUIRED_STREAK = 3;
+        const MAX_REWARDS = 3;
+
+        let correctStreak = 0;
+        let hintsLeft = 0;
+        let revealsLeft = 0;
         let currentQuestion = 0;
 
         let userAnswers = [];
         let revealed = [];
         let attemptsCount = [];
-
+        let hintsUsed = [];
 
       const questionText = document.getElementById("question");
       const boxes = document.querySelectorAll(".box");
@@ -820,6 +824,23 @@ async function fetchQuestions() {
         }
       }
 
+      function recordCorrectAnswer() {
+    correctStreak++;
+
+    if (correctStreak >= REQUIRED_STREAK) {
+        hintsLeft = Math.min(MAX_REWARDS, hintsLeft + 1);
+        revealsLeft = Math.min(MAX_REWARDS, revealsLeft + 1);
+
+        correctStreak = 0;
+    }
+
+    updateButtonLabels();
+    }
+
+      function recordWrongAnswer() {
+          correctStreak = 0;
+          updateButtonLabels();
+      }
 
       function updateScore() {
         const correctAnswers = userAnswers.filter((ans, idx) => ans === questions[idx].answer && !revealed[idx]).length;
@@ -831,9 +852,16 @@ async function fetchQuestions() {
 
 
       function loadQuestion() {
-        document.getElementById("hintBox").style.display = "none";
-        let q = questions[currentQuestion];
+        const hintBox = document.getElementById("hintBox");
+        const q = questions[currentQuestion];
 
+        hintBox.style.display = hintsUsed[currentQuestion]
+            ? "block"
+            : "none";
+
+        if (hintsUsed[currentQuestion]) {
+            hintBox.innerText = "Hint: " + q.hint;
+        }
 
 
 
@@ -860,114 +888,173 @@ async function fetchQuestions() {
       const answeredCount = userAnswers.filter(a => a !== null).length;
       updateProgress((answeredCount / questions.length) * 100);
       updateNavigation();
+      updateButtonLabels();
     }
 
 
       function checkAnswer(choice, e) {
-        if (!questions.length) return;
-        let q = questions[currentQuestion];
-        const correctSound = document.getElementById("correctSound");
-        const wrongSound = document.getElementById("wrongSound");
+          if (!questions.length) return;
 
-        if (!questions.length) return;
+          const q = questions[currentQuestion];
 
-        if (revealed[currentQuestion]) {
+          if (
+              revealed[currentQuestion] ||
+              userAnswers[currentQuestion] !== null
+          ) {
+              return;
+          }
+
+          const correctSound = document.getElementById("correctSound");
+          const wrongSound = document.getElementById("wrongSound");
+
+          attemptsCount[currentQuestion]++;
+
           if (choice === q.answer) {
-            e.target.classList.add("correct");
-            correctSound.play().catch(d => {});
-            setTimeout(() => nextQuestion(), 600);
+              correctSound.play().catch(() => {});
+              e.target.classList.add("correct");
+
+              if (attemptsCount[currentQuestion] <= 2) {
+                  userAnswers[currentQuestion] = choice;
+
+                  const answeredCount =
+                      userAnswers.filter(a => a !== null).length;
+
+                  updateProgress(
+                      (answeredCount / questions.length) * 100
+                  );
+
+                  const plusOne = document.createElement("div");
+                  plusOne.classList.add("plus-one");
+                  plusOne.innerText = "+1";
+
+                  document.querySelector(".progress-container")
+                      .appendChild(plusOne);
+
+                  setTimeout(() => plusOne.remove(), 1000);
+              } else {
+                  userAnswers[currentQuestion] = "no-point";
+
+                  const answeredCount =
+                      userAnswers.filter(a => a !== null).length;
+
+                  updateProgress(
+                      (answeredCount / questions.length) * 100
+                  );
+              }
+
+              if (
+                  attemptsCount[currentQuestion] === 1 &&
+                  !hintsUsed[currentQuestion]
+              ) {
+                  recordCorrectAnswer();
+              } else {
+                  recordWrongAnswer();
+              }
+
+              questionText.innerHTML =
+                  q.word.replace("_____", "<i>" + q.answer + "</i>");
+
+              updateScore();
+              updateNavigation();
+
+              setTimeout(() => nextQuestion(), 800);
+
           } else {
-            e.target.classList.add("wrong");
-            wrongSound.play().catch(d => {});
-          }
-          return;
-        }
+              wrongSound.play().catch(() => {});
+              e.target.classList.add("wrong");
 
+              recordWrongAnswer();
 
-        attemptsCount[currentQuestion]++;
+              if (attemptsCount[currentQuestion] >= 2) {
+                  userAnswers[currentQuestion] = "no-point";
 
+                  const answeredCount =
+                      userAnswers.filter(a => a !== null).length;
 
-        if (choice === q.answer) {
-          correctSound.play().catch(d => {});
-          e.target.classList.add("correct");
+                  updateProgress(
+                      (answeredCount / questions.length) * 100
+                  );
+              }
 
-
-          if (attemptsCount[currentQuestion] <= 2) {
-            userAnswers[currentQuestion] = choice;
-            const answeredCount = userAnswers.filter(a => a !== null).length;
-            updateProgress((answeredCount / questions.length) * 100);
-            const plusOne = document.createElement("div");
-            plusOne.classList.add("plus-one");
-            plusOne.innerText = "+1";
-            document.querySelector(".progress-container").appendChild(plusOne);
-            setTimeout(() => plusOne.remove(), 1000);
-          } else {
-            userAnswers[currentQuestion] = "no-point";
-            const answeredCount = userAnswers.filter(a => a !== null).length;
-            updateProgress((answeredCount / questions.length) * 100);
+              updateScore();
+              updateNavigation();
           }
 
-          function refreshProgress() {
-          const answeredCount = userAnswers.filter(a => a !== null).length;
-          updateProgress((answeredCount / questions.length) * 100);
-          }
-          questionText.innerHTML = q.word.replace("_____", "<i>" + q.answer + "</i>");
-          updateScore();
-          updateNavigation();
-          setTimeout(() => nextQuestion(), 800);
-
-
-        } else {
-          wrongSound.play().catch(d => {});
-          e.target.classList.add("wrong");
-          if (attemptsCount[currentQuestion] >= 2) {
-            userAnswers[currentQuestion] = "no-point";
-          }
-          updateScore();
-        }
-        updateNavigation();
+          updateButtonLabels();
       }
 
 
       function showHint() {
         if (!questions.length) return;
-        if (hintsLeft <= 0) return;
 
-    const hintSound = document.getElementById("hintSound");
-    hintSound.play().catch(() => {});
+        if (
+            hintsLeft <= 0 ||
+            revealed[currentQuestion] ||
+            userAnswers[currentQuestion] !== null ||
+            hintsUsed[currentQuestion]
+        ) {
+            return;
+        }
 
-    const hintBox = document.getElementById("hintBox");
-    hintBox.innerText = "Hint: " + questions[currentQuestion].hint;
-    hintBox.style.display = "block";
+        hintsLeft--;
+        hintsUsed[currentQuestion] = true;
 
-    hintsLeft--;
-    updateButtonLabels();
-}
+        const hintSound = document.getElementById("hintSound");
+        hintSound.play().catch(() => {});
 
-      function revealAnswer() {
-        if (revealed[currentQuestion] || userAnswers[currentQuestion] === questions[currentQuestion].answer) return;
-        if (revealsLeft <= 0) return;
+        const hintBox = document.getElementById("hintBox");
 
+        hintBox.innerText =
+            "Hint: " + questions[currentQuestion].hint;
+
+        hintBox.style.display = "block";
+
+        updateButtonLabels();
+    }
+
+          function revealAnswer() {
+        if (!questions.length) return;
+
+        if (
+            revealsLeft <= 0 ||
+            revealed[currentQuestion] ||
+            userAnswers[currentQuestion] !== null
+        ) {
+            return;
+        }
 
         revealsLeft--;
-        updateButtonLabels();
-
 
         const revealSound = document.getElementById("revealSound");
-        revealSound.play().catch(d => {});
+        revealSound.play().catch(() => {});
 
+        const q = questions[currentQuestion];
 
-        let q = questions[currentQuestion];
         revealed[currentQuestion] = true;
-        questionText.innerHTML = q.word.replace("_____", "<i>" + q.answer + "</i>");
+        userAnswers[currentQuestion] = "revealed";
 
+        questionText.innerHTML =
+            q.word.replace("_____", "<i>" + q.answer + "</i>");
 
-        boxes.forEach((box) => {
-          box.classList.remove("wrong", "correct");
-          if (box.innerText === q.answer) box.classList.add("correct");
+        boxes.forEach(box => {
+            box.classList.remove("wrong", "correct");
+
+            if (box.innerText === q.answer) {
+                box.classList.add("correct");
+            }
         });
+
+        const answeredCount =
+            userAnswers.filter(a => a !== null).length;
+
+        updateProgress(
+            (answeredCount / questions.length) * 100
+        );
+
+        updateScore();
         updateNavigation();
-      }
+        updateButtonLabels();
+    }
 
 
       function nextQuestion() {
@@ -981,8 +1068,8 @@ async function fetchQuestions() {
 
 function goNext() {
     const isSolved =
-        userAnswers[currentQuestion] === questions[currentQuestion].answer ||
-        revealed[currentQuestion];
+    userAnswers[currentQuestion] !== null ||
+    revealed[currentQuestion];
 
     if (isSolved) {
         nextQuestion();
@@ -1015,29 +1102,39 @@ function goPrevious() {
       }
      
       function updateButtonLabels() {
-      const hintIcons = "I".repeat(hintsLeft);
-      const revealIcons = "I".repeat(revealsLeft);
-     
-      const hBtn = document.getElementById("hintBtn");
-      const rBtn = document.getElementById("revealBtn");
+        const hBtn = document.getElementById("hintBtn");
+        const rBtn = document.getElementById("revealBtn");
 
+        if (!hBtn || !rBtn) return;
 
-      hBtn.innerText = `HINT: ${hintIcons || "NONE"}`;
-      rBtn.innerText = `REVEAL: ${revealIcons || "NONE"}`;
+        hBtn.innerText = `HINT: ${hintsLeft}`;
+        rBtn.innerText = `REVEAL: ${revealsLeft}`;
 
+        const hasQuestion =
+            questions.length > 0 &&
+            currentQuestion < questions.length;
 
-      if (hintsLeft <= 0) {
-        hBtn.disabled = true;
-      } else {
-        hBtn.disabled = false;
-      }
+        const answered = hasQuestion &&
+            userAnswers[currentQuestion] !== null;
 
+        const isRevealed = hasQuestion &&
+            revealed[currentQuestion];
 
-      if (revealsLeft <= 0) {
-        rBtn.disabled = true;
-      } else {
-        rBtn.disabled = false;
-      }
+        hBtn.disabled =
+            !hasQuestion ||
+            hintsLeft <= 0 ||
+            answered ||
+            isRevealed ||
+            hintsUsed[currentQuestion];
+
+        rBtn.disabled =
+            !hasQuestion ||
+            revealsLeft <= 0 ||
+            answered ||
+            isRevealed;
+
+        hBtn.style.opacity = hBtn.disabled ? "0.5" : "1";
+        rBtn.style.opacity = rBtn.disabled ? "0.5" : "1";
     }
  
       function showCongrats() {
@@ -1070,26 +1167,29 @@ function goPrevious() {
         console.log("Audio failed:", error)
     );
 }
-      
-
 
       function restartGame() {
-        currentQuestion = 0;
-        hintsLeft = 3;
-        revealsLeft = 3;
+      currentQuestion = 0;
+      correctStreak = 0;
+      hintsLeft = 0;
+      revealsLeft = 0;
 
-        document.getElementById("hintBox").style.display = "none";
-        updateButtonLabels();
-        shuffleArray(questions);
-        questions.forEach(q => shuffleArray(q.choices));
-        userAnswers.fill(null);
-        revealed.fill(false);
-        attemptsCount.fill(0);
-        refreshProgress();
-        updateScore();
-        document.getElementById("congratsScreen").style.display = "none";
-        loadQuestion();
-      }
+      shuffleArray(questions);
+
+      questions.forEach(q => shuffleArray(q.choices));
+
+      userAnswers = new Array(questions.length).fill(null);
+      revealed = new Array(questions.length).fill(false);
+      attemptsCount = new Array(questions.length).fill(0);
+      hintsUsed = new Array(questions.length).fill(false);
+
+      document.getElementById("hintBox").style.display = "none";
+      document.getElementById("congratsScreen").style.display = "none";
+
+      updateProgress(0);
+      updateScore();
+      loadQuestion();
+  }
 
      
     async function initializeGame() {
@@ -1106,6 +1206,11 @@ function goPrevious() {
     userAnswers = new Array(questions.length).fill(null);
     revealed = new Array(questions.length).fill(false);
     attemptsCount = new Array(questions.length).fill(0);
+    hintsUsed = new Array(questions.length).fill(false);
+
+    correctStreak = 0;
+    hintsLeft = 0;
+    revealsLeft = 0;
 
     updateButtonLabels();
     loadQuestion();

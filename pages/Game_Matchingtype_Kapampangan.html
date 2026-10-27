@@ -411,6 +411,29 @@
       margin: 0;
     }
 
+    .hearts-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+    padding: 12px;
+    background: #fff8e7;
+    border: 2px solid #8A3B08;
+    border-radius: 12px;
+    }
+
+    .hearts-label {
+        font-size: 20px;
+        font-weight: bold;
+        color: #8A3B08;
+    }
+
+    #heartsDisplay {
+        font-size: 26px;
+        letter-spacing: 5px;
+    }
+
   </style>
 </head>
 <body>
@@ -435,6 +458,11 @@
 
       <div class="instruction">Instruction: Click two boxes that belong together. If they match, they will disappear and be recorded as a pair. Continue until all pairs are matched.</div>
 
+      <div class="hearts-container">
+    <span class="hearts-label">Lives:</span>
+    <span id="heartsDisplay">❤️ ❤️ ❤️ ❤️ ❤️</span>
+      </div>
+
       <div class="word-boxes" id="wordBoxes"></div>
 
       <div class="action-bar">
@@ -442,6 +470,41 @@
       </div>
 
       <div class="pair-words" id="pairWords"></div>
+    </div>
+  </div>
+
+  <div id="gameOverScreen" style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+">
+    <div style="
+        background: #fff8e7;
+        padding: 40px;
+        border-radius: 20px;
+        text-align: center;
+        border: 4px solid #8A3B08;
+    ">
+        <h1 style="color: #8A3B08;">Game Over!</h1>
+
+        <p>You have lost all five hearts.</p>
+        <p>Better luck next time!</p>
+
+        <button onclick="restartGame()" style="
+            background: #8A3B08;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+        ">
+            Restart Game
+        </button>
     </div>
   </div>
 
@@ -485,6 +548,33 @@
   let points = 0;
   let gameCompleted = false;
   let totalPairs = 0;
+
+  const MAX_HEARTS = 5;
+let hearts = MAX_HEARTS;
+
+const heartsDisplay = document.getElementById("heartsDisplay");
+
+function updateHearts() {
+    const remaining = "❤️ ".repeat(hearts);
+    const lost = "🖤 ".repeat(MAX_HEARTS - hearts);
+
+    heartsDisplay.textContent = remaining + lost;
+}
+
+function loseHeart() {
+    if (gameCompleted) return;
+
+    hearts = Math.max(0, hearts - 1);
+    updateHearts();
+
+    if (hearts === 0) {
+        gameCompleted = true;
+
+        setTimeout(() => {
+            document.getElementById("gameOverScreen").style.display = "flex";
+        }, 600);
+    }
+}
 
 async function fetchMatchingPairs() {
     try {
@@ -601,6 +691,7 @@ async function fetchMatchingPairs() {
         }
       } else {
         playWrongSound();
+        loseHeart();
         f.classList.add('shake');
         s.classList.add('shake');
         setTimeout(() => {
@@ -676,11 +767,14 @@ async function fetchMatchingPairs() {
     storedPairs = [];
     points = 0;
     gameCompleted = false;
+    hearts = MAX_HEARTS;
+    updateHearts();
     pointsDisplay.textContent = `0 / ${totalPairs}`;
     progressBar.style.width = `0%`;
     pairWords.innerHTML = "";
     pairWords.style.display = "none";
     document.getElementById("congratsScreen").style.display = "none";
+    document.getElementById("gameOverScreen").style.display = "none";
     resetAndShuffleBoxes();
   }
 
